@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="/brand.css?v=20260905p" />
     <title>Web design services — FORGE CT, Farmington</title>
     <script src="/schema.js" defer></script>
+    <script src="/checkout.js" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to content</a>
@@ -44,6 +45,10 @@
               <li>Hours, the floor, how to walk in</li>
               <li>Three to five pages</li>
             </ul>
+            <p class="pricing-note">
+              <button class="button" type="button" data-stripe-plan="site-deposit" aria-describedby="site-deposit-status">Start with a deposit</button>
+            </p>
+            <p class="form-status" id="site-deposit-status" role="status" aria-live="polite"></p>
           </div>
           <div class="compare-col">
             <p class="compare-kicker">Site and System</p>
@@ -52,6 +57,10 @@
               <li>Events, play nights, intake</li>
               <li>Five to ten pages</li>
             </ul>
+            <p class="pricing-note">
+              <button class="button" type="button" data-stripe-plan="system-deposit" aria-describedby="system-deposit-status">Start with a deposit</button>
+            </p>
+            <p class="form-status" id="system-deposit-status" role="status" aria-live="polite"></p>
           </div>
           <div class="compare-col compare-col--us">
             <p class="compare-kicker">Care — $35 / mo</p>
@@ -60,6 +69,10 @@
               <li>Cancel anytime. Site stays yours.</li>
               <li><a href="/care">See what care includes</a></li>
             </ul>
+            <p class="pricing-note">
+              <button class="button" type="button" data-stripe-plan="care" aria-describedby="svc-care-status">Start Care — $35/mo</button>
+            </p>
+            <p class="form-status" id="svc-care-status" role="status" aria-live="polite"></p>
           </div>
           <div class="compare-col">
             <p class="compare-kicker">Care+ — $79 / mo</p>
@@ -68,6 +81,10 @@
               <li>One extra change a month</li>
               <li>Same-week when the floor moves</li>
             </ul>
+            <p class="pricing-note">
+              <button class="button" type="button" data-stripe-plan="care-plus" aria-describedby="svc-care-plus-status">Start Care+ — $79/mo</button>
+            </p>
+            <p class="form-status" id="svc-care-plus-status" role="status" aria-live="polite"></p>
           </div>
         </div>
         <p class="pricing-note"><a class="button" href="/#contact">Tell me about the shop</a></p>
