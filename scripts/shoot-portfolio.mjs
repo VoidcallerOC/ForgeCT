@@ -19,6 +19,11 @@ const shots = [
     ratio: "16-9",
   },
   {
+    slug: "harrisinwonderland",
+    url: "https://harrisinwonderland.com/",
+    ratio: "16-9",
+  },
+  {
     slug: "voidcaller",
     url: "https://voidcaller.enterthegrotto.xyz/",
     ratio: "16-9",
