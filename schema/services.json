@@ -6,7 +6,7 @@
       "@id": "https://www.forge-ct.com/#business",
       "name": "FORGE CT",
       "url": "https://www.forge-ct.com/",
-      "email": "Create@forge-CT.com",
+      "email": "Create@Forge-CT.com",
       "description": "Shop pages for card and tabletop stores around Greater Hartford. Care from $35 a month.",
       "priceRange": "$35+",
       "founder": { "@type": "Person", "name": "Nick Sousa" },
