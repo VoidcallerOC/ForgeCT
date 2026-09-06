@@ -8,6 +8,7 @@ const RELEVANT = new Set([
   "checkout.session.completed",
   "checkout.session.async_payment_succeeded",
   "checkout.session.async_payment_failed",
+  "payment_intent.succeeded",
   "customer.subscription.created",
   "customer.subscription.updated",
   "customer.subscription.deleted",
@@ -25,9 +26,8 @@ const CARE_PRICE_ENV = {
   "care-plus": "STRIPE_PRICE_CARE_PLUS",
 };
 
-// Best-effort replay guard for a warm instance. Every side effect below is an
-// email, so a duplicate is noise rather than a double charge — swap this for a
-// durable store before adding fulfillment that is not safe to repeat.
+// Best-effort replay guard for a warm instance. Stripe-side idempotency and the
+// final-invoice check below protect the financial side effect across instances.
 const seen = new Set();
 
 function rawBody(request) {
@@ -44,7 +44,7 @@ function money(amount, currency) {
   return `${(amount / 100).toFixed(2)} ${String(currency || "usd").toUpperCase()}`;
 }
 
-function addOneMonth(timestamp) {
+export function addOneMonth(timestamp) {
   const date = new Date(timestamp * 1000);
   const day = date.getUTCDate();
   date.setUTCDate(1);
@@ -56,26 +56,54 @@ function addOneMonth(timestamp) {
   return Math.floor(date.getTime() / 1000);
 }
 
-async function rememberCarePlan(client, session) {
+function customerId(value) {
+  return typeof value === "string" ? value : value?.id;
+}
+
+async function rememberCarePlan(client, session, settledAt) {
   const carePlan = session.metadata?.care_plan;
-  const customer =
-    typeof session.customer === "string"
-      ? session.customer
-      : session.customer?.id;
+  const customer = customerId(session.customer);
   if (!customer || !CARE_PRICE_ENV[carePlan]) return;
+
+  const metadata = {
+    care_plan: carePlan,
+    source: "forge_deposit_checkout",
+  };
+  if (settledAt) {
+    metadata.care_payment_settled_at = String(settledAt);
+    metadata.care_countdown_ends_at = String(addOneMonth(settledAt));
+    metadata.care_payment_intent = session.payment_intent || "";
+  }
+  await client.customers.update(customer, { metadata });
+}
+
+async function rememberCarePlanFromPaymentIntent(
+  client,
+  paymentIntent,
+  settledAt,
+) {
+  const carePlan = paymentIntent.metadata?.care_plan;
+  const customer = customerId(paymentIntent.customer);
+  if (!customer || !CARE_PRICE_ENV[carePlan]) return;
+
+  settledAt =
+    settledAt || paymentIntent.created || Math.floor(Date.now() / 1000);
   await client.customers.update(customer, {
-    metadata: { care_plan: carePlan, source: "forge_deposit_checkout" },
+    metadata: {
+      care_plan: carePlan,
+      source: "forge_deposit_checkout",
+      care_payment_settled_at: String(settledAt),
+      care_countdown_ends_at: String(addOneMonth(settledAt)),
+      care_payment_intent: paymentIntent.id,
+    },
   });
 }
 
-async function provisionCareAfterFinalPayment(client, invoice) {
+async function provisionCareAfterFinalPayment(client, invoice, settledAt) {
   const lookup = invoice.metadata?.lookup;
   if (!FINAL_PAYMENT_LOOKUPS.has(lookup)) return null;
 
-  const customer =
-    typeof invoice.customer === "string"
-      ? invoice.customer
-      : invoice.customer?.id;
+  const customer = customerId(invoice.customer);
   if (!customer) throw new Error(`Final invoice ${invoice.id} has no customer`);
 
   const customerRecord = await client.customers.retrieve(customer);
@@ -102,7 +130,9 @@ async function provisionCareAfterFinalPayment(client, invoice) {
   if (alreadyProvisioned) return alreadyProvisioned;
 
   const paidAt =
-    invoice.status_transitions?.paid_at || Math.floor(Date.now() / 1000);
+    settledAt ||
+    invoice.status_transitions?.paid_at ||
+    Math.floor(Date.now() / 1000);
   const trialEnd = addOneMonth(paidAt);
   const subscription = await client.subscriptions.create(
     {
@@ -113,13 +143,24 @@ async function provisionCareAfterFinalPayment(client, invoice) {
         source: "forge_final_payment",
         final_invoice: invoice.id,
         care_plan: carePlan,
+        care_countdown_started_at: String(paidAt),
+        care_countdown_ends_at: String(trialEnd),
       },
     },
     { idempotencyKey: `care-after-final:${invoice.id}:${carePlan}` },
   );
 
+  await client.customers.update(customer, {
+    metadata: {
+      care_payment_settled_at: String(paidAt),
+      care_countdown_ends_at: String(trialEnd),
+      care_final_invoice: invoice.id,
+    },
+  });
+
   await notify("FORGE — Care scheduled after final payment", [
     `Plan: ${carePlan}`,
+    `Settlement: ${new Date(paidAt * 1000).toISOString()}`,
     `Starts billing: ${new Date(trialEnd * 1000).toISOString()}`,
     `Customer: ${customer}`,
     `Subscription: ${subscription.id}`,
@@ -171,7 +212,7 @@ async function handleEvent(client, event) {
         console.log("checkout session completed but unpaid", object.id);
         return;
       }
-      await rememberCarePlan(client, object);
+      await rememberCarePlan(client, object, event.created);
       const plan = object.metadata?.plan_label || object.metadata?.plan || "—";
       await notify(`FORGE — paid: ${plan}`, [
         `Plan: ${plan}`,
@@ -181,6 +222,25 @@ async function handleEvent(client, event) {
         `Name: ${object.customer_details?.name || "unknown"}`,
         `Customer: ${object.customer || "none"}`,
         `Session: ${object.id}`,
+      ]);
+      return;
+    }
+
+    case "payment_intent.succeeded": {
+      // ACH Direct Debit reaches this event only after the bank settles the
+      // payment. Persist the settlement marker and, for a final invoice,
+      // start the Care countdown from this settlement timestamp.
+      await rememberCarePlanFromPaymentIntent(client, object, event.created);
+      const invoiceId = object.invoice && customerId(object.invoice);
+      if (invoiceId) {
+        const invoice = await client.invoices.retrieve(invoiceId);
+        await provisionCareAfterFinalPayment(client, invoice, event.created);
+      }
+      await notify("FORGE — ACH payment settled", [
+        `Payment intent: ${object.id}`,
+        `Customer: ${object.customer || "unknown"}`,
+        `Settled: ${new Date((event.created || Date.now() / 1000) * 1000).toISOString()}`,
+        `Invoice: ${invoiceId || "none"}`,
       ]);
       return;
     }

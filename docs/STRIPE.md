@@ -44,7 +44,10 @@ Deposit Checkout asks the customer to choose Care or Care+. The choice is stored
 on the Stripe Customer when the deposit settles. The webhook provisions no
 subscription at that point. When the final invoice is paid (`forge_site_final`
 or `forge_system_launch`), the webhook creates the selected subscription with a
-one-month trial ending one month after Stripe's settled `paid_at` timestamp.
+one-month trial ending one month after Stripe's settlement event timestamp.
+For ACH, the handler consumes `payment_intent.succeeded`—Stripe emits it after
+the bank settles the debit—and records `care_payment_settled_at` and
+`care_countdown_ends_at` on the Customer and subscription metadata.
 The first Care charge therefore follows the final build payment, which is the
 launch event. ACH and other delayed payment methods cannot provision Care early:
 the handler ignores unpaid Checkout completions and waits for the asynchronous
@@ -118,6 +121,7 @@ Stripe retries cannot create a duplicate subscription.
    - `checkout.session.completed`
    - `checkout.session.async_payment_succeeded`
    - `checkout.session.async_payment_failed`
+   - `payment_intent.succeeded`
    - `customer.subscription.created` / `.updated` / `.deleted`
    - `invoice.paid`
    - `invoice.payment_failed`
@@ -140,6 +144,9 @@ Two details that matter there:
 - `checkout.session.completed` arrives **while the session is still unpaid** for
   delayed-notification methods (bank debits). The handler skips those and waits
   for `checkout.session.async_payment_succeeded`.
+- `payment_intent.succeeded` is the settlement-level signal for ACH Direct Debit.
+  The handler uses the event's `created` timestamp—not Checkout creation time—to
+  start the one-month Care countdown.
 - The handler returns non-2xx on failure so Stripe retries with backoff, and
   never acts on a body whose signature did not verify.
 
