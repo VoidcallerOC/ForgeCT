@@ -254,7 +254,7 @@
     const steps = [
       {
         label: "Hours and door",
-        copy: "Tue–Sun · address · how to walk in. Built so a phone in the lot finds you before they drive past.",
+        copy: "Mon–Sun · address · how to walk in. Built so a phone in the lot finds you before they drive past.",
       },
       {
         label: "What is on your floor",

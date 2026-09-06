@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Payment received. FORGE CT will be in touch from the studio inbox." />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#0A0A0A" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Space+Grotesk:wght@400;500;600;700&display=swap" />
+    <link rel="stylesheet" href="/styles.css?v=20260905n" />
+    <link rel="stylesheet" href="/brand.css?v=20260905n" />
+    <title>Payment received — FORGE CT</title>
+    <script src="/checkout.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <header class="site-header">
+      <div class="shell nav-wrap">
+        <a class="brand" href="/" aria-label="FORGE CT home"><img src="/brand/DTsjw.png" width="220" height="32" alt="FORGE CT" /></a>
+        <nav class="primary-nav" aria-label="Primary navigation">
+          <a href="/#work">Work</a>
+          <a href="/services">Services</a>
+          <a href="/care">Care</a>
+          <a href="/#contact">Contact</a>
+        </nav>
+        <a class="button button--small" href="/#contact">Talk about the shop</a>
+      </div>
+    </header>
+    <main id="main-content" class="policy-main">
+      <article class="shell policy-content">
+        <p class="eyebrow">Payment received</p>
+        <h1>That went through. Thank you.</h1>
+        <p class="policy-intro">Stripe emailed your receipt. I get the same notice in the studio inbox and will reply from Create@Forge-CT.com — usually the same day.</p>
+        <h2>Manage your plan</h2>
+        <p>On a Care plan, this opens Stripe's billing page. Update the card, read past receipts, or cancel any month. Bookmark this page to come back to it.</p>
+        <p class="pricing-note">
+          <button class="button" type="button" data-stripe-portal aria-describedby="portal-status">Open billing</button>
+        </p>
+        <p class="form-status" id="portal-status" role="status" aria-live="polite"></p>
+        <p><a href="/services">Back to services</a></p>
+      </article>
+    </main>
+    <footer class="site-footer">
+      <div class="shell footer-bottom">
+        <p>© 2026 FORGE CT. All rights reserved.</p>
+        <p>Farmington, Connecticut</p>
+      </div>
+    </footer>
+  </body>
+</html>
