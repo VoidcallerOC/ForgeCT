@@ -35,7 +35,8 @@
       <article class="shell policy-content">
         <p class="eyebrow">Pay</p>
         <h1>Start care, or settle a build.</h1>
-        <p class="policy-intro">Card details never touch this page. Payments open on Stripe, the same checkout the shops you already know use. Care is month to month and you cancel it yourself.</p>
+        <p class="policy-intro" data-payment-when="care:unset">Card details never touch this page. Card payment is being set up right now; until it is live, start a plan here and I will send the first invoice by hand. Care is month to month either way.</p>
+        <p class="policy-intro" data-payment-when="care:set" hidden>Card details never touch this page. Payments open on Stripe, the same checkout the shops you already know use. Care is month to month and you cancel it yourself.</p>
         <h2>Care plans</h2>
         <div class="compare-grid">
           <div class="compare-col compare-col--us">
@@ -45,7 +46,7 @@
               <li>The page stays up. You still own it.</li>
               <li>Cancel any month, from your own receipt.</li>
             </ul>
-            <p><a class="button" href="/#contact" data-payment-link="care">Start Care — $35/month</a></p>
+            <p><a class="button" href="/#contact" data-payment-link="care" data-payment-label="Start Care — $35/month">Ask about Care — $35/month</a></p>
           </div>
           <div class="compare-col">
             <p class="compare-kicker">Care+ — $79 / month</p>
@@ -54,10 +55,11 @@
               <li>One extra block or small page change a month.</li>
               <li>Same-week turn when the shop is busy.</li>
             </ul>
-            <p><a class="button" href="/#contact" data-payment-link="carePlus">Start Care+ — $79/month</a></p>
+            <p><a class="button" href="/#contact" data-payment-link="carePlus" data-payment-label="Start Care+ — $79/month">Ask about Care+ — $79/month</a></p>
           </div>
         </div>
-        <p class="pricing-note">Already on a plan? <a href="/#contact" data-payment-link="portal">Update your card or cancel</a>. No email required, no retainer trap.</p>
+        <p class="pricing-note" data-payment-when="portal:unset">Already on a plan? <a href="/#contact">Tell me to change the card or stop the plan</a> and it is done that day. No retainer trap, no notice period.</p>
+        <p class="pricing-note" data-payment-when="portal:set" hidden>Already on a plan? <a href="/#contact" data-payment-link="portal">Update your card or cancel</a>. No email required, no retainer trap.</p>
         <h2>Build deposits</h2>
         <p>Builds start at $2,000 and are not a checkout button. After we scope the shop, I send an invoice. Pay it by bank transfer and the fee is a few dollars instead of a few hundred; card works too if you would rather put it on the business card.</p>
         <p><strong>Half to start, half at launch.</strong> On a $2,000 shop page that is $1,000 to put it on the calendar and $1,000 when the page goes live. Same split at every tier. No surprise line at the end.</p>

@@ -9,19 +9,29 @@
   // one of them is a plain outbound link, which is why the Content Security
   // Policy in vercel.json does not need a Stripe entry. Embedding Stripe.js
   // would; that is the trade being avoided here.
-  //
-  // Until a value is set, its link keeps the href already in the markup, which
-  // points at the inquiry form. Nothing here can ship a dead payment button.
   const PAYMENT_LINKS = {
     care: "",
     carePlus: "",
     portal: "",
   };
 
+  // The page ships written for the unconfigured state: buttons ask about a
+  // plan, and the copy says an invoice comes by hand. Setting a URL above
+  // upgrades that link and swaps in the wording that promises checkout, so the
+  // page never claims a payment path it does not have. Both states are in the
+  // markup, so this holds with JavaScript disabled too.
   document.querySelectorAll("[data-payment-link]").forEach((link) => {
     const url = PAYMENT_LINKS[link.getAttribute("data-payment-link")];
     if (!url) return;
     link.href = url;
     link.rel = "noopener";
+    const label = link.getAttribute("data-payment-label");
+    if (label) link.textContent = label;
+  });
+
+  document.querySelectorAll("[data-payment-when]").forEach((element) => {
+    const [key, state] = element.getAttribute("data-payment-when").split(":");
+    const configured = Boolean(PAYMENT_LINKS[key]);
+    element.hidden = state === "set" ? !configured : configured;
   });
 })();
