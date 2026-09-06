@@ -2,7 +2,7 @@
 
 A fast, accessible marketing site for **SousaSaaS**, an independent web design and development practice based in Farmington, Connecticut.
 
-The live project is currently served at [sousasaas.vercel.app](https://sousasaas.vercel.app/). The `sousasaas.com` custom domain has not been configured for this repository; do not add it to canonical tags, sitemap URLs, Open Graph metadata, or email addresses until DNS, hosting, and the mailbox are confirmed.
+The live project is served at [forge-ct.com](https://forge-ct.com/). The custom domain is configured and active.
 
 ## What is included
 

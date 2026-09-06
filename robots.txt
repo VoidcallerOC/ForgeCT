@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://sousasaas.vercel.app/sitemap.xml
+Sitemap: https://forge-ct.com/sitemap.xml
