@@ -82,19 +82,23 @@ the environment. While a value is empty, that link falls back to the href in the
 markup, which points at the inquiry form — an unconfigured button is never a dead
 button. Enabling real payments is editing those three strings.
 
-### If a webhook is added later
+### Stripe webhook fulfillment
 
-Nothing in this project needs one today: there is no database and no client
-accounts, so there is no payment state to record. If that changes, two things in
-this stack will bite:
+The production webhook is live at `/api/stripe-webhook`. It verifies Stripe
+signatures against the raw request body, ignores unpaid delayed-payment
+checkouts, records ACH settlement timestamps, and starts the Care one-month
+countdown after a settled final payment. The endpoint is registered in the live
+Stripe account for checkout, PaymentIntent, subscription, and invoice events.
+
+Two operational limits remain:
 
 - Stripe signature verification needs the raw request body. Vercel's Node runtime
-  parses it first, so the function must opt out with
+  parses it first, so `api/stripe-webhook.js` opts out with
   `export const config = { api: { bodyParser: false } }` — otherwise every
   signature check fails and it reads like a bad signing secret.
-- The in-memory rate-limit map in `api/contact.js` does not survive across
-  serverless instances. It is adequate spam friction on a contact form; do not
-  reuse that pattern for anything financial.
+- The webhook replay guard is currently in memory. Stripe-side idempotency and
+  the final-invoice lookup prevent duplicate Care subscriptions, but durable
+  event storage should be added before payment volume grows.
 
 Embedding Stripe.js or a pricing table instead of linking out would require
 adding `https://js.stripe.com` to `script-src`, adding a `frame-src`, and
@@ -109,6 +113,8 @@ is the cost of an embedded checkout, and the reason this site links out.
 4. Merge the approved change to `main` and wait for the Git-linked Vercel deployment to be READY.
 5. Confirm the production alias serves the newly approved commit—not an earlier redeploy. Check the title, canonical URL, response status, security policy, form behavior, and the core routes again on production.
 6. Verify that HTTPS works on both the apex and `www` hostnames, that the apex permanently redirects to `https://www.forge-ct.com`, and that mail delivery works before requesting indexing.
+7. After the first real payment, confirm the Stripe delivery, Care countdown metadata,
+   subscription timing, and Resend notification in the live Dashboard.
 
 ## Payments
 

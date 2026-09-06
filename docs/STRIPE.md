@@ -200,25 +200,30 @@ If the site ever moves to an embedded Payment Element, that changes — it needs
 `Permissions-Policy: payment=()` header would have to allow `payment=(self)` for
 Apple Pay and Google Pay.
 
-## Known limits
+## Known limits and hardening backlog
 
 - **Portal access is receipt-bound.** The site has no accounts, so `/api/portal`
   trades a `cs_…` session id for a portal link. The id is unguessable and scoped
   to one customer, but if real logins arrive, resolve the customer from the
   session instead.
 - **Replay guard is in-memory.** `api/stripe-webhook.js` dedupes event ids per
-  warm instance. Every side effect today is an email, so a duplicate is noise —
-  move the guard to durable storage before adding fulfillment that is not safe
-  to repeat.
+  warm instance. Stripe-side idempotency and the final-invoice lookup protect
+  the Care subscription side effect, but move event processing records to
+  durable storage before payment volume grows or additional non-repeatable
+  fulfillment is added.
 - **Rate limiting is per-instance.** Same reason; it blunts casual abuse, and
   Stripe's own limits and Radar are the real backstop.
 
-## Before going live
+## Production status and remaining checks
 
-Run through <https://docs.stripe.com/get-started/checklist/go-live.md>. The
-short version for this site: swap the test key for a live `rk_…`, create the
-catalog again in live mode (the price IDs differ), register the live webhook and
-store its own `whsec_…`, and put one real card through Care and refund it.
+The live restricted key, catalog, webhook endpoint, signing secret, and Vercel
+deployment are configured. The endpoint is active at
+`https://www.forge-ct.com/api/stripe-webhook` and listens for nine events,
+including `payment_intent.succeeded` for ACH settlement.
+
+Before treating payments as fully proven, run through
+<https://docs.stripe.com/get-started/checklist/go-live.md> and complete the
+following owner/accounting checks:
 
 Also settle these before the first real charge:
 
@@ -228,3 +233,7 @@ Also settle these before the first real charge:
   the one people look for, and burying it costs the dispute later.
 - The privacy notice covers payments — it currently reads as though the site has
   no e-commerce.
+- Complete one controlled real-payment lifecycle with an approved customer,
+  then verify the Stripe delivery, Care countdown metadata, subscription timing,
+  and Resend notification. Do not use a real charge solely as a technical test.
+- Add durable webhook-event storage before transaction volume increases.
