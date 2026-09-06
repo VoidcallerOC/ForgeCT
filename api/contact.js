@@ -66,6 +66,7 @@ export default async function handler(request, response) {
   const name = String(payload?.name || "").trim();
   const email = String(payload?.email || "").trim();
   const company = String(payload?.company || "").trim();
+  const siteUrl = String(payload?.siteUrl || "").trim();
   const message = String(payload?.message || "").trim();
 
   if (name.length < 2 || name.length > 100) {
@@ -86,10 +87,20 @@ export default async function handler(request, response) {
       .json({ ok: false, error: "Company name is too long." });
   }
 
-  if (message.length < 10 || message.length > 4000) {
+  if (
+    siteUrl &&
+    (siteUrl.length > 500 || !/^https?:\/\/[^\s]+$/i.test(siteUrl))
+  ) {
     return response.status(400).json({
       ok: false,
-      error: "Please add a short note about your shop.",
+      error: "Please add a valid website URL, including https://.",
+    });
+  }
+
+  if (message.length > 4000) {
+    return response.status(400).json({
+      ok: false,
+      error: "Your note is too long. Please keep it under 4,000 characters.",
     });
   }
 
@@ -110,9 +121,10 @@ export default async function handler(request, response) {
     `Name: ${name}`,
     `Email: ${email}`,
     company ? `Company: ${company}` : "",
+    siteUrl ? `Website: ${siteUrl}` : "",
     "",
     "Shop details:",
-    message,
+    message || "No additional note provided.",
   ]
     .filter(Boolean)
     .join("\n");
