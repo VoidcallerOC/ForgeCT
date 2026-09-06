@@ -3,12 +3,12 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Web design for card shops and local businesses in Hartford, Farmington, West Hartford, Southington, and Canton. Live examples, pricing from $2,000, and care from $35/month." />
+    <meta name="description" content="Web design for Hartford-area shops and local businesses. Send FORGE CT your website and get three practical fixes within 24 hours. Builds from $2,000; care from $35/month." />
     <meta name="theme-color" content="#070708" />
     <meta name="robots" content="index,follow" />
     <link rel="canonical" href="https://www.forge-ct.com/hartford-web-design" />
     <meta property="og:title" content="Hartford Web Design for Shops — FORGE CT" />
-    <meta property="og:description" content="See live Greater Hartford shop websites before you book a call. FORGE CT builds clear, mobile-first pages from $2,000." />
+    <meta property="og:description" content="Send your shop URL and get three practical website fixes within 24 hours. Live Greater Hartford work, from $2,000." />
     <meta property="og:url" content="https://www.forge-ct.com/hartford-web-design" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -16,65 +16,113 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Space+Grotesk:wght@400;500;600;700&display=swap" />
     <link rel="stylesheet" href="/styles.css?v=20260904k" />
     <link rel="stylesheet" href="/brand.css?v=20260904k" />
+    <script src="/app.js?v=20260906a" defer></script>
+    <script defer src="https://cdn.vercel-insights.com/v1/script.js"></script>
     <title>Hartford Web Design for Shops — FORGE CT</title>
     <script src="/schema.js" defer></script>
   </head>
-  <body>
+  <body data-conversion-page="hartford-web-design">
     <a class="skip-link" href="#main-content">Skip to content</a>
     <header class="site-header">
       <div class="shell nav-wrap">
         <a class="brand" href="/" aria-label="FORGE CT home">FORGE <span>CT</span></a>
         <nav class="primary-nav" aria-label="Primary navigation">
-          <a href="/#work">Work</a>
-          <a href="/services">Services</a>
-          <a href="/why">Why</a>
-          <a href="/#contact">Contact</a>
+          <a href="#proof" data-track="landing_nav_proof">Work</a>
+          <a href="#offer" data-track="landing_nav_offer">What you get</a>
+          <a href="#contact" data-track="landing_nav_contact">Contact</a>
         </nav>
-        <a class="button button--small" href="/#contact">Talk about your shop</a>
+        <a class="button button--small" data-track="landing_header_cta" href="#contact">Get your 3 fixes</a>
       </div>
     </header>
-    <main id="main-content" class="policy-main">
-      <article class="shell policy-content">
-        <p class="eyebrow">Farmington · Greater Hartford</p>
-        <h1>Hartford web design your walk-ins can use.</h1>
-        <p class="policy-intro">Most Hartford web companies hide the price from you and show you logos. I show you live shop pages: West Hartford, Southington, Canton, and a new card room. From $2,000. Care $35 a month.</p>
-        <h2>See the work first</h2>
-        <p>Open them the way your customers would, from the parking lot.</p>
-        <ul>
-          <li><a href="https://www.thousandsunnytcg.com/">thousandsunnytcg.com</a> — Thousand Sunny Cards, West Hartford</li>
-          <li><a href="https://mjvideogames.com/">mjvideogames.com</a> — M and J Video Games, Southington</li>
-          <li><a href="https://hardhittincardshop.com/">hardhittincardshop.com</a> — Hard Hittin Card Shop</li>
-          <li><a href="https://harrisinwonderland.com/">harrisinwonderland.com</a> — Harris in Wonderland, Canton</li>
-        </ul>
-        <h2>What you get</h2>
-        <p>Your hours, your floor, how to walk in, and a page that holds up on a phone. Not a WordPress stack. Not a six-week discovery deck.</p>
-        <div class="compare-grid">
-          <div class="compare-col compare-col--them">
-            <p class="compare-kicker">Search, and here is what you get</p>
-            <ul>
-              <li>Free quote forms</li>
-              <li>One agency for every trade</li>
-              <li>Your price after the call</li>
-            </ul>
+    <main id="main-content" class="conversion-main">
+      <section class="conversion-hero">
+        <div class="shell conversion-hero-grid">
+          <div class="conversion-hero-copy">
+            <p class="eyebrow"><span class="live-dot" aria-hidden="true"></span> Farmington · Greater Hartford · Built for real shops</p>
+            <h1>A website your walk-ins can use.</h1>
+            <p class="conversion-lede">Send me your shop URL. I’ll reply with <strong>three practical website fixes within 24 hours</strong>—no pitch deck, no quote maze.</p>
+            <div class="conversion-actions">
+              <a class="button" data-track="landing_hero_cta" href="#contact">Get my 3 website fixes <span aria-hidden="true">↗</span></a>
+              <a class="text-link" data-track="landing_hero_work" href="#proof">See live shop work <span aria-hidden="true">↓</span></a>
+            </div>
+            <p class="conversion-proof-line">Live client work in West Hartford, Southington, Canton, and Greater Hartford. Builds from $2,000 · Care from $35/month.</p>
           </div>
-          <div class="compare-col compare-col--us">
-            <p class="compare-kicker">FORGE CT</p>
-            <ul>
-              <li>Shop pages already live</li>
-              <li>Card and tabletop around Hartford</li>
-              <li>Your price, from $2,000, on the site</li>
-            </ul>
+          <aside class="conversion-offer" aria-labelledby="offer-title">
+            <p class="eyebrow eyebrow--dark">A useful first step</p>
+            <h2 id="offer-title">Your site, looked at like a customer.</h2>
+            <ol>
+              <li><strong>Send your URL</strong><span>Tell me what feels stuck.</span></li>
+              <li><strong>Get three fixes</strong><span>Clear, practical, specific to your shop.</span></li>
+              <li><strong>Decide from there</strong><span>Keep the fixes or talk about a build.</span></li>
+            </ol>
+          </aside>
+        </div>
+      </section>
+      <section id="proof" class="conversion-section conversion-section--paper" aria-labelledby="proof-title">
+        <div class="shell">
+          <div class="conversion-heading">
+            <p class="eyebrow">01 — Proof</p>
+            <h2 id="proof-title">Real shops. Live pages.</h2>
+            <p>Open the work the way your customers would—from a phone in the parking lot.</p>
+          </div>
+          <div class="conversion-proof-grid">
+            <a class="conversion-proof-card" data-track="landing_proof_thousand_sunny" href="https://www.thousandsunnytcg.com/" target="_blank" rel="noopener noreferrer">
+              <span class="conversion-proof-name">Thousand Sunny Cards</span><span>West Hartford · Shop page ↗</span>
+            </a>
+            <a class="conversion-proof-card" data-track="landing_proof_mj" href="https://mjvideogames.com/" target="_blank" rel="noopener noreferrer">
+              <span class="conversion-proof-name">M and J Video Games</span><span>Southington · Storefront online ↗</span>
+            </a>
+            <a class="conversion-proof-card" data-track="landing_proof_hard_hittin" href="https://hardhittincardshop.com/" target="_blank" rel="noopener noreferrer">
+              <span class="conversion-proof-name">Hard Hittin Card Shop</span><span>Card shop · New launch ↗</span>
+            </a>
+            <a class="conversion-proof-card" data-track="landing_proof_harris" href="https://harrisinwonderland.com/" target="_blank" rel="noopener noreferrer">
+              <span class="conversion-proof-name">Harris in Wonderland</span><span>Canton · Live inventory ↗</span>
+            </a>
           </div>
         </div>
-        <p class="pricing-note"><a class="button" href="/#contact">Start with your shop, not a pitch deck</a></p>
-        <p class="policy-date">Nick Sousa. Farmington, Connecticut. <a href="/why">Why shops like yours pick FORGE</a>.</p>
-      </article>
+      </section>
+      <section id="offer" class="conversion-section conversion-section--cream" aria-labelledby="offer-section-title">
+        <div class="shell conversion-two-col">
+          <div class="conversion-heading">
+            <p class="eyebrow">02 — What changes</p>
+            <h2 id="offer-section-title">Your hours, your floor, how to walk in.</h2>
+            <p>Customers should not have to hunt Facebook for the real hours or guess what you carry. FORGE CT builds the page around the visit your shop actually wants.</p>
+          </div>
+          <ul class="conversion-checks">
+            <li><strong>Find you first</strong><span>Hours, address, directions, and a clear next step on a phone.</span></li>
+            <li><strong>Know what you carry</strong><span>Collections, events, services, and inventory without the scroll.</span></li>
+            <li><strong>Keep it true</strong><span>Care plans from $35/month for restocks, events, and changes after launch.</span></li>
+          </ul>
+        </div>
+      </section>
+      <section id="contact" class="conversion-section conversion-section--contact" aria-labelledby="contact-title">
+        <div class="shell contact-grid">
+          <div class="contact-copy">
+            <p class="eyebrow eyebrow--dark">03 — Get the fixes</p>
+            <h2 id="contact-title">Send me your shop URL.</h2>
+            <p>Give me five minutes of context. I’ll look at the page like a customer and reply with three practical fixes within 24 hours.</p>
+            <p class="contact-email">Prefer email? <a data-track="landing_email_click" href="mailto:create@forge-ct.com">create@forge-ct.com</a></p>
+          </div>
+          <form class="contact-form" data-contact-form data-form-source="hartford-web-design">
+            <div class="field-group"><label for="name">Your name</label><input id="name" name="name" type="text" autocomplete="name" required /></div>
+            <div class="field-group"><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" required /></div>
+            <div class="field-group"><label for="company">Shop or business name <span class="optional">(optional)</span></label><input id="company" name="company" type="text" autocomplete="organization" /></div>
+            <div class="field-group"><label for="siteUrl">Your website URL</label><input id="siteUrl" name="siteUrl" type="url" inputmode="url" placeholder="https://" required /></div>
+            <div class="honeypot" aria-hidden="true"><label for="website">Website</label><input id="website" name="website" type="text" tabindex="-1" autocomplete="off" /></div>
+            <div class="field-group"><label for="message">What feels stuck? <span class="optional">(optional)</span></label><textarea id="message" name="message" rows="3" placeholder="More calls, clearer hours, better events—whatever you want the page to do."></textarea></div>
+            <button class="button button--ink" data-magnetic type="submit" data-track="landing_form_submit">Send my URL <span aria-hidden="true">↗</span></button>
+            <p class="form-note">Used only to reply to your inquiry. Not stored on this website.</p>
+            <p class="form-status" data-form-status aria-live="polite"></p>
+          </form>
+        </div>
+      </section>
     </main>
     <footer class="site-footer">
-      <div class="shell footer-bottom">
-        <p>© 2026 FORGE CT. All rights reserved.</p>
-        <p>Farmington, Connecticut</p>
+      <div class="shell footer-wrap">
+        <div><a class="brand brand--footer" href="/" aria-label="FORGE CT home">FORGE <span>CT</span></a><p>Shop pages and interactive sites, built like storefronts.</p></div>
+        <div class="footer-links"><a href="#proof">Work</a><a href="#offer">What you get</a><a href="#contact">Contact</a><a href="/privacy">Privacy</a></div>
       </div>
+      <div class="shell footer-bottom"><p>© <span data-current-year>2026</span> FORGE CT. All rights reserved.</p><p>Farmington, Connecticut</p></div>
     </footer>
   </body>
 </html>
