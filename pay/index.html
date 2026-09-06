@@ -64,6 +64,14 @@
         <h2>Build deposits</h2>
         <p>Once we scope the shop, choose the deposit that matches the build. Stripe Checkout supports card and eligible bank-account payments, including ACH Direct Debit. ACH payments can take time to settle, so work begins after Stripe confirms the funds have arrived.</p>
         <p><strong>Half to start, half at launch.</strong> On a $2,000 shop page that is $1,000 to put it on the calendar and $1,000 when the page goes live. Same split at every tier. No surprise line at the end.</p>
+        <aside class="payment-notice" aria-label="Important payment timing and limits">
+          <p class="payment-notice-title">Important for larger deposits</p>
+          <ul>
+            <li>ACH settlement is not instant. Work begins after Stripe confirms the funds have settled.</li>
+            <li>Deposits are subject to Stripe account eligibility, risk checks, and weekly ACH limits.</li>
+            <li>Card checkout or an invoice paid by bank transfer may be available as alternatives.</li>
+          </ul>
+        </aside>
         <div class="field-group">
           <label for="deposit-care-plan">Care plan after launch</label>
           <select id="deposit-care-plan" data-checkout-care-plan name="care_plan" required>
