@@ -1,0 +1,25 @@
+/* Mobile nav: wrap links instead of horizontal scroll / Contact clip */
+@media (max-width: 800px) {
+  .primary-nav {
+    flex-wrap: wrap;
+    gap: 0.75rem 1rem;
+    overflow-x: visible;
+    padding-bottom: 0;
+    -webkit-overflow-scrolling: auto;
+  }
+
+  .primary-nav a {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+
+  .nav-wrap > .button {
+    flex: 0 0 auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-wrap > .button {
+    max-width: 100%;
+  }
+}
