@@ -10,9 +10,9 @@
   // Policy in vercel.json does not need a Stripe entry. Embedding Stripe.js
   // would; that is the trade being avoided here.
   const PAYMENT_LINKS = {
-    care: "",
-    carePlus: "",
-    portal: "",
+    care: "https://buy.stripe.com/4gMbJ30Cc07sd525Mt5EY06",
+    carePlus: "https://buy.stripe.com/4gM9AV84Ef2m4yw3El5EY07",
+    portal: "https://billing.stripe.com/p/login/14A00l1Gg2fAaWUcaR5EY00",
   };
 
   // The page ships written for the unconfigured state: buttons ask about a
