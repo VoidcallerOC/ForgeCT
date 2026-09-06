@@ -103,7 +103,7 @@ const invoice = await stripe.invoices.create({
   // each product carries a tax code that is not the SaaS default.
   automatic_tax: { enabled: process.env.STRIPE_AUTOMATIC_TAX === "true" },
   description: lineLabel,
-  footer: "FORGE CT — Farmington, Connecticut. Questions: Create@Forge-CT.com",
+  footer: "FORGE CT — Farmington, Connecticut. Questions: create@forge-ct.com",
   metadata: { source: "forge_ct_invoice", ...(lookup ? { lookup } : {}) },
 });
 

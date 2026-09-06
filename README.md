@@ -50,7 +50,7 @@ GitHub Actions runs these checks on pull requests and pushes to `main`. Branch p
 The inquiry form posts to `/api/contact`. Delivery uses Resend. Set these Vercel project environment variables before relying on the form in production:
 
 - `RESEND_API_KEY` — Resend API key
-- `CONTACT_TO_EMAIL` — destination inbox (currently the public address `Create@Forge-CT.com`)
+- `CONTACT_TO_EMAIL` — destination inbox (currently the public address `create@forge-ct.com`)
 - `CONTACT_FROM_EMAIL` — optional verified From value (example: `SousaSaaS <hello@your-domain.com>`). Until a custom domain is verified in Resend, the Resend onboarding sender is used.
 
 The visible mailto link remains a fallback. Do not point `CONTACT_TO_EMAIL` at an address until that mailbox actually exists and receives mail.
