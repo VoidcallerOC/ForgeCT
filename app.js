@@ -281,7 +281,7 @@
         copy: "Collections, events, and what you carry — without hunting Facebook for the real hours.",
       },
       {
-        label: "Call or come by",
+        label: "Call or walk in",
         copy: "Your phone, your map, and a page you can keep current. Care after launch is $35/month.",
       },
     ];
