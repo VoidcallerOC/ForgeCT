@@ -15,6 +15,16 @@ const RELEVANT = new Set([
   "invoice.payment_failed",
 ]);
 
+const FINAL_PAYMENT_LOOKUPS = new Set([
+  "forge_site_final",
+  "forge_system_launch",
+]);
+
+const CARE_PRICE_ENV = {
+  care: "STRIPE_PRICE_CARE",
+  "care-plus": "STRIPE_PRICE_CARE_PLUS",
+};
+
 // Best-effort replay guard for a warm instance. Every side effect below is an
 // email, so a duplicate is noise rather than a double charge — swap this for a
 // durable store before adding fulfillment that is not safe to repeat.
@@ -32,6 +42,90 @@ function rawBody(request) {
 function money(amount, currency) {
   if (typeof amount !== "number") return "";
   return `${(amount / 100).toFixed(2)} ${String(currency || "usd").toUpperCase()}`;
+}
+
+function addOneMonth(timestamp) {
+  const date = new Date(timestamp * 1000);
+  const day = date.getUTCDate();
+  date.setUTCDate(1);
+  date.setUTCMonth(date.getUTCMonth() + 1);
+  const lastDay = new Date(
+    Date.UTC(date.getUTCFullYear(), date.getUTCMonth() + 1, 0),
+  ).getUTCDate();
+  date.setUTCDate(Math.min(day, lastDay));
+  return Math.floor(date.getTime() / 1000);
+}
+
+async function rememberCarePlan(client, session) {
+  const carePlan = session.metadata?.care_plan;
+  const customer =
+    typeof session.customer === "string"
+      ? session.customer
+      : session.customer?.id;
+  if (!customer || !CARE_PRICE_ENV[carePlan]) return;
+  await client.customers.update(customer, {
+    metadata: { care_plan: carePlan, source: "forge_deposit_checkout" },
+  });
+}
+
+async function provisionCareAfterFinalPayment(client, invoice) {
+  const lookup = invoice.metadata?.lookup;
+  if (!FINAL_PAYMENT_LOOKUPS.has(lookup)) return null;
+
+  const customer =
+    typeof invoice.customer === "string"
+      ? invoice.customer
+      : invoice.customer?.id;
+  if (!customer) throw new Error(`Final invoice ${invoice.id} has no customer`);
+
+  const customerRecord = await client.customers.retrieve(customer);
+  const carePlan = customerRecord.metadata?.care_plan;
+  const priceEnv = CARE_PRICE_ENV[carePlan];
+  if (!priceEnv) {
+    console.warn("Final payment has no Care plan", invoice.id, customer);
+    return null;
+  }
+
+  const price = process.env[priceEnv];
+  if (!price) throw new Error(`${priceEnv} is not configured`);
+
+  const existing = await client.subscriptions.list({
+    customer,
+    status: "all",
+    limit: 100,
+  });
+  const alreadyProvisioned = existing.data.find(
+    (subscription) =>
+      subscription.metadata?.source === "forge_final_payment" &&
+      subscription.metadata?.final_invoice === invoice.id,
+  );
+  if (alreadyProvisioned) return alreadyProvisioned;
+
+  const paidAt =
+    invoice.status_transitions?.paid_at || Math.floor(Date.now() / 1000);
+  const trialEnd = addOneMonth(paidAt);
+  const subscription = await client.subscriptions.create(
+    {
+      customer,
+      items: [{ price }],
+      trial_end: trialEnd,
+      metadata: {
+        source: "forge_final_payment",
+        final_invoice: invoice.id,
+        care_plan: carePlan,
+      },
+    },
+    { idempotencyKey: `care-after-final:${invoice.id}:${carePlan}` },
+  );
+
+  await notify("FORGE — Care scheduled after final payment", [
+    `Plan: ${carePlan}`,
+    `Starts billing: ${new Date(trialEnd * 1000).toISOString()}`,
+    `Customer: ${customer}`,
+    `Subscription: ${subscription.id}`,
+    `Final invoice: ${invoice.id}`,
+  ]);
+  return subscription;
 }
 
 async function notify(subject, lines) {
@@ -77,6 +171,7 @@ async function handleEvent(event) {
         console.log("checkout session completed but unpaid", object.id);
         return;
       }
+      await rememberCarePlan(client, object);
       const plan = object.metadata?.plan_label || object.metadata?.plan || "—";
       await notify(`FORGE — paid: ${plan}`, [
         `Plan: ${plan}`,
@@ -111,6 +206,7 @@ async function handleEvent(event) {
       return;
 
     case "invoice.paid":
+      await provisionCareAfterFinalPayment(client, object);
       await notify("FORGE — invoice paid", [
         `Number: ${object.number || object.id}`,
         `Amount: ${money(object.amount_paid, object.currency)}`,

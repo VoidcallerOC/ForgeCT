@@ -38,6 +38,19 @@ Each installment is its own Stripe **Product**, because Checkout and invoices
 print the product name on the line item. A shop that clicks "Start Care" should
 get a receipt that says Care — not a shared or generic product name.
 
+## Care starts after launch
+
+Deposit Checkout asks the customer to choose Care or Care+. The choice is stored
+on the Stripe Customer when the deposit settles. The webhook provisions no
+subscription at that point. When the final invoice is paid (`forge_site_final`
+or `forge_system_launch`), the webhook creates the selected subscription with a
+one-month trial ending one month after Stripe's settled `paid_at` timestamp.
+The first Care charge therefore follows the final build payment, which is the
+launch event. ACH and other delayed payment methods cannot provision Care early:
+the handler ignores unpaid Checkout completions and waits for the asynchronous
+settlement event. Subscription creation is keyed by final invoice and plan so
+Stripe retries cannot create a duplicate subscription.
+
 ## Files
 
 | Path                           | Role                                                                  |
