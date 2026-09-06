@@ -110,10 +110,21 @@ is the cost of an embedded checkout, and the reason this site links out.
 5. Confirm the production alias serves the newly approved commit—not an earlier redeploy. Check the title, canonical URL, response status, security policy, form behavior, and the core routes again on production.
 6. If a custom domain is later configured, update the canonical tag, Open Graph URLs, sitemap, `robots.txt`, contact email address, and this README in the same pull request. Verify HTTPS, both apex and `www` redirect behavior, and mail delivery before requesting indexing.
 
+## Payments
+
+Deposits, the Care plans, and project invoices run through Stripe. The plan,
+environment variables, webhook setup, and tax posture are documented in
+[`docs/STRIPE.md`](docs/STRIPE.md).
+
+Buttons on `/services` and `/care` post to `/api/checkout`, which returns a
+Stripe-hosted Checkout URL — no card data touches this origin and the Content
+Security Policy is unchanged. Fulfillment runs in `api/stripe-webhook.js`, not
+on the `/thanks` page.
+
 ## Privacy notice
 
 `privacy/index.html` is a working website privacy notice based on the current implementation, which includes Vercel delivery, Google Fonts, and a server-side inquiry form. It is not legal advice. Have qualified counsel review it before relying on it, especially if the site adds analytics, advertising pixels, form processing, account features, e-commerce, or visitors in additional jurisdictions.
 
 ## Security model
 
-The project uses a restrictive Content Security Policy that permits only same-origin scripts and local styles, plus the Google Fonts stylesheet and font origins. Keep application styles in `styles.css` and JavaScript in `app.js`; do not add inline style or script blocks without deliberately updating and validating the policy. Production HTTPS, HSTS, frame protection, a restrictive permissions policy, and a strict referrer policy are configured in `vercel.json`.
+The project uses a restrictive Content Security Policy that permits only same-origin scripts and local styles, plus the Google Fonts stylesheet and font origins. Keep application styles in `styles.css` and JavaScript in `app.js` or `checkout.js`; do not add inline style or script blocks without deliberately updating and validating the policy. Production HTTPS, HSTS, frame protection, a restrictive permissions policy, and a strict referrer policy are configured in `vercel.json`.

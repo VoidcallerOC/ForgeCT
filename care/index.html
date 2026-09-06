@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="/brand.css?v=20260905n" />
     <title>Shop care from $35/month — FORGE CT</title>
     <script src="/schema.js" defer></script>
+    <script src="/checkout.js" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to content</a>
@@ -66,6 +67,10 @@
               <li>The page stays up. You still own it.</li>
               <li>Cancel anytime. No retainer trap.</li>
             </ul>
+            <p class="pricing-note">
+              <button class="button" type="button" data-stripe-plan="care" aria-describedby="care-status">Start Care — $35/mo</button>
+            </p>
+            <p class="form-status" id="care-status" role="status" aria-live="polite"></p>
           </div>
           <div class="compare-col">
             <p class="compare-kicker">Care+ — $79 / month</p>
@@ -75,6 +80,10 @@
               <li>Same-week turn when the shop is busy.</li>
               <li>For shops that change the floor often.</li>
             </ul>
+            <p class="pricing-note">
+              <button class="button" type="button" data-stripe-plan="care-plus" aria-describedby="care-plus-status">Start Care+ — $79/mo</button>
+            </p>
+            <p class="form-status" id="care-plus-status" role="status" aria-live="polite"></p>
           </div>
         </div>
         <div class="faq-grid">

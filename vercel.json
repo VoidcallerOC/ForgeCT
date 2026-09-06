@@ -45,7 +45,7 @@
       ]
     },
     {
-      "source": "/(styles.css|brand.css|pitch.css|app.js|schema.js|payments.js|favicon.svg)",
+      "source": "/(styles.css|brand.css|pitch.css|app.js|schema.js|checkout.js|payments.js|favicon.svg)",
       "headers": [
         {
           "key": "Cache-Control",
