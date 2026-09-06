@@ -1,8 +1,8 @@
-# SousaSaaS
+# FORGE CT
 
-A fast, accessible marketing site for **SousaSaaS**, an independent web design and development practice based in Farmington, Connecticut.
+A fast, accessible marketing site for **FORGE CT**, an independent web design and development practice based in Farmington, Connecticut.
 
-The live project is currently served at [sousasaas.vercel.app](https://sousasaas.vercel.app/). The `sousasaas.com` custom domain has not been configured for this repository; do not add it to canonical tags, sitemap URLs, Open Graph metadata, or email addresses until DNS, hosting, and the mailbox are confirmed.
+The production site is [www.forge-ct.com](https://www.forge-ct.com/). The apex domain redirects permanently to the `www` hostname, which is the canonical host used by page metadata, the sitemap, crawler controls, and Stripe return URLs.
 
 ## What is included
 
@@ -51,7 +51,7 @@ The inquiry form posts to `/api/contact`. Delivery uses Resend. Set these Vercel
 
 - `RESEND_API_KEY` — Resend API key
 - `CONTACT_TO_EMAIL` — destination inbox (currently the public address `create@forge-ct.com`)
-- `CONTACT_FROM_EMAIL` — optional verified From value (example: `SousaSaaS <hello@your-domain.com>`). Until a custom domain is verified in Resend, the Resend onboarding sender is used.
+- `CONTACT_FROM_EMAIL` — optional verified From value (example: `FORGE CT <hello@forge-ct.com>`). Until a custom domain is verified in Resend, the Resend onboarding sender is used.
 
 The visible mailto link remains a fallback. Do not point `CONTACT_TO_EMAIL` at an address until that mailbox actually exists and receives mail.
 
@@ -108,7 +108,7 @@ is the cost of an embedded checkout, and the reason this site links out.
 3. Review the Vercel preview at desktop and mobile widths. Confirm that the site is styled, the inquiry form posts to `/api/contact`, `/privacy`, `/robots.txt`, `/sitemap.xml`, `/favicon.svg`, and `/images/og-image.jpg` return 200, and the page has the expected metadata.
 4. Merge the approved change to `main` and wait for the Git-linked Vercel deployment to be READY.
 5. Confirm the production alias serves the newly approved commit—not an earlier redeploy. Check the title, canonical URL, response status, security policy, form behavior, and the core routes again on production.
-6. If a custom domain is later configured, update the canonical tag, Open Graph URLs, sitemap, `robots.txt`, contact email address, and this README in the same pull request. Verify HTTPS, both apex and `www` redirect behavior, and mail delivery before requesting indexing.
+6. Verify that HTTPS works on both the apex and `www` hostnames, that the apex permanently redirects to `https://www.forge-ct.com`, and that mail delivery works before requesting indexing.
 
 ## Payments
 
