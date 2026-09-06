@@ -1,6 +1,26 @@
 (() => {
   "use strict";
 
+  window.va =
+    window.va ||
+    function (...args) {
+      (window.vaq = window.vaq || []).push(args);
+    };
+
+  const track = (name, properties = {}) => {
+    window.va("event", { name, ...properties });
+  };
+
+  track("landing_page_view", {
+    page: document.body.dataset.conversionPage || window.location.pathname,
+  });
+
+  document.addEventListener("click", (event) => {
+    const target = event.target.closest("[data-track]");
+    if (!target) return;
+    track(target.getAttribute("data-track"));
+  });
+
   const reducedMotion = window.matchMedia(
     "(prefers-reduced-motion: reduce)",
   ).matches;
@@ -311,6 +331,7 @@
       name: String(formData.get("name") || "").trim(),
       email: String(formData.get("email") || "").trim(),
       company: String(formData.get("company") || "").trim(),
+      siteUrl: String(formData.get("siteUrl") || "").trim(),
       message: String(formData.get("message") || "").trim(),
       website: String(formData.get("website") || "").trim(),
     };
@@ -337,8 +358,12 @@
       }
 
       form.reset();
+      track("lead_form_success", {
+        source:
+          form.getAttribute("data-form-source") || window.location.pathname,
+      });
       status.textContent =
-        "Received. I will reply from the studio inbox as soon as I can.";
+        "Received. I’ll reply with three practical fixes within 24 hours.";
     } catch {
       status.textContent =
         "The message could not be sent. Email create@forge-ct.com instead.";
