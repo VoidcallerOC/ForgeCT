@@ -122,11 +122,20 @@ const CATALOG = [
 ];
 
 const apply = process.argv.includes("--apply");
-const key = process.env.STRIPE_SECRET_KEY;
 
-if (!key) {
-  console.error("Set STRIPE_SECRET_KEY (a restricted key, rk_…) first.");
-  process.exit(1);
+/**
+ * The key normally comes from STRIPE_SECRET_KEY. Some environments instead
+ * attach it at an egress proxy, where it never reaches the process — the SDK
+ * still needs a non-empty string to build a request, so stand one in and say
+ * so, rather than failing on an absence that is not really missing.
+ */
+const proxyAuth = !process.env.STRIPE_SECRET_KEY;
+const key = process.env.STRIPE_SECRET_KEY || "sk_credential_attached_by_proxy";
+
+if (proxyAuth) {
+  console.log(
+    "No STRIPE_SECRET_KEY set — relying on proxy-attached credentials.",
+  );
 }
 
 const stripe = new Stripe(key, { apiVersion: API_VERSION });
