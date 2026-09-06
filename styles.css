@@ -598,6 +598,32 @@ h2 em {
   font-size: 0.92rem;
 }
 
+.payment-notice {
+  margin: 2rem 0;
+  padding: 1.2rem 1.35rem;
+  color: var(--ink);
+  background: var(--surface-2);
+  border-left: 4px solid var(--brick);
+}
+
+.payment-notice-title {
+  margin: 0 0 0.55rem;
+  color: var(--brick);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.payment-notice ul {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+
+.payment-notice li + li {
+  margin-top: 0.35rem;
+}
+
 .payment-cta {
   display: flex;
   align-items: center;
