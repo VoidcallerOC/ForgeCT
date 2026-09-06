@@ -1,6 +1,7 @@
 {
   "name": "sousasaas",
   "version": "1.0.0",
+  "type": "module",
   "private": true,
   "description": "Front Window marketing website",
   "scripts": {
