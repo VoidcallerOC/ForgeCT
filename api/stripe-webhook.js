@@ -199,7 +199,7 @@ async function notify(subject, lines) {
   }
 }
 
-async function handleEvent(client, event) {
+export async function handleEvent(client, event) {
   const object = event.data.object;
 
   switch (event.type) {
