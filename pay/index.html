@@ -3,11 +3,11 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Start a FORGE care plan or pay a build deposit. Care $35/month, Care+ $79/month, cancel anytime. Build deposits by invoice with bank transfer." />
+    <meta name="description" content="Start a FORGE care plan or pay a build deposit. Care $35/month, Care+ $79/month, cancel anytime. Build deposits from $2,000 with secure Stripe Checkout." />
     <meta name="theme-color" content="#0A0A0A" />
     <link rel="canonical" href="https://www.forge-ct.com/pay" />
     <meta property="og:title" content="Pay FORGE CT — care plans and build deposits" />
-    <meta property="og:description" content="Care $35/month, Care+ $79/month, cancel anytime. Build deposits by invoice." />
+    <meta property="og:description" content="Care $35/month, Care+ $79/month, cancel anytime. Build deposits from $2,000 with secure Stripe Checkout." />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="/brand.css?v=20260905n" />
     <title>Pay FORGE CT — care plans and build deposits</title>
     <script src="/payments.js?v=20260905n" defer></script>
+    <script src="/checkout.js?v=20260905n" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to content</a>
@@ -61,9 +62,23 @@
         <p class="pricing-note" data-payment-when="portal:unset">Already on a plan? <a href="/#contact">Tell me to change the card or stop the plan</a> and it is done that day. No retainer trap, no notice period.</p>
         <p class="pricing-note" data-payment-when="portal:set" hidden>Already on a plan? <a href="/#contact" data-payment-link="portal">Update your card or cancel</a>. No email required, no retainer trap.</p>
         <h2>Build deposits</h2>
-        <p>Builds start at $2,000 and are not a checkout button. After we scope the shop, I send an invoice. Pay it by bank transfer and the fee is a few dollars instead of a few hundred; card works too if you would rather put it on the business card.</p>
+        <p>Once we scope the shop, choose the deposit that matches the build. Stripe Checkout supports card and eligible bank-account payments, including ACH Direct Debit. ACH payments can take time to settle, so work begins after Stripe confirms the funds have arrived.</p>
         <p><strong>Half to start, half at launch.</strong> On a $2,000 shop page that is $1,000 to put it on the calendar and $1,000 when the page goes live. Same split at every tier. No surprise line at the end.</p>
-        <p class="pricing-note"><a class="button" href="/#contact">Scope a build</a></p>
+        <div class="compare-grid">
+          <div class="compare-col compare-col--us">
+            <p class="compare-kicker">Local Business Site — $2,000 deposit</p>
+            <p>For a focused shop page, local business site, or small launch build.</p>
+            <p><button class="button" type="button" data-stripe-plan="site-deposit" aria-describedby="site-deposit-status">Pay the $2,000 deposit</button></p>
+            <p class="form-status" id="site-deposit-status" role="status" aria-live="polite"></p>
+          </div>
+          <div class="compare-col">
+            <p class="compare-kicker">Site and System — scoped deposit</p>
+            <p>For a larger build with systems, automations, or a deeper launch plan.</p>
+            <p><button class="button" type="button" data-stripe-plan="system-deposit" aria-describedby="system-deposit-status">Pay the system deposit</button></p>
+            <p class="form-status" id="system-deposit-status" role="status" aria-live="polite"></p>
+          </div>
+        </div>
+        <p class="pricing-note">Prefer an invoice or bank transfer? <a href="/#contact">Scope a build first</a> and we can arrange it.</p>
         <div class="faq-grid">
           <details open>
             <summary>Where does my card go?</summary>
