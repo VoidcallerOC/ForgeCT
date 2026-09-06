@@ -64,6 +64,11 @@
         <h2>Build deposits</h2>
         <p>Once we scope the shop, choose the deposit that matches the build. Stripe Checkout supports card and eligible bank-account payments, including ACH Direct Debit. ACH payments can take time to settle, so work begins after Stripe confirms the funds have arrived.</p>
         <p><strong>Half to start, half at launch.</strong> On a $2,000 shop page that is $1,000 to put it on the calendar and $1,000 when the page goes live. Same split at every tier. No surprise line at the end.</p>
+        <div class="field-group">
+          <label for="deposit-email">Email for your Stripe receipt</label>
+          <input id="deposit-email" data-checkout-email type="email" name="email" autocomplete="email" placeholder="you@example.com" required />
+          <p class="form-note">Stripe uses this address for your receipt and payment-status updates.</p>
+        </div>
         <div class="compare-grid">
           <div class="compare-col compare-col--us">
             <p class="compare-kicker">Local Business Site — $2,000 deposit</p>

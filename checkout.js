@@ -45,8 +45,20 @@
     }
   }
 
+  function checkoutPayload(button) {
+    const emailField = document.querySelector("[data-checkout-email]");
+    if (!emailField) return { plan: button.dataset.stripePlan };
+    if (!emailField.reportValidity()) {
+      throw new Error("Enter a valid email address to continue.");
+    }
+    return {
+      plan: button.dataset.stripePlan,
+      email: emailField.value.trim(),
+    };
+  }
+
   bind("[data-stripe-plan]", (button) =>
-    post("/api/checkout", { plan: button.dataset.stripePlan }),
+    post("/api/checkout", checkoutPayload(button)),
   );
 
   bind("[data-stripe-portal]", () => {
