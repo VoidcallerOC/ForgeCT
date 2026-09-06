@@ -89,7 +89,7 @@ export default async function handler(request, response) {
   if (message.length < 10 || message.length > 4000) {
     return response.status(400).json({
       ok: false,
-      error: "Please add a short note about the shop.",
+      error: "Please add a short note about your shop.",
     });
   }
 

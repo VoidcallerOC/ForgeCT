@@ -187,28 +187,28 @@
       name: "Local Business Site",
       price: "From $2,000",
       blurb:
-        "The shop page. Three to five pages: hours, the floor, how to walk in.",
+        "Your shop page. Three to five pages: your hours, your floor, how to walk in.",
       bullets: [
-        "Hours, the floor, how to walk in",
-        "Works on a phone in the parking lot",
-        "Collections and events people can find",
+        "Your hours, your floor, how to walk in",
+        "Works on a phone in your parking lot",
+        "Collections and events your customers can find",
       ],
     },
     system: {
       name: "Site and System",
       price: "From $6,000",
       blurb:
-        "Events, play nights, collection intake, or a bigger site around the shop.",
+        "Events, play nights, collection intake, or a bigger site around your shop.",
       bullets: [
         "Events and play nights on the page",
-        "Collection intake that matches the floor",
-        "Bigger site around the same shop",
+        "Collection intake that matches your floor",
+        "A bigger site around the same shop of yours",
       ],
     },
     product: {
       name: "Product Site",
       price: "From $16,000",
-      blurb: "A catalog or checkout that matches how the shop actually sells.",
+      blurb: "A catalog or checkout that matches how you actually sell.",
       bullets: [
         "Catalog that matches how you sell",
         "Checkout or trade-in path people understand",
@@ -257,12 +257,12 @@
         copy: "Mon–Sun · address · how to walk in. Built so a phone in the lot finds you before they drive past.",
       },
       {
-        label: "What is on the floor",
+        label: "What is on your floor",
         copy: "Collections, events, and what you carry — without hunting Facebook for the real hours.",
       },
       {
         label: "Call or come by",
-        copy: "Phone, map, and a page you can keep current. Care after launch is $35/month.",
+        copy: "Your phone, your map, and a page you can keep current. Care after launch is $35/month.",
       },
     ];
     const labelEl = visit.querySelector("[data-visit-label]");
