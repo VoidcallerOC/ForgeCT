@@ -158,7 +158,7 @@ async function notify(subject, lines) {
   }
 }
 
-async function handleEvent(event) {
+async function handleEvent(client, event) {
   const object = event.data.object;
 
   switch (event.type) {
@@ -267,7 +267,7 @@ export default async function handler(request, response) {
   }
 
   try {
-    await handleEvent(event);
+    await handleEvent(client, event);
     if (seen.size > 500) seen.clear();
     seen.add(event.id);
     return response.status(200).json({ ok: true });
