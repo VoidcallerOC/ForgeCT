@@ -49,13 +49,13 @@ export const CATALOG = {
   },
   "site-deposit": {
     mode: "payment",
-    label: "Local Business Site deposit",
+    label: "Local Business Site — deposit",
     priceEnv: "STRIPE_PRICE_SITE_DEPOSIT",
     integrationIdentifier: INTEGRATION_ID.deposit,
   },
   "system-deposit": {
     mode: "payment",
-    label: "Site and System deposit",
+    label: "Site and System — deposit",
     priceEnv: "STRIPE_PRICE_SYSTEM_DEPOSIT",
     integrationIdentifier: INTEGRATION_ID.deposit,
   },

@@ -8,23 +8,35 @@ v22).
 
 ## What maps to what
 
-| On the site                       | Stripe product | Mechanism                                            |
-| --------------------------------- | -------------- | ---------------------------------------------------- |
-| Local Business Site — from $2,000 | Payments       | Checkout Session, `mode: "payment"` — $1,000 deposit |
-| Site and System — from $6,000     | Payments       | Checkout Session, `mode: "payment"` — $3,000 deposit |
-| Care — $35/mo                     | Billing        | Checkout Session, `mode: "subscription"`             |
-| Care+ — $79/mo                    | Billing        | Checkout Session, `mode: "subscription"`             |
-| Project balance after launch      | Invoicing      | `scripts/stripe-invoice.mjs`                         |
-| Card change, receipts, cancel     | Billing        | Customer Portal, from `/thanks`                      |
+| On the site                       | Stripe product | Mechanism                                         |
+| --------------------------------- | -------------- | ------------------------------------------------- |
+| Local Business Site — from $2,000 | Payments       | Checkout Session, `mode: "payment"` — first half  |
+| Site and System — from $6,000     | Payments       | Checkout Session, `mode: "payment"` — first third |
+| Care — $35/mo                     | Billing        | Checkout Session, `mode: "subscription"`          |
+| Care+ — $79/mo                    | Billing        | Checkout Session, `mode: "subscription"`          |
+| Later installments                | Invoicing      | `scripts/stripe-invoice.mjs --lookup …`           |
+| Card change, receipts, cancel     | Billing        | Customer Portal, from `/thanks`                   |
 
-The published prices are floors ("from $2,000"), so the site sells a **fixed
-deposit** and the balance goes out as an invoice once scope is settled. That
-keeps a real number on the page — the thing the services page promises — without
-pretending every shop costs the same.
+## Installments
 
-Each plan is its own Stripe **Product**. Checkout and invoice line items print
-the product name, so sharing one product across tiers would make every receipt
-read the same.
+The published prices are floors ("from $2,000"), so the site sells only the
+**first** installment. Everything after it goes out as an invoice, once scope is
+settled and the real number is known.
+
+| Build               | Total  | Split                           |
+| ------------------- | ------ | ------------------------------- |
+| Local Business Site | $2,000 | halves — deposit, final         |
+| Site and System     | $6,000 | thirds — deposit, build, launch |
+
+The installment amounts live in two constants at the top of
+`scripts/stripe-bootstrap.mjs` (`SITE_INSTALLMENT`, `SYSTEM_INSTALLMENT`). **The
+catalog and the services page have to agree.** If a Site and System build is
+really $9,000, change `SYSTEM_INSTALLMENT` to `300000` and change the "from
+$6,000" copy on `/services` in the same commit.
+
+Each installment is its own Stripe **Product**, because Checkout and invoices
+print the product name on the line item. A shop that clicks "Start Care" should
+get a receipt that says Care — not a shared or generic product name.
 
 ## Files
 
@@ -48,15 +60,27 @@ read the same.
    everything else at _None_. Use a restricted key rather than `sk_…` so a leak
    from the deployment cannot move money out or read the whole account.
 
-2. **Create the catalog** against a test key first:
+2. **Reconcile the catalog** against a test key first:
 
    ```sh
-   STRIPE_SECRET_KEY=rk_test_… node scripts/stripe-bootstrap.mjs          # dry run
+   STRIPE_SECRET_KEY=rk_test_… node scripts/stripe-bootstrap.mjs          # report only
    STRIPE_SECRET_KEY=rk_test_… node scripts/stripe-bootstrap.mjs --apply
    ```
 
-   It prints the four `STRIPE_PRICE_*` values. Re-running is safe — it matches
-   on `lookup_key` before creating anything.
+   The script **adopts products that already exist**, including ones created by
+   hand in the Dashboard. It matches on a metadata tag, then the canonical name,
+   then any known former name (`Website Maintenance` → `Care`,
+   `Site - First Deposit` → `Local Business Site — deposit`, and so on), then
+   renames and re-describes what it finds. Re-running is safe and it never
+   creates a duplicate of a product it can recognise.
+
+   Read the dry run before applying. It reports three things worth acting on:
+   active products it did not claim (archive the duplicates), prices at the
+   wrong amount (Stripe prices are immutable, so it creates the right one and
+   names the old price for you to archive), and unset tax codes.
+
+   It prints the four `STRIPE_PRICE_*` values the site needs, plus the lookup
+   keys for the installments that are invoiced later.
 
 3. **Set the environment** (Vercel → Project → Settings → Environment Variables):
 
@@ -126,6 +150,15 @@ Run the site's own checks before deploying: `npm test`.
 Connecticut taxes computer and data processing services, and FORGE sells to
 Connecticut shops — so this is a live question, not a someday one.
 
+**Check the product tax codes before anything else.** Products created in the
+Dashboard default to _Software as a service (SaaS)_, which is wrong for custom
+build work and wrong for a monthly care plan; those are treated differently from
+SaaS in several states. It costs nothing while Stripe Tax is off, and mis-rates
+every invoice the day it is switched on. Set each product's tax code in the
+Dashboard (Product catalog → product → Tax code), confirm the choice with an
+accountant, then pin the codes in the `TAX_CODE` constant in
+`scripts/stripe-bootstrap.mjs` so later runs keep them.
+
 `STRIPE_AUTOMATIC_TAX` is deliberately **off**. Enabling `automatic_tax` without
 an active tax registration is the most common Stripe Tax mistake: Stripe
 calculates and collects nothing, returns no error, and the Dashboard reads as
@@ -166,3 +199,12 @@ Run through <https://docs.stripe.com/get-started/checklist/go-live.md>. The
 short version for this site: swap the test key for a live `rk_…`, create the
 catalog again in live mode (the price IDs differ), register the live webhook and
 store its own `whsec_…`, and put one real card through Care and refund it.
+
+Also settle these before the first real charge:
+
+- Product tax codes are not the SaaS default (see **Tax**).
+- The services page and `SYSTEM_INSTALLMENT` agree on what a Site and System costs.
+- The deposit descriptions say whether a deposit is refundable. That sentence is
+  the one people look for, and burying it costs the dispute later.
+- The privacy notice covers payments — it currently reads as though the site has
+  no e-commerce.
