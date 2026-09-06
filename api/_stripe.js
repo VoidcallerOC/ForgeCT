@@ -24,7 +24,7 @@ export function stripe() {
   if (!key) return null;
   client = new Stripe(key, {
     apiVersion: STRIPE_API_VERSION,
-    appInfo: { name: "FORGE CT", url: "https://forge-ct.com" },
+    appInfo: { name: "FORGE CT", url: "https://www.forge-ct.com" },
     maxNetworkRetries: 2,
   });
   return client;
@@ -63,10 +63,17 @@ export const CATALOG = {
 
 export function siteUrl(request) {
   const configured = process.env.SITE_URL;
-  if (configured) return configured.replace(/\/$/, "");
+  if (configured) {
+    return configured
+      .replace(/\/$/, "")
+      .replace("https://forge-ct.com", "https://www.forge-ct.com");
+  }
   const host = request.headers["x-forwarded-host"] || request.headers.host;
   const proto = request.headers["x-forwarded-proto"] || "https";
-  return host ? `${proto}://${host}` : "https://forge-ct.com";
+  const canonicalHost = host === "forge-ct.com" ? "www.forge-ct.com" : host;
+  return canonicalHost
+    ? `${proto}://${canonicalHost}`
+    : "https://www.forge-ct.com";
 }
 
 /**
