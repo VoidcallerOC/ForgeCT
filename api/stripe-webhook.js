@@ -40,7 +40,7 @@ async function notify(subject, lines) {
     console.warn("RESEND_API_KEY missing; skipping notification", subject);
     return;
   }
-  const to = process.env.CONTACT_TO_EMAIL || "Create@Forge-CT.com";
+  const to = process.env.CONTACT_TO_EMAIL || "create@forge-ct.com";
   const from =
     process.env.CONTACT_FROM_EMAIL || "FORGE CT <onboarding@resend.dev>";
 

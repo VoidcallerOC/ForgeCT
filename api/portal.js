@@ -69,7 +69,7 @@ export default async function handler(request, response) {
     });
     return response.status(502).json({
       ok: false,
-      error: "Could not open billing. Email Create@Forge-CT.com.",
+      error: "Could not open billing. Email create@forge-ct.com.",
     });
   }
 }

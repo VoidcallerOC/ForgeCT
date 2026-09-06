@@ -5,7 +5,7 @@
   "use strict";
 
   const FALLBACK =
-    "Could not open checkout. Email Create@Forge-CT.com and I will send an invoice.";
+    "Could not open checkout. Email create@forge-ct.com and I will send an invoice.";
 
   function setStatus(button, message) {
     const target = document.getElementById(
@@ -55,7 +55,7 @@
     );
     if (!sessionId) {
       throw new Error(
-        "Open this from the link in your receipt, or email Create@Forge-CT.com.",
+        "Open this from the link in your receipt, or email create@forge-ct.com.",
       );
     }
     return post("/api/portal", { session_id: sessionId });

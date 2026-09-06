@@ -43,7 +43,7 @@ export default async function handler(request, response) {
     response.setHeader("Retry-After", "900");
     return response.status(429).json({
       ok: false,
-      error: "Too many messages. Wait a bit, or email Create@Forge-CT.com.",
+      error: "Too many messages. Wait a bit, or email create@forge-ct.com.",
     });
   }
 
@@ -98,11 +98,11 @@ export default async function handler(request, response) {
     return response.status(503).json({
       ok: false,
       error:
-        "The inquiry form is not configured yet. Email Create@Forge-CT.com instead.",
+        "The inquiry form is not configured yet. Email create@forge-ct.com instead.",
     });
   }
 
-  const to = process.env.CONTACT_TO_EMAIL || "Create@Forge-CT.com";
+  const to = process.env.CONTACT_TO_EMAIL || "create@forge-ct.com";
   const from =
     process.env.CONTACT_FROM_EMAIL || "FORGE CT <onboarding@resend.dev>";
 

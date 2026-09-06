@@ -332,7 +332,7 @@
       if (!response.ok || !result.ok) {
         status.textContent =
           result.error ||
-          "The message could not be sent. Email Create@Forge-CT.com instead.";
+          "The message could not be sent. Email create@forge-ct.com instead.";
         return;
       }
 
@@ -341,7 +341,7 @@
         "Received. I will reply from the studio inbox as soon as I can.";
     } catch {
       status.textContent =
-        "The message could not be sent. Email Create@Forge-CT.com instead.";
+        "The message could not be sent. Email create@forge-ct.com instead.";
     } finally {
       if (submitButton) {
         submitButton.disabled = false;

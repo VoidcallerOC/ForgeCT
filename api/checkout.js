@@ -50,7 +50,7 @@ export default async function handler(request, response) {
     return response.status(503).json({
       ok: false,
       error:
-        "Online payment is not switched on yet. Email Create@Forge-CT.com and I will send an invoice.",
+        "Online payment is not switched on yet. Email create@forge-ct.com and I will send an invoice.",
     });
   }
 
@@ -102,7 +102,7 @@ export default async function handler(request, response) {
     });
     return response.status(502).json({
       ok: false,
-      error: "Could not start checkout. Email Create@Forge-CT.com.",
+      error: "Could not start checkout. Email create@forge-ct.com.",
     });
   }
 }
