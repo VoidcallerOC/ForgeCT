@@ -35,6 +35,14 @@ export default async function handler(request, response) {
   }
 
   const email = String(payload.email || "").trim();
+  const carePlan = String(payload.care_plan || "").trim();
+  const isDeposit = plan.mode === "payment";
+  if (isDeposit && !["care", "care-plus"].includes(carePlan)) {
+    return response.status(400).json({
+      ok: false,
+      error: "Choose a Care plan before starting a deposit checkout.",
+    });
+  }
   if (
     email &&
     (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 254)
@@ -67,16 +75,20 @@ export default async function handler(request, response) {
         automatic_tax: automaticTax(),
         billing_address_collection: "auto",
         client_reference_id: `forge:${payload.plan}`,
-        metadata: { plan: payload.plan, plan_label: plan.label },
+        metadata: {
+          plan: payload.plan,
+          plan_label: plan.label,
+          ...(isDeposit ? { care_plan: carePlan } : {}),
+        },
         ...(email ? { customer_email: email } : {}),
         // Deposits must produce a Customer so the project balance can be
         // invoiced to the same record later.
-        ...(plan.mode === "payment"
+        ...(isDeposit
           ? {
               customer_creation: "always",
               payment_intent_data: {
                 description: `FORGE CT — ${plan.label}`,
-                metadata: { plan: payload.plan },
+                metadata: { plan: payload.plan, care_plan: carePlan },
               },
             }
           : {

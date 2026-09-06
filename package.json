@@ -9,7 +9,8 @@
     "format:check": "prettier --check .",
     "lint:html": "html-validate .",
     "test:links": "node scripts/check-local-links.mjs",
-    "test": "npm run format:check && npm run lint:html && npm run test:links"
+    "test:js": "node --check checkout.js && node --check api/checkout.js && node --check api/stripe-webhook.js",
+    "test": "npm run format:check && npm run lint:html && npm run test:links && npm run test:js"
   },
   "devDependencies": {
     "html-validate": "10.7.0",

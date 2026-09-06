@@ -47,13 +47,20 @@
 
   function checkoutPayload(button) {
     const emailField = document.querySelector("[data-checkout-email]");
-    if (!emailField) return { plan: button.dataset.stripePlan };
-    if (!emailField.reportValidity()) {
+    const carePlanField = document.querySelector("[data-checkout-care-plan]");
+    if (!emailField && !carePlanField) {
+      return { plan: button.dataset.stripePlan };
+    }
+    if (emailField && !emailField.reportValidity()) {
       throw new Error("Enter a valid email address to continue.");
+    }
+    if (carePlanField && !carePlanField.reportValidity()) {
+      throw new Error("Choose a Care plan to continue.");
     }
     return {
       plan: button.dataset.stripePlan,
-      email: emailField.value.trim(),
+      ...(emailField ? { email: emailField.value.trim() } : {}),
+      ...(carePlanField ? { care_plan: carePlanField.value } : {}),
     };
   }
 

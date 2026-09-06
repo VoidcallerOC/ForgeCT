@@ -681,6 +681,7 @@ h2 em {
 }
 
 .field-group input,
+.field-group select,
 .field-group textarea {
   width: 100%;
   padding: 0.78rem 0.85rem;
@@ -696,6 +697,7 @@ h2 em {
 }
 
 .field-group input:focus,
+.field-group select:focus,
 .field-group textarea:focus {
   outline: 3px solid rgba(239, 231, 206, 0.32);
   outline-offset: 1px;
