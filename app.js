@@ -205,34 +205,35 @@
   const packages = {
     local: {
       name: "Local Business Site",
-      price: "From $2,000",
+      price: "$2,000 total — 2 × $1,000",
       blurb:
-        "Your shop page. Three to five pages: your hours, your floor, how to walk in.",
+        "Your shop page. Three to five pages: your hours, your floor, how to walk in, paid across two milestone payments.",
       bullets: [
-        "Your hours, your floor, how to walk in",
-        "Works on a phone in your parking lot",
-        "Collections and events your customers can find",
+        "Local Business — Deposit · $1,000",
+        "Local Business — Final delivery · $1,000",
       ],
     },
     system: {
       name: "Site and System",
-      price: "From $6,000",
+      price: "$6,000 total — 3 × $2,000",
       blurb:
-        "Events, play nights, collection intake, or a bigger site around your shop.",
+        "Events, play nights, collection intake, or a bigger site around your shop, paid across three milestone payments.",
       bullets: [
-        "Events and play nights on the page",
-        "Collection intake that matches your floor",
-        "A bigger site around the same shop of yours",
+        "Site and System — Deposit · $2,000",
+        "Site and System — Build · $2,000",
+        "Site and System — Launch · $2,000",
       ],
     },
     product: {
       name: "Product Site",
-      price: "From $16,000",
-      blurb: "A catalog or checkout that matches how you actually sell.",
+      price: "$16,000 total — 4 × $4,000",
+      blurb:
+        "A catalog or checkout that matches how you actually sell, paid across four milestone payments.",
       bullets: [
-        "Catalog that matches how you sell",
-        "Checkout or trade-in path people understand",
-        "Launch, then keep it current",
+        "Tier 3 — Deposit · $4,000",
+        "Tier 3 — First round of edits · $4,000",
+        "Tier 3 — Second round of edits · $4,000",
+        "Tier 3 — Launch · $4,000",
       ],
     },
   };
