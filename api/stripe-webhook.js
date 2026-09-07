@@ -1,4 +1,5 @@
 import { stripe } from "./_stripe.js";
+import { Pool } from 'pg';
 
 // Signature verification needs the exact bytes Stripe signed, so the platform
 // body parser must stay out of the way.
@@ -26,9 +27,46 @@ const CARE_PRICE_ENV = {
   "care-plus": "STRIPE_PRICE_CARE_PLUS",
 };
 
-// Best-effort replay guard for a warm instance. Stripe-side idempotency and the
-// final-invoice check below protect the financial side effect across instances.
-const seen = new Set();
+// Database connection pool for durable event storage
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  max: 20,
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 2000,
+});
+
+// Graceful shutdown
+process.on('SIGTERM', () => pool.end());
+process.on('SIGINT', () => pool.end());
+
+// Database helper functions
+async function isEventProcessed(eventId) {
+  const client = await pool.connect();
+  try {
+    const result = await client.query(
+      'SELECT 1 FROM stripe_webhook_events WHERE event_id = $1',
+      [eventId]
+    );
+    return result.rowCount > 0;
+  } finally {
+    client.release();
+  }
+}
+
+async function storeWebhookEvent(eventId, eventType, eventData, metadata = null) {
+  const client = await pool.connect();
+  try {
+    await client.query(
+      `INSERT INTO stripe_webhook_events 
+       (event_id, event_type, event_data, metadata) 
+       VALUES ($1, $2, $3, $4) 
+       ON CONFLICT (event_id) DO NOTHING`,
+      [eventId, eventType, eventData, metadata]
+    );
+  } finally {
+    client.release();
+  }
+}
 
 function rawBody(request) {
   return new Promise((resolve, reject) => {
@@ -58,6 +96,26 @@ export function addOneMonth(timestamp) {
 
 function customerId(value) {
   return typeof value === "string" ? value : value?.id;
+}
+
+// Enhanced ACH settlement verification
+async function isACHSettled(paymentIntent) {
+  if (paymentIntent.payment_method_types?.includes('us_bank_account')) {
+    if (paymentIntent.charges?.data?.[0]) {
+      const chargeId = paymentIntent.charges.data[0].id;
+      const client = stripe();
+      if (client) {
+        try {
+          const charge = await client.charges.retrieve(chargeId);
+          return charge.paid && charge.status === 'succeeded';
+        } catch (error) {
+          console.error('Error verifying ACH settlement:', error);
+          return false;
+        }
+      }
+    }
+  }
+  return true;
 }
 
 async function rememberCarePlan(client, session, settledAt) {
@@ -179,41 +237,58 @@ async function notify(subject, lines) {
   const from =
     process.env.CONTACT_FROM_EMAIL || "FORGE CT <onboarding@resend.dev>";
 
-  const result = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      from,
-      to: [to],
-      subject,
-      text: lines.filter(Boolean).join("\n"),
-    }),
-  });
+  try {
+    const result = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from,
+        to: [to],
+        subject,
+        text: lines.filter(Boolean).join("\n"),
+      }),
+    });
 
-  if (!result.ok) {
-    // Throwing returns a non-2xx to Stripe, which retries the event.
-    throw new Error(`Resend responded ${result.status}`);
+    if (!result.ok) {
+      console.error(`Resend notification failed: ${result.status}`, subject);
+      return;
+    }
+    
+    console.log(`Resend notification sent: ${subject}`);
+  } catch (error) {
+    console.error('Resend notification error:', error);
   }
 }
 
 export async function handleEvent(client, event) {
   const object = event.data.object;
+  const eventId = event.id;
+  const eventType = event.type;
+
+  console.log(`Processing event: ${eventType}`, {
+    eventId,
+    created: event.created,
+    livemode: event.livemode
+  });
 
   switch (event.type) {
     case "checkout.session.completed":
     case "checkout.session.async_payment_succeeded": {
-      // Delayed-notification methods complete the session while it is still
-      // unpaid. Fulfilling on the event alone would grant work for money that
-      // never arrives, so gate on payment_status.
       if (object.payment_status === "unpaid") {
         console.log("checkout session completed but unpaid", object.id);
+        await storeWebhookEvent(eventId, eventType, object, {
+          status: 'ignored',
+          reason: 'payment_status is unpaid'
+        });
         return;
       }
+      
       await rememberCarePlan(client, object, event.created);
       const plan = object.metadata?.plan_label || object.metadata?.plan || "—";
+      
       await notify(`FORGE — paid: ${plan}`, [
         `Plan: ${plan}`,
         `Mode: ${object.mode}`,
@@ -222,26 +297,51 @@ export async function handleEvent(client, event) {
         `Name: ${object.customer_details?.name || "unknown"}`,
         `Customer: ${object.customer || "none"}`,
         `Session: ${object.id}`,
+        `Payment Status: ${object.payment_status}`,
       ]);
+      
+      await storeWebhookEvent(eventId, eventType, object, {
+        status: 'processed',
+        plan,
+        amount: object.amount_total,
+        currency: object.currency
+      });
       return;
     }
 
     case "payment_intent.succeeded": {
-      // ACH Direct Debit reaches this event only after the bank settles the
-      // payment. Persist the settlement marker and, for a final invoice,
-      // start the Care countdown from this settlement timestamp.
+      const isSettled = await isACHSettled(object);
+      
+      if (!isSettled) {
+        console.log('ACH payment not yet settled, skipping processing', object.id);
+        await storeWebhookEvent(eventId, eventType, object, {
+          status: 'pending',
+          reason: 'ACH settlement not confirmed'
+        });
+        return;
+      }
+      
       await rememberCarePlanFromPaymentIntent(client, object, event.created);
       const invoiceId = object.invoice && customerId(object.invoice);
       if (invoiceId) {
         const invoice = await client.invoices.retrieve(invoiceId);
         await provisionCareAfterFinalPayment(client, invoice, event.created);
       }
+      
       await notify("FORGE — ACH payment settled", [
         `Payment intent: ${object.id}`,
         `Customer: ${object.customer || "unknown"}`,
         `Settled: ${new Date((event.created || Date.now() / 1000) * 1000).toISOString()}`,
         `Invoice: ${invoiceId || "none"}`,
+        `Amount: ${money(object.amount, object.currency)}`,
       ]);
+      
+      await storeWebhookEvent(eventId, eventType, object, {
+        status: 'processed',
+        ach_settled: true,
+        amount: object.amount,
+        currency: object.currency
+      });
       return;
     }
 
@@ -251,6 +351,11 @@ export async function handleEvent(client, event) {
         `Amount: ${money(object.amount_total, object.currency)}`,
         `Session: ${object.id}`,
       ]);
+      
+      await storeWebhookEvent(eventId, eventType, object, {
+        status: 'failed',
+        reason: 'async_payment_failed'
+      });
       return;
 
     case "customer.subscription.created":
@@ -263,6 +368,11 @@ export async function handleEvent(client, event) {
         `Customer: ${object.customer}`,
         `Subscription: ${object.id}`,
       ]);
+      
+      await storeWebhookEvent(eventId, eventType, object, {
+        status: 'processed',
+        subscription_status: object.status
+      });
       return;
 
     case "invoice.paid":
@@ -273,10 +383,15 @@ export async function handleEvent(client, event) {
         `Email: ${object.customer_email || "unknown"}`,
         `Customer: ${object.customer}`,
       ]);
+      
+      await storeWebhookEvent(eventId, eventType, object, {
+        status: 'processed',
+        invoice_number: object.number,
+        amount_paid: object.amount_paid
+      });
       return;
 
     case "invoice.payment_failed":
-      // Stripe's own dunning retries the card; this is the human heads-up.
       await notify("FORGE — invoice payment failed", [
         `Number: ${object.number || object.id}`,
         `Amount due: ${money(object.amount_due, object.currency)}`,
@@ -284,9 +399,18 @@ export async function handleEvent(client, event) {
         `Attempt: ${object.attempt_count}`,
         `Hosted invoice: ${object.hosted_invoice_url || "—"}`,
       ]);
+      
+      await storeWebhookEvent(eventId, eventType, object, {
+        status: 'failed',
+        attempt_count: object.attempt_count
+      });
       return;
 
     default:
+      await storeWebhookEvent(eventId, eventType, object, {
+        status: 'ignored',
+        reason: 'not in RELEVANT set'
+      });
       return;
   }
 }
@@ -301,6 +425,7 @@ export default async function handler(request, response) {
 
   const client = stripe();
   const secret = process.env.STRIPE_WEBHOOK_SECRET;
+  
   if (!client || !secret) {
     console.error("Stripe webhook is not configured");
     return response.status(503).json({ ok: false });
@@ -315,25 +440,44 @@ export default async function handler(request, response) {
       secret,
     );
   } catch (error) {
-    // An unverified body is not trustworthy input — never act on it.
     console.error("Stripe signature verification failed", error?.message);
     return response
       .status(400)
       .json({ ok: false, error: "Invalid signature." });
   }
 
-  if (!RELEVANT.has(event.type) || seen.has(event.id)) {
-    return response.status(200).json({ ok: true, ignored: true });
-  }
-
   try {
+    const alreadyProcessed = await isEventProcessed(event.id);
+    
+    if (!RELEVANT.has(event.type) || alreadyProcessed) {
+      if (!alreadyProcessed) {
+        await storeWebhookEvent(event.id, event.type, event.data.object, {
+          status: 'ignored',
+          reason: 'not relevant or already processed'
+        });
+      }
+      return response.status(200).json({ ok: true, ignored: true });
+    }
+
     await handleEvent(client, event);
-    if (seen.size > 500) seen.clear();
-    seen.add(event.id);
+    
+    await storeWebhookEvent(event.id, event.type, event.data.object, {
+      status: 'processed',
+      processed_at: new Date().toISOString()
+    });
+    
     return response.status(200).json({ ok: true });
   } catch (error) {
-    // Non-2xx tells Stripe to retry with backoff.
-    console.error("Stripe webhook handler failed", event.type, error?.message);
+    console.error("Stripe webhook handler failed", event?.type, error?.message);
+    
+    if (event) {
+      await storeWebhookEvent(event.id, event.type, event.data?.object, {
+        status: 'failed',
+        error: error.message,
+        stack: error.stack
+      });
+    }
+    
     return response.status(500).json({ ok: false });
   }
 }
