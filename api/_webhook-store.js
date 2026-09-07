@@ -3,11 +3,10 @@ const PROCESSING_LEASE_SECONDS = 5 * 60;
 const memoryStates = new Map();
 
 function storageConfig() {
-  const url =
-    process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL || "";
-  const token =
-    process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN || "";
-  return { url: url.replace(/\/$/, ""), token };
+  return {
+    url: (process.env.SUPABASE_URL || "").replace(/\/$/, ""),
+    key: process.env.SUPABASE_SERVICE_ROLE_KEY || "",
+  };
 }
 
 function useMemoryStore() {
@@ -17,12 +16,16 @@ function useMemoryStore() {
   );
 }
 
-async function redisCommand(command, { fetchImpl = globalThis.fetch } = {}) {
-  const { url, token } = storageConfig();
-  if (!url || !token) {
+async function supabaseRpc(
+  functionName,
+  body,
+  { fetchImpl = globalThis.fetch } = {},
+) {
+  const { url, key } = storageConfig();
+  if (!url || !key) {
     if (!useMemoryStore()) {
       throw new Error(
-        "Durable webhook storage is not configured; set UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN",
+        "Durable webhook storage is not configured; set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY",
       );
     }
     return null;
@@ -31,35 +34,31 @@ async function redisCommand(command, { fetchImpl = globalThis.fetch } = {}) {
     throw new Error("Fetch is unavailable for durable webhook storage");
   }
 
-  const response = await fetchImpl(url, {
+  const response = await fetchImpl(`${url}/rest/v1/rpc/${functionName}`, {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${token}`,
+      apikey: key,
+      Authorization: `Bearer ${key}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(command),
+    body: JSON.stringify(body),
   });
   if (!response.ok) {
-    throw new Error(`Durable webhook storage responded ${response.status}`);
+    throw new Error(`Supabase webhook storage responded ${response.status}`);
   }
-  const payload = await response.json();
-  if (!("result" in payload)) {
-    throw new Error("Durable webhook storage returned an unexpected result");
-  }
-  return payload.result;
+  return response.json();
 }
 
 /**
- * Acquire a short processing lease for a Stripe event. A duplicate delivery is
- * ignored while a lease or completed record exists. A crashed invocation can
- * be retried after the five-minute lease expires.
+ * Acquire a short processing lease for a Stripe event. The Supabase RPC uses
+ * a unique event id and a conditional upsert so concurrent serverless
+ * instances cannot process the same event twice.
  */
 export async function claimWebhookEvent(
   eventId,
   { fetchImpl = globalThis.fetch } = {},
 ) {
   if (!eventId) throw new Error("Webhook event id is required");
-  const key = `forge:webhook:event:${eventId}`;
 
   if (useMemoryStore() && !storageConfig().url) {
     if (memoryStates.has(eventId)) return false;
@@ -67,11 +66,16 @@ export async function claimWebhookEvent(
     return true;
   }
 
-  const result = await redisCommand(
-    ["SET", key, "processing", "NX", "EX", String(PROCESSING_LEASE_SECONDS)],
+  const result = await supabaseRpc(
+    "claim_stripe_webhook_event",
+    {
+      p_event_id: eventId,
+      p_lease_seconds: PROCESSING_LEASE_SECONDS,
+      p_retention_seconds: RETENTION_SECONDS,
+    },
     { fetchImpl },
   );
-  return result === "OK";
+  return result === true;
 }
 
 export async function markWebhookEventProcessed(
@@ -79,15 +83,15 @@ export async function markWebhookEventProcessed(
   { fetchImpl = globalThis.fetch } = {},
 ) {
   if (!eventId) throw new Error("Webhook event id is required");
-  const key = `forge:webhook:event:${eventId}`;
 
   if (useMemoryStore() && !storageConfig().url) {
     memoryStates.set(eventId, "processed");
     return;
   }
 
-  await redisCommand(
-    ["SET", key, "processed", "EX", String(RETENTION_SECONDS)],
+  await supabaseRpc(
+    "mark_stripe_webhook_event_processed",
+    { p_event_id: eventId, p_retention_seconds: RETENTION_SECONDS },
     { fetchImpl },
   );
 }
@@ -97,7 +101,6 @@ export async function releaseWebhookEvent(
   { fetchImpl = globalThis.fetch } = {},
 ) {
   if (!eventId) return;
-  const key = `forge:webhook:event:${eventId}`;
 
   if (useMemoryStore() && !storageConfig().url) {
     if (memoryStates.get(eventId) === "processing")
@@ -105,7 +108,11 @@ export async function releaseWebhookEvent(
     return;
   }
 
-  await redisCommand(["DEL", key], { fetchImpl });
+  await supabaseRpc(
+    "release_stripe_webhook_event",
+    { p_event_id: eventId },
+    { fetchImpl },
+  );
 }
 
 export function resetMemoryWebhookStore() {

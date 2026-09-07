@@ -10,48 +10,46 @@ import {
 } from "./_webhook-store.js";
 
 test.afterEach(() => {
-  delete process.env.UPSTASH_REDIS_REST_URL;
-  delete process.env.UPSTASH_REDIS_REST_TOKEN;
-  delete process.env.KV_REST_API_URL;
-  delete process.env.KV_REST_API_TOKEN;
+  delete process.env.SUPABASE_URL;
+  delete process.env.SUPABASE_SERVICE_ROLE_KEY;
   delete process.env.NODE_ENV;
   delete process.env.WEBHOOK_EVENT_STORE;
   resetMemoryWebhookStore();
 });
 
-test("durable store atomically claims a new event with a short lease", async () => {
-  process.env.UPSTASH_REDIS_REST_URL = "https://redis.example.com";
-  process.env.UPSTASH_REDIS_REST_TOKEN = "test-token";
+test("Supabase atomically claims a new event with a short lease", async () => {
+  process.env.SUPABASE_URL = "https://project.supabase.co";
+  process.env.SUPABASE_SERVICE_ROLE_KEY = "service-role-test-key";
   let request;
 
   const claimed = await claimWebhookEvent("evt_new", {
     fetchImpl: async (url, options) => {
       request = { url, options };
-      return { ok: true, json: async () => ({ result: "OK" }) };
+      return { ok: true, json: async () => true };
     },
   });
 
   assert.equal(claimed, true);
-  assert.equal(request.url, "https://redis.example.com");
-  assert.equal(request.options.headers.Authorization, "Bearer test-token");
-  assert.deepEqual(JSON.parse(request.options.body), [
-    "SET",
-    "forge:webhook:event:evt_new",
-    "processing",
-    "NX",
-    "EX",
-    String(WEBHOOK_PROCESSING_LEASE_SECONDS),
-  ]);
+  assert.equal(
+    request.url,
+    "https://project.supabase.co/rest/v1/rpc/claim_stripe_webhook_event",
+  );
+  assert.equal(request.options.headers.apikey, "service-role-test-key");
+  assert.deepEqual(JSON.parse(request.options.body), {
+    p_event_id: "evt_new",
+    p_lease_seconds: WEBHOOK_PROCESSING_LEASE_SECONDS,
+    p_retention_seconds: WEBHOOK_EVENT_RETENTION_SECONDS,
+  });
 });
 
-test("durable store rejects a duplicate event", async () => {
-  process.env.KV_REST_API_URL = "https://kv.example.com";
-  process.env.KV_REST_API_TOKEN = "test-token";
+test("Supabase rejects a duplicate event", async () => {
+  process.env.SUPABASE_URL = "https://project.supabase.co";
+  process.env.SUPABASE_SERVICE_ROLE_KEY = "service-role-test-key";
 
   const claimed = await claimWebhookEvent("evt_duplicate", {
     fetchImpl: async () => ({
       ok: true,
-      json: async () => ({ result: null }),
+      json: async () => false,
     }),
   });
 
@@ -59,29 +57,27 @@ test("durable store rejects a duplicate event", async () => {
 });
 
 test("successful events receive a long retention window", async () => {
-  process.env.UPSTASH_REDIS_REST_URL = "https://redis.example.com";
-  process.env.UPSTASH_REDIS_REST_TOKEN = "test-token";
-  let command;
+  process.env.SUPABASE_URL = "https://project.supabase.co";
+  process.env.SUPABASE_SERVICE_ROLE_KEY = "service-role-test-key";
+  let request;
 
   await markWebhookEventProcessed("evt_processed", {
-    fetchImpl: async (_url, options) => {
-      command = JSON.parse(options.body);
-      return { ok: true, json: async () => ({ result: "OK" }) };
+    fetchImpl: async (url, options) => {
+      request = { url, options };
+      return { ok: true, json: async () => null };
     },
   });
 
-  assert.deepEqual(command, [
-    "SET",
-    "forge:webhook:event:evt_processed",
-    "processed",
-    "EX",
-    String(WEBHOOK_EVENT_RETENTION_SECONDS),
-  ]);
+  assert.match(request.url, /mark_stripe_webhook_event_processed$/);
+  assert.deepEqual(JSON.parse(request.options.body), {
+    p_event_id: "evt_processed",
+    p_retention_seconds: WEBHOOK_EVENT_RETENTION_SECONDS,
+  });
 });
 
 test("storage failures are surfaced for Stripe retry", async () => {
-  process.env.UPSTASH_REDIS_REST_URL = "https://redis.example.com";
-  process.env.UPSTASH_REDIS_REST_TOKEN = "test-token";
+  process.env.SUPABASE_URL = "https://project.supabase.co";
+  process.env.SUPABASE_SERVICE_ROLE_KEY = "service-role-test-key";
 
   await assert.rejects(
     () =>
@@ -92,7 +88,7 @@ test("storage failures are surfaced for Stripe retry", async () => {
   );
 });
 
-test("production fails closed when durable storage is not configured", async () => {
+test("production fails closed when Supabase is not configured", async () => {
   process.env.NODE_ENV = "production";
 
   await assert.rejects(
@@ -101,7 +97,7 @@ test("production fails closed when durable storage is not configured", async () 
   );
 });
 
-test("local tests retain an explicit in-memory fallback and release failures", async () => {
+test("local fallback releases failures but retains successes", async () => {
   process.env.WEBHOOK_EVENT_STORE = "memory";
 
   assert.equal(await claimWebhookEvent("evt_local"), true);
