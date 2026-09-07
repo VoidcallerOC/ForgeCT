@@ -214,8 +214,13 @@ Apple Pay and Google Pay.
   processing lease for crash recovery, and retains successful event markers for
   90 days. Production fails closed if the Supabase variables are missing; local
   tests may explicitly use `WEBHOOK_EVENT_STORE=memory`.
-- **Rate limiting is per-instance.** Same reason; it blunts casual abuse, and
-  Stripe's own limits and Radar are the real backstop.
+- **Rate limiting uses Supabase in production.** Run the current
+  `sql/stripe-webhook-events.sql` to create the shared atomic fixed-window
+  counter. `/api/checkout`, `/api/contact`, and `/api/portal` use the existing
+  `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` variables. Local and test
+  environments use an in-memory fallback; production returns a temporary
+  unavailable response rather than silently falling back to per-instance
+  protection if Supabase is unavailable.
 
 ## Production status and remaining checks
 
