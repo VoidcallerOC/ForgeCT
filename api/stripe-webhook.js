@@ -1,4 +1,9 @@
 import { stripe } from "./_stripe.js";
+import {
+  claimWebhookEvent,
+  markWebhookEventProcessed,
+  releaseWebhookEvent,
+} from "./_webhook-store.js";
 
 // Signature verification needs the exact bytes Stripe signed, so the platform
 // body parser must stay out of the way.
@@ -25,10 +30,6 @@ const CARE_PRICE_ENV = {
   care: "STRIPE_PRICE_CARE",
   "care-plus": "STRIPE_PRICE_CARE_PLUS",
 };
-
-// Best-effort replay guard for a warm instance. Stripe-side idempotency and the
-// final-invoice check below protect the financial side effect across instances.
-const seen = new Set();
 
 function rawBody(request) {
   return new Promise((resolve, reject) => {
@@ -322,17 +323,25 @@ export default async function handler(request, response) {
       .json({ ok: false, error: "Invalid signature." });
   }
 
-  if (!RELEVANT.has(event.type) || seen.has(event.id)) {
-    return response.status(200).json({ ok: true, ignored: true });
-  }
-
   try {
+    const claimed = await claimWebhookEvent(event.id);
+    if (!RELEVANT.has(event.type) || !claimed) {
+      return response.status(200).json({ ok: true, ignored: true });
+    }
+
     await handleEvent(client, event);
-    if (seen.size > 500) seen.clear();
-    seen.add(event.id);
+    await markWebhookEventProcessed(event.id);
     return response.status(200).json({ ok: true });
   } catch (error) {
     // Non-2xx tells Stripe to retry with backoff.
+    try {
+      await releaseWebhookEvent(event.id);
+    } catch (storageError) {
+      console.error(
+        "Failed to release webhook processing lease",
+        storageError?.message,
+      );
+    }
     console.error("Stripe webhook handler failed", event.type, error?.message);
     return response.status(500).json({ ok: false });
   }

@@ -111,6 +111,8 @@ Stripe retries cannot create a duplicate subscription.
    | `SITE_URL`                    | `https://www.forge-ct.com`                     |
    | `STRIPE_AUTOMATIC_TAX`        | leave unset — see **Tax**                      |
    | `RESEND_API_KEY`              | already set; the webhook reuses it for notices |
+   | `SUPABASE_URL`                | Supabase project URL for webhook event storage |
+   | `SUPABASE_SERVICE_ROLE_KEY`   | server-only Supabase service-role key          |
 
    Keys belong in the platform's environment store, never in the repo. Nothing
    here is a `NEXT_PUBLIC_`-style client value — the browser only ever talks to
@@ -206,11 +208,12 @@ Apple Pay and Google Pay.
   trades a `cs_…` session id for a portal link. The id is unguessable and scoped
   to one customer, but if real logins arrive, resolve the customer from the
   session instead.
-- **Replay guard is in-memory.** `api/stripe-webhook.js` dedupes event ids per
-  warm instance. Stripe-side idempotency and the final-invoice lookup protect
-  the Care subscription side effect, but move event processing records to
-  durable storage before payment volume grows or additional non-repeatable
-  fulfillment is added.
+- **Replay records expire after 90 days.** Run
+  `sql/stripe-webhook-events.sql` in the Supabase SQL Editor. The webhook
+  atomically claims event ids through Supabase RPC functions, keeps a five-minute
+  processing lease for crash recovery, and retains successful event markers for
+  90 days. Production fails closed if the Supabase variables are missing; local
+  tests may explicitly use `WEBHOOK_EVENT_STORE=memory`.
 - **Rate limiting is per-instance.** Same reason; it blunts casual abuse, and
   Stripe's own limits and Radar are the real backstop.
 
@@ -236,4 +239,5 @@ Also settle these before the first real charge:
 - Complete one controlled real-payment lifecycle with an approved customer,
   then verify the Stripe delivery, Care countdown metadata, subscription timing,
   and Resend notification. Do not use a real charge solely as a technical test.
-- Add durable webhook-event storage before transaction volume increases.
+- Keep the durable webhook store variables configured and monitor storage
+  errors before transaction volume increases.
