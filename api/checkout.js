@@ -17,11 +17,19 @@ export default async function handler(request, response) {
       .json({ ok: false, error: "Method not allowed." });
   }
 
-  if (isRateLimited("checkout", clientIp(request), MAX_POSTS)) {
-    response.setHeader("Retry-After", "900");
-    return response
-      .status(429)
-      .json({ ok: false, error: "Too many attempts. Wait a bit." });
+  try {
+    if (await isRateLimited("checkout", clientIp(request), MAX_POSTS)) {
+      response.setHeader("Retry-After", "900");
+      return response
+        .status(429)
+        .json({ ok: false, error: "Too many attempts. Wait a bit." });
+    }
+  } catch (error) {
+    console.error("distributed checkout rate limiter failed", error);
+    return response.status(503).json({
+      ok: false,
+      error: "Checkout is temporarily unavailable. Please try again shortly.",
+    });
   }
 
   const payload = readJsonBody(request);

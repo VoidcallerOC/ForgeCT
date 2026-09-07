@@ -90,6 +90,11 @@ checkouts, records ACH settlement timestamps, and starts the Care one-month
 countdown after a settled final payment. The endpoint is registered in the live
 Stripe account for checkout, PaymentIntent, subscription, and invoice events.
 
+The same Supabase project provides the distributed fixed-window limiter used by
+the public `/api/checkout` and `/api/contact` endpoints (and `/api/portal`). Run
+the current `sql/stripe-webhook-events.sql` migration before deploying those
+endpoints with `NODE_ENV=production`.
+
 Two operational limits remain:
 
 - Stripe signature verification needs the raw request body. Vercel's Node runtime
