@@ -97,6 +97,16 @@ test("production fails closed when Supabase is not configured", async () => {
   );
 });
 
+test("partial Supabase configuration fails closed instead of using memory", async () => {
+  process.env.NODE_ENV = "production";
+  process.env.SUPABASE_URL = "https://project.supabase.co";
+
+  await assert.rejects(
+    () => claimWebhookEvent("evt_partial_config"),
+    /Durable webhook storage is not configured/,
+  );
+});
+
 test("local fallback releases failures but retains successes", async () => {
   process.env.WEBHOOK_EVENT_STORE = "memory";
 

@@ -28,3 +28,9 @@ jobs:
 
       - name: Run quality checks
         run: npm test
+
+      - name: Install Chromium for browser checks
+        run: npx playwright install --with-deps chromium
+
+      - name: Run critical browser flows
+        run: npm run test:browser

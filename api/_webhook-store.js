@@ -16,6 +16,11 @@ function useMemoryStore() {
   );
 }
 
+function hasDurableStorage() {
+  const { url, key } = storageConfig();
+  return Boolean(url && key);
+}
+
 async function supabaseRpc(
   functionName,
   body,
@@ -60,7 +65,12 @@ export async function claimWebhookEvent(
 ) {
   if (!eventId) throw new Error("Webhook event id is required");
 
-  if (useMemoryStore() && !storageConfig().url) {
+  if (
+    useMemoryStore() &&
+    !hasDurableStorage() &&
+    !storageConfig().url &&
+    !storageConfig().key
+  ) {
     if (memoryStates.has(eventId)) return false;
     memoryStates.set(eventId, "processing");
     return true;
@@ -84,7 +94,12 @@ export async function markWebhookEventProcessed(
 ) {
   if (!eventId) throw new Error("Webhook event id is required");
 
-  if (useMemoryStore() && !storageConfig().url) {
+  if (
+    useMemoryStore() &&
+    !hasDurableStorage() &&
+    !storageConfig().url &&
+    !storageConfig().key
+  ) {
     memoryStates.set(eventId, "processed");
     return;
   }
@@ -102,7 +117,12 @@ export async function releaseWebhookEvent(
 ) {
   if (!eventId) return;
 
-  if (useMemoryStore() && !storageConfig().url) {
+  if (
+    useMemoryStore() &&
+    !hasDurableStorage() &&
+    !storageConfig().url &&
+    !storageConfig().key
+  ) {
     if (memoryStates.get(eventId) === "processing")
       memoryStates.delete(eventId);
     return;

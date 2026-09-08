@@ -35,13 +35,18 @@ Open `http://localhost:8000` in a browser while the local server is running. The
 
 ## Quality checks
 
-`npm test` runs three release checks:
+`npm test` runs the release checks for formatting, HTML, links, and application
+logic. CI also runs `npm run test:browser` against a local static server using
+Chromium. Those browser checks intentionally cover only the business-critical
+contact submission, Care/Care+ links, deposit checkout hand-off, and receipt-bound
+customer portal path; they do not attempt visual regression testing.
 
 | Command                | Purpose                                                           |
 | ---------------------- | ----------------------------------------------------------------- |
 | `npm run format:check` | Ensures source files follow the shared Prettier configuration.    |
 | `npm run lint:html`    | Detects invalid or inconsistent HTML.                             |
 | `npm run test:links`   | Detects broken local routes and static assets referenced by HTML. |
+| `npm run test:browser` | Exercises the contact and payment-critical flows in Chromium.     |
 
 GitHub Actions runs these checks on pull requests and pushes to `main`. Branch protection is active: changes to `main` require a pull request and the passing `Validate site` check before merging.
 
@@ -95,15 +100,23 @@ the public `/api/checkout` and `/api/contact` endpoints (and `/api/portal`). Run
 the current `sql/stripe-webhook-events.sql` migration before deploying those
 endpoints with `NODE_ENV=production`.
 
-Two operational limits remain:
+Two operational details remain:
 
 - Stripe signature verification needs the raw request body. Vercel's Node runtime
   parses it first, so `api/stripe-webhook.js` opts out with
   `export const config = { api: { bodyParser: false } }` — otherwise every
   signature check fails and it reads like a bad signing secret.
-- The webhook replay guard is currently in memory. Stripe-side idempotency and
-  the final-invoice lookup prevent duplicate Care subscriptions, but durable
-  event storage should be added before payment volume grows.
+- Webhook event IDs are durably claimed in Supabase through a unique primary key,
+  with a five-minute processing lease and 90-day retention for completed events.
+  Run `sql/stripe-webhook-events.sql` before deploying production payments and set
+  both `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY`. Production fails closed if
+  either value is missing; only local or explicitly opted-in test runs may use
+  the in-memory fallback.
+
+The contact endpoint accepts JSON only, rejects request bodies over 12 KiB, applies
+Unicode normalization and bounded email validation, and logs validation and delivery
+failures with the client IP but never the submitted message. The existing honeypot and
+shared IP rate limiter remain the primary anti-abuse controls.
 
 Embedding Stripe.js or a pricing table instead of linking out would require
 adding `https://js.stripe.com` to `script-src`, adding a `frame-src`, and
@@ -138,4 +151,11 @@ on the `/thanks` page.
 
 ## Security model
 
-The project uses a restrictive Content Security Policy that permits only same-origin scripts and local styles, plus the Google Fonts stylesheet and font origins. Keep application styles in `styles.css` and JavaScript in `app.js` or `checkout.js`; do not add inline style or script blocks without deliberately updating and validating the policy. Production HTTPS, HSTS, frame protection, a restrictive permissions policy, and a strict referrer policy are configured in `vercel.json`.
+The project uses a restrictive Content Security Policy that permits same-origin
+scripts and local styles, the verified Vercel Insights script and endpoint, and
+the Google Fonts stylesheet and font origins. It denies inline script/style
+attributes, frames, media, and data-URI images. Keep application styles in
+`styles.css` and JavaScript in `app.js` or `checkout.js`; do not add inline style
+or script blocks without deliberately updating and validating the policy.
+Production HTTPS, HSTS, frame protection, a restrictive permissions policy, and
+a strict referrer policy are configured in `vercel.json`.
