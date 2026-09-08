@@ -313,6 +313,7 @@
   // Contact form
   const form = document.querySelector("[data-contact-form]");
   const status = document.querySelector("[data-form-status]");
+  const bookingForm = form?.matches("[data-booking-form]");
 
   if (!form || !status) {
     return;
@@ -333,7 +334,16 @@
       email: String(formData.get("email") || "").trim(),
       company: String(formData.get("company") || "").trim(),
       siteUrl: String(formData.get("siteUrl") || "").trim(),
-      message: String(formData.get("message") || "").trim(),
+      message: bookingForm
+        ? [
+            "Appointment request:",
+            `Preferred date: ${String(formData.get("preferredDate") || "").trim()}`,
+            `Preferred time: ${String(formData.get("preferredTime") || "").trim()}`,
+            `Time zone: ${String(formData.get("timezone") || "").trim()}`,
+            "",
+            String(formData.get("message") || "").trim(),
+          ].join("\n")
+        : String(formData.get("message") || "").trim(),
       website: String(formData.get("website") || "").trim(),
     };
 
@@ -341,7 +351,9 @@
     if (submitButton) {
       submitButton.disabled = true;
     }
-    status.textContent = "Sending your inquiry…";
+    status.textContent = bookingForm
+      ? "Sending your appointment request…"
+      : "Sending your inquiry…";
 
     try {
       const response = await fetch("/api/contact", {
@@ -363,8 +375,9 @@
         source:
           form.getAttribute("data-form-source") || window.location.pathname,
       });
-      status.textContent =
-        "Received. I’ll reply with three practical fixes within 24 hours.";
+      status.textContent = bookingForm
+        ? "Request received. I’ll confirm the appointment by email."
+        : "Received. I’ll reply with three practical fixes within 24 hours.";
     } catch {
       status.textContent =
         "The message could not be sent. Email create@forge-ct.com instead.";
