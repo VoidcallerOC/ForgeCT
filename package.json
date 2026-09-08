@@ -9,10 +9,12 @@
     "format:check": "prettier --check .",
     "lint:html": "html-validate .",
     "test:links": "node scripts/check-local-links.mjs",
-    "test:js": "node --check checkout.js && node --check api/checkout.js && node --check api/contact.js && node --check api/portal.js && node --check api/_ratelimit.js && node --check api/stripe-webhook.js && node --check api/_webhook-store.js && node --test api/_ratelimit.test.js api/stripe-webhook.test.js api/_webhook-store.test.js",
+    "test:js": "node --check checkout.js && node --check api/checkout.js && node --check api/contact.js && node --check api/portal.js && node --check api/_ratelimit.js && node --check api/stripe-webhook.js && node --check api/_webhook-store.js && node --test api/_ratelimit.test.js api/contact.test.js api/stripe-webhook.test.js api/_webhook-store.test.js",
+    "test:browser": "playwright test",
     "test": "npm run format:check && npm run lint:html && npm run test:links && npm run test:js"
   },
   "devDependencies": {
+    "@playwright/test": "^1.55.1",
     "html-validate": "10.7.0",
     "prettier": "3.6.2"
   },

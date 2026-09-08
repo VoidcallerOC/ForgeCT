@@ -57,6 +57,7 @@ pids
 coverage/
 .nyc_output/
 lib-cov/
+test-results/
 
 # TypeScript
 *.tsbuildinfo
