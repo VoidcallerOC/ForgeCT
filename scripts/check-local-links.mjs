@@ -54,6 +54,8 @@ for (const htmlFile of htmlFiles) {
       continue;
     if (/^(https?:)?\/\//i.test(reference) || reference.startsWith("data:"))
       continue;
+    // Skip Vercel-specific paths that only exist when deployed
+    if (reference.startsWith("/_vercel/")) continue;
 
     const target = reference.startsWith("/")
       ? localPathFor(reference)
