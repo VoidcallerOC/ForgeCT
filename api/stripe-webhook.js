@@ -31,6 +31,15 @@ const CARE_PRICE_ENV = {
   "care-plus": "STRIPE_PRICE_CARE_PLUS",
 };
 
+const FIXTURE_IDS = new Set([
+  "pi_ach_settled",
+  "cus_ach",
+  "in_final",
+  "cus_final",
+  "cs_unpaid",
+  "cus_unpaid",
+]);
+
 function rawBody(request) {
   return new Promise((resolve, reject) => {
     const chunks = [];
@@ -59,6 +68,18 @@ export function addOneMonth(timestamp) {
 
 function customerId(value) {
   return typeof value === "string" ? value : value?.id;
+}
+
+function looksLikeFixture(event) {
+  if (event?.livemode === false) return true;
+  const object = event?.data?.object || {};
+  const ids = [
+    object.id,
+    customerId(object.customer),
+    object.payment_intent,
+    object.invoice,
+  ];
+  return ids.some((id) => typeof id === "string" && FIXTURE_IDS.has(id));
 }
 
 async function rememberCarePlan(client, session, settledAt) {
@@ -176,32 +197,40 @@ async function notify(subject, lines) {
     console.warn("RESEND_API_KEY missing; skipping notification", subject);
     return;
   }
+  if (process.env.NODE_ENV === "test") return;
+
   const to = process.env.CONTACT_TO_EMAIL || "create@forge-ct.com";
   const from =
     process.env.CONTACT_FROM_EMAIL || "FORGE CT <onboarding@resend.dev>";
 
-  const result = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      from,
-      to: [to],
-      subject,
-      text: lines.filter(Boolean).join("\n"),
-    }),
-  });
+  try {
+    const result = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from,
+        to: [to],
+        subject,
+        text: lines.filter(Boolean).join("\n"),
+      }),
+    });
 
-  if (!result.ok) {
-    // Throwing returns a non-2xx to Stripe, which retries the event.
-    throw new Error(`Resend responded ${result.status}`);
+    if (!result.ok) {
+      // Never throw: a Resend 429/quota failure used to 500 the webhook,
+      // which made Stripe retry the same event and burn the daily quota.
+      console.error("Resend notification failed", subject, result.status);
+    }
+  } catch (error) {
+    console.error("Resend notification failed", subject, error?.message);
   }
 }
 
 export async function handleEvent(client, event) {
   const object = event.data.object;
+  const skipMail = looksLikeFixture(event);
 
   switch (event.type) {
     case "checkout.session.completed":
@@ -214,6 +243,7 @@ export async function handleEvent(client, event) {
         return;
       }
       await rememberCarePlan(client, object, event.created);
+      if (skipMail) return;
       const plan = object.metadata?.plan_label || object.metadata?.plan || "—";
       await notify(`FORGE — paid: ${plan}`, [
         `Plan: ${plan}`,
@@ -237,6 +267,7 @@ export async function handleEvent(client, event) {
         const invoice = await client.invoices.retrieve(invoiceId);
         await provisionCareAfterFinalPayment(client, invoice, event.created);
       }
+      if (skipMail) return;
       await notify("FORGE — ACH payment settled", [
         `Payment intent: ${object.id}`,
         `Customer: ${object.customer || "unknown"}`,
@@ -247,6 +278,7 @@ export async function handleEvent(client, event) {
     }
 
     case "checkout.session.async_payment_failed":
+      if (skipMail) return;
       await notify("FORGE — payment failed at checkout", [
         `Email: ${object.customer_details?.email || "unknown"}`,
         `Amount: ${money(object.amount_total, object.currency)}`,
@@ -257,6 +289,7 @@ export async function handleEvent(client, event) {
     case "customer.subscription.created":
     case "customer.subscription.updated":
     case "customer.subscription.deleted":
+      if (skipMail) return;
       await notify(`FORGE — subscription ${event.type.split(".").pop()}`, [
         `Plan: ${object.metadata?.plan_label || object.metadata?.plan || "—"}`,
         `Status: ${object.status}`,
@@ -268,6 +301,7 @@ export async function handleEvent(client, event) {
 
     case "invoice.paid":
       await provisionCareAfterFinalPayment(client, object);
+      if (skipMail) return;
       await notify("FORGE — invoice paid", [
         `Number: ${object.number || object.id}`,
         `Amount: ${money(object.amount_paid, object.currency)}`,
@@ -277,7 +311,7 @@ export async function handleEvent(client, event) {
       return;
 
     case "invoice.payment_failed":
-      // Stripe's own dunning retries the card; this is the human heads-up.
+      if (skipMail) return;
       await notify("FORGE — invoice payment failed", [
         `Number: ${object.number || object.id}`,
         `Amount due: ${money(object.amount_due, object.currency)}`,
