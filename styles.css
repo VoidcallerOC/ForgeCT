@@ -814,8 +814,14 @@ h2 em {
     width: 100%;
     justify-content: flex-start;
     gap: 1rem 1.25rem;
-    overflow-x: auto;
-    padding-bottom: 0.1rem;
+    flex-wrap: wrap;
+    padding: 0.15rem 0 0.1rem;
+  }
+
+  .primary-nav a,
+  .nav-wrap > .button {
+    flex: 0 0 auto;
+    white-space: nowrap;
   }
 
   .nav-wrap > .button {
