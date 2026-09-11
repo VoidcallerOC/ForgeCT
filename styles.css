@@ -1408,6 +1408,11 @@ h1 em {
   -webkit-backdrop-filter: blur(6px);
 }
 
+.work-card--thousand-sunny .work-status {
+  top: 0.75rem;
+  bottom: auto;
+}
+
 .work-body {
   padding: 1.4rem 1.4rem 1.5rem;
 }
