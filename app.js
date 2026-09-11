@@ -283,7 +283,7 @@
       },
       {
         label: "Call or walk in",
-        copy: "Your phone, your map, and a page you can keep current. Care after launch is $35/month.",
+        copy: "Your phone, your map, and a page you can keep current.",
       },
     ];
     const labelEl = visit.querySelector("[data-visit-label]");
