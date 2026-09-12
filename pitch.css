@@ -177,6 +177,31 @@
   margin: 2rem 0 0;
 }
 
+.faq-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.faq-list details {
+  border-top: 1px solid rgba(7, 7, 8, 0.18);
+  padding: 1rem 0;
+}
+
+.faq-list details:last-child {
+  border-bottom: 1px solid rgba(7, 7, 8, 0.18);
+}
+
+.faq-list summary {
+  cursor: pointer;
+  font-weight: 700;
+  padding-right: 1rem;
+}
+
+.faq-list p {
+  margin: 0.75rem 0 0;
+  max-width: 42rem;
+}
+
 @media (max-width: 800px) {
   .pitch-grid {
     grid-template-columns: 1fr;
