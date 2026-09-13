@@ -1768,3 +1768,72 @@ h1 em {
     flex-direction: column;
   }
 }
+
+/* ---------- Story-first narrative ---------- */
+.section--story {
+  color: var(--ink);
+  background: var(--cream);
+  border-block: 1px solid var(--wood);
+}
+.story-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(20rem, 1fr);
+  gap: clamp(2.5rem, 8vw, 8rem);
+  align-items: start;
+}
+.story-statement {
+  position: sticky;
+  top: 7rem;
+}
+.story-statement h2 {
+  max-width: 10ch;
+  margin: 0.8rem 0 0;
+  font-size: clamp(2.5rem, 5vw, 5.6rem);
+  letter-spacing: -0.07em;
+  line-height: 0.96;
+}
+.story-copy {
+  max-width: 39rem;
+  padding-top: 0.35rem;
+}
+.story-copy p {
+  margin: 0 0 1.25rem;
+  font-size: clamp(1.05rem, 1.7vw, 1.35rem);
+  line-height: 1.55;
+}
+.story-formula {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.55rem 0.8rem;
+  margin-top: 2.2rem !important;
+  color: var(--brick);
+  font-family: var(--sans);
+  font-size: 0.78rem !important;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.story-formula b {
+  color: var(--ink);
+  font-size: 1rem;
+}
+.hero-copy h1 em {
+  color: var(--brick);
+  font-style: normal;
+}
+.founder span {
+  color: var(--muted);
+}
+@media (max-width: 800px) {
+  .story-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .story-statement {
+    position: static;
+  }
+  .story-statement h2 {
+    max-width: 12ch;
+  }
+}
