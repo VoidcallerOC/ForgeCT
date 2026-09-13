@@ -214,6 +214,11 @@ button {
   width: 100%;
 }
 
+.cta-arrow {
+  opacity: 0.62;
+  font-variant-emoji: text;
+}
+
 .hero {
   overflow: hidden;
   padding-top: clamp(4.5rem, 8vw, 8.5rem);
