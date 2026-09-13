@@ -214,9 +214,73 @@ button {
   width: 100%;
 }
 
-.cta-arrow {
-  opacity: 0.62;
+/* ------------------------------------------------------------------
+   Glyph vocabulary. Typography is the icon system — no icon library,
+   no containers, no color of its own.
+
+     ↗  action / external / forward
+     →  progression
+     ↓  scroll / continue
+     ◆  marker / separator
+     ·  secondary separator
+
+   U+2197 is Emoji=Yes in Unicode's emoji data, so a platform is free to
+   resolve it from the emoji font and render it as a colour pictograph.
+   Every instance in the markup carries U+FE0E — the text presentation
+   selector — and this rule is the second guard for engines that honour
+   font-variant-emoji instead. The other glyphs above are maths or
+   geometric symbols with no emoji presentation, so they need neither.
+
+   Each glyph is aria-hidden in the markup: it repeats a label that is
+   already spelled out in text, so assistive tech should skip it.
+------------------------------------------------------------------ */
+.glyph {
+  display: inline-block;
   font-variant-emoji: text;
+  /* DM Sans is loaded at 400/500/600/700. 700 is the heaviest real
+     weight available — do not ask for 800 and get a synthesised one. */
+  font-weight: 700;
+  font-size: 1.08em;
+  line-height: 1;
+  /* Arrow ink sits high in the em box. Nudge it onto the optical
+     baseline of the text it follows. */
+  transform: translateY(0.045em);
+}
+
+/* Inline glyphs need their own breathing room. */
+.glyph--inline {
+  margin-left: 0.42em;
+}
+
+/* …except inside components that already space their children with a
+   flex gap, which would otherwise get a second helping. */
+:where(.button, .work-cta) .glyph--inline {
+  margin-left: 0;
+}
+
+/* Marker / separator. It punctuates; it is not something to click, so it
+   keeps the weight of its context rather than pushing to 700 — the
+   marquee is set in Instrument Serif, which ships a single weight and
+   would only give us a synthesised bold. A solid diamond also carries
+   more ink than the four-pointed star it replaced, so it sits a little
+   below the text size to punctuate instead of compete. */
+.glyph--marker {
+  font-size: 0.78em;
+  font-weight: inherit;
+  transform: none;
+}
+
+/* Optical weight for the glyphs our fonts cannot embolden.
+   Measured ink at 80px, weight 400 vs 700:
+     ↗ U+2197  +41%   ◆ U+25C6  +10%   A (control) +42%
+     ↓ U+2193   +0%   → U+2192   +0%
+   Those last two resolve to a fallback face with no bold, so
+   font-weight is inert on them and they read lighter than the text they
+   sit beside. A hairline stroke restores the weight; it paints inside
+   the existing glyph box, so nothing moves. */
+.glyph--optical-bold,
+.story-formula b {
+  -webkit-text-stroke: 0.03em currentColor;
 }
 
 .hero {
@@ -356,7 +420,7 @@ h2 em {
   position: absolute;
   left: 0.12rem;
   color: var(--brick);
-  content: "✦";
+  content: "◆";
 }
 
 .section--cream {
