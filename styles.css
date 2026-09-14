@@ -363,6 +363,27 @@ h2 em {
   margin-top: 2.35rem;
 }
 
+/* The lower-friction second path under the hero CTAs: the buyer who
+   already knows what they want and just needs to reach Nick. */
+.hero-secondary {
+  margin: 1.1rem 0 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.hero-secondary a {
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: var(--wood);
+  text-underline-offset: 0.28em;
+}
+
+.hero-secondary a:hover,
+.hero-secondary a:focus-visible {
+  text-decoration-color: var(--brick);
+}
+
 .text-link {
   color: var(--ink);
   font-size: 0.95rem;
@@ -1184,6 +1205,19 @@ h1 em {
   color: var(--muted);
   font-size: 0.86rem;
   font-weight: 600;
+}
+
+.hero-card-foot a {
+  color: var(--ink);
+  white-space: nowrap;
+  text-decoration: underline;
+  text-decoration-color: var(--wood);
+  text-underline-offset: 0.24em;
+}
+
+.hero-card-foot a:hover,
+.hero-card-foot a:focus-visible {
+  text-decoration-color: var(--brick);
 }
 
 /* Marquee */
