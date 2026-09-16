@@ -1,24 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://www.forge-ct.com/</loc>
-  </url>
-  <url>
-    <loc>https://www.forge-ct.com/why</loc>
-  </url>
-  <url>
-    <loc>https://www.forge-ct.com/services</loc>
-  </url>
-  <url>
-    <loc>https://www.forge-ct.com/care</loc>
-  </url>
-  <url>
-    <loc>https://www.forge-ct.com/hartford-web-design</loc>
-  </url>
-  <url>
-    <loc>https://www.forge-ct.com/contact</loc>
-  </url>
-  <url>
-    <loc>https://www.forge-ct.com/book</loc>
-  </url>
+  <url><loc>https://www.forge-ct.com/</loc></url>
+  <url><loc>https://www.forge-ct.com/why</loc></url>
+  <url><loc>https://www.forge-ct.com/services</loc></url>
+  <url><loc>https://www.forge-ct.com/care</loc></url>
+  <url><loc>https://www.forge-ct.com/hartford-web-design</loc></url>
+  <url><loc>https://www.forge-ct.com/contact</loc></url>
+  <url><loc>https://www.forge-ct.com/book</loc></url>
+  <url><loc>https://www.forge-ct.com/connecticut-web-design</loc></url>
+  <url><loc>https://www.forge-ct.com/work</loc></url>
+  <url><loc>https://www.forge-ct.com/work/thousand-sunny</loc></url>
+  <url><loc>https://www.forge-ct.com/work/hard-hittin</loc></url>
+  <url><loc>https://www.forge-ct.com/work/harris-in-wonderland</loc></url>
+  <url><loc>https://www.forge-ct.com/work/m-and-j-video-games</loc></url>
 </urlset>
