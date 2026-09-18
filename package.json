@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "type": "module",
   "private": true,
-  "description": "Front Window marketing website",
+  "description": "FORGE CT marketing site",
   "scripts": {
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint:html": "html-validate .",
     "test:links": "node scripts/check-local-links.mjs",
-    "test:js": "node --check checkout.js && node --check api/checkout.js && node --check api/contact.js && node --check api/portal.js && node --check api/_ratelimit.js && node --check api/stripe-webhook.js && node --check api/_webhook-store.js && node --test api/_ratelimit.test.js api/contact.test.js api/stripe-webhook.test.js api/_webhook-store.test.js",
+    "test:js": "node --check checkout.js && node --check api/checkout.js && node --check api/contact.js && node --check api/portal.js && node --check api/_ratelimit.js && node --check api/_stripe.js && node --check api/stripe-webhook.js && node --check api/_webhook-store.js && node --test api/_ratelimit.test.js api/contact.test.js api/stripe-webhook.test.js api/_webhook-store.test.js",
     "test:browser": "playwright test",
     "test": "npm run format:check && npm run lint:html && npm run test:links && npm run test:js"
   },
