@@ -13,6 +13,29 @@ async function mockContact(page) {
 }
 
 test.describe("business-critical flows", () => {
+  test("homepage exposes the URL-audit conversion path", async ({ page }) => {
+    await page.goto("/");
+    await expect(
+      page.getByRole("heading", { level: 1, name: /Connecticut card shops/i }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("link", { name: /Send your shop URL — get 3 fixes/i }),
+    ).toHaveAttribute("href", "#contact");
+    await expect(page.getByRole("link", { name: "Hartford Web Design" }).first()).toHaveAttribute(
+      "href",
+      "/hartford-web-design",
+    );
+    await expect(page.getByRole("link", { name: "Connecticut Web Design" }).first()).toHaveAttribute(
+      "href",
+      "/connecticut-web-design",
+    );
+    await expect(page.getByRole("link", { name: /Thousand Sunny Cards/i })).toHaveAttribute(
+      "href",
+      "https://www.thousandsunnytcg.com/",
+    );
+    await expect(page.locator("#siteUrl")).toBeVisible();
+  });
+
   test("contact form submits a normalized inquiry", async ({ page }) => {
     await mockContact(page);
     await page.goto("/contact");
