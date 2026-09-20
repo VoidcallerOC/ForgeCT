@@ -202,6 +202,68 @@
   max-width: 42rem;
 }
 
+/* The Forge-CT Audit — FIND / MISS / FORGE / NEXT.
+   A two-up grid of labelled steps. Reuses the site's type and colour
+   tokens; the word-label sits in its own column so it reads as an
+   editorial mark, not a bullet. */
+.audit-steps {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0;
+  margin: 2.5rem 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--line);
+}
+
+.audit-steps li {
+  display: grid;
+  grid-template-columns: 4.5rem minmax(0, 1fr);
+  gap: 1rem;
+  padding: 1.8rem 2rem 1.8rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.audit-steps li:nth-child(odd) {
+  border-right: 1px solid var(--line);
+  padding-right: 2.5rem;
+}
+
+.audit-step {
+  color: var(--brick);
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.audit-steps h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+
+.audit-steps p {
+  max-width: 40ch;
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+@media (max-width: 720px) {
+  .audit-steps {
+    grid-template-columns: 1fr;
+  }
+  .audit-steps li,
+  .audit-steps li:nth-child(odd) {
+    padding: 1.6rem 0;
+    border-right: 0;
+  }
+}
+
 @media (max-width: 800px) {
   .pitch-grid {
     grid-template-columns: 1fr;
