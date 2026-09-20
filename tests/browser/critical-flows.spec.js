@@ -21,18 +21,15 @@ test.describe("business-critical flows", () => {
     await expect(
       page.getByRole("link", { name: /Send your shop URL — get 3 fixes/i }),
     ).toHaveAttribute("href", "#contact");
-    await expect(page.getByRole("link", { name: "Hartford Web Design" }).first()).toHaveAttribute(
-      "href",
-      "/hartford-web-design",
-    );
-    await expect(page.getByRole("link", { name: "Connecticut Web Design" }).first()).toHaveAttribute(
-      "href",
-      "/connecticut-web-design",
-    );
-    await expect(page.getByRole("link", { name: /Thousand Sunny Cards/i })).toHaveAttribute(
-      "href",
-      "https://www.thousandsunnytcg.com/",
-    );
+    await expect(
+      page.getByRole("link", { name: "Hartford Web Design" }).first(),
+    ).toHaveAttribute("href", "/hartford-web-design");
+    await expect(
+      page.getByRole("link", { name: "Connecticut Web Design" }).first(),
+    ).toHaveAttribute("href", "/connecticut-web-design");
+    await expect(
+      page.getByRole("link", { name: /Thousand Sunny Cards/i }),
+    ).toHaveAttribute("href", "https://www.thousandsunnytcg.com/");
     await expect(page.locator("#siteUrl")).toBeVisible();
   });
 
