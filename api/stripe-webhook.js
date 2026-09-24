@@ -31,15 +31,6 @@ const CARE_PRICE_ENV = {
   "care-plus": "STRIPE_PRICE_CARE_PLUS",
 };
 
-const FIXTURE_IDS = new Set([
-  "pi_ach_settled",
-  "cus_ach",
-  "in_final",
-  "cus_final",
-  "cs_unpaid",
-  "cus_unpaid",
-]);
-
 function rawBody(request) {
   return new Promise((resolve, reject) => {
     const chunks = [];
@@ -68,18 +59,6 @@ export function addOneMonth(timestamp) {
 
 function customerId(value) {
   return typeof value === "string" ? value : value?.id;
-}
-
-function looksLikeFixture(event) {
-  if (event?.livemode === false) return true;
-  const object = event?.data?.object || {};
-  const ids = [
-    object.id,
-    customerId(object.customer),
-    object.payment_intent,
-    object.invoice,
-  ];
-  return ids.some((id) => typeof id === "string" && FIXTURE_IDS.has(id));
 }
 
 async function rememberCarePlan(client, session, settledAt) {
@@ -230,7 +209,7 @@ async function notify(subject, lines) {
 
 export async function handleEvent(client, event) {
   const object = event.data.object;
-  const skipMail = looksLikeFixture(event);
+  const skipMail = event?.livemode === false;
 
   switch (event.type) {
     case "checkout.session.completed":
@@ -358,8 +337,14 @@ export default async function handler(request, response) {
   }
 
   try {
+    // Irrelevant types must not claim a processing lease — previously they
+    // inserted a row, returned ignored, and never marked/released (~5m lease).
+    if (!RELEVANT.has(event.type)) {
+      return response.status(200).json({ ok: true, ignored: true });
+    }
+
     const claimed = await claimWebhookEvent(event.id);
-    if (!RELEVANT.has(event.type) || !claimed) {
+    if (!claimed) {
       return response.status(200).json({ ok: true, ignored: true });
     }
 

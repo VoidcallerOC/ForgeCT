@@ -26,6 +26,7 @@ test("unpaid checkout sessions do not update customers or send fulfillment", asy
 
   await handleEvent(client, {
     type: "checkout.session.completed",
+    livemode: false,
     created: timestamp("2026-09-06T17:55:23Z"),
     data: {
       object: {
@@ -49,6 +50,7 @@ test("ACH settlement records the settlement timestamp and countdown", async () =
 
   await handleEvent(client, {
     type: "payment_intent.succeeded",
+    livemode: false,
     created: settledAt,
     data: {
       object: {
@@ -101,6 +103,7 @@ test("a paid final invoice does not create a duplicate Care subscription", async
 
   await handleEvent(client, {
     type: "invoice.paid",
+    livemode: false,
     created: timestamp("2026-09-06T17:55:23Z"),
     data: {
       object: {
