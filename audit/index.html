@@ -32,6 +32,19 @@
     <link rel="stylesheet" href="/styles.css?v=20260910b" />
     <link rel="stylesheet" href="/brand.css?v=20260910b" />
     <link rel="stylesheet" href="/pitch.css?v=20260910b" />
+    <style>
+      /* Light conversion hero: keep body copy readable on the ink ground. */
+      .conversion-lede { color: rgba(14, 15, 18, 0.78); }
+      .conversion-lede strong { color: var(--paper); }
+      .conversion-proof-line { color: rgba(14, 15, 18, 0.62); }
+      .conversion-proof-line a { color: var(--paper); }
+      .conversion-section--contact .contact-copy > p:not(.eyebrow),
+      .conversion-section--contact .contact-email,
+      .conversion-section--contact .contact-email a { color: rgba(14, 15, 18, 0.78); }
+      .conversion-offer li { grid-template-columns: 2.1rem minmax(0, 1fr); }
+      .conversion-offer li strong,
+      .conversion-offer li span { grid-column: 2; }
+    </style>
     <script src="/app.js?v=20260910b" defer></script>
     <title>The Forge-CT Audit — See your shop like a customer</title>
     <script type="application/ld+json">
@@ -79,7 +92,7 @@
             </p>
             <div class="conversion-actions">
               <a class="button" data-magnetic href="#audit-form">Get your Forge-CT Audit <span class="glyph glyph--inline" aria-hidden="true">↗︎</span></a>
-              <a class="text-link" href="/#work">See live shop work <span class="glyph glyph--inline glyph--optical-bold" aria-hidden="true">↓</span></a>
+              <a class="text-link" href="#what">See what you get <span class="glyph glyph--inline glyph--optical-bold" aria-hidden="true">↓</span></a>
             </div>
             <p class="conversion-proof-line">
               Already know what you need? <a href="/book">Book a working session <span class="glyph glyph--inline" aria-hidden="true">↗︎</span></a>
