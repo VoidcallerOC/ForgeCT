@@ -28,6 +28,16 @@
     <link rel="stylesheet" href="/styles.css?v=20260910b" />
     <link rel="stylesheet" href="/brand.css?v=20260910b" />
     <link rel="stylesheet" href="/pitch.css?v=20260910b" />
+    <style>
+      /* Infinite Heroes screenshot includes iOS status-bar chrome at the top. */
+      .work-card--crop-status .work-thumb img {
+        object-position: center 22%;
+      }
+      .work-card--crop-status:hover .work-thumb img,
+      .work-card--crop-status:focus-within .work-thumb img {
+        object-position: center bottom;
+      }
+    </style>
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
