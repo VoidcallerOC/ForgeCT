@@ -1,1 +1,26 @@
-PLACEHOLDER_WILL_REPLACE
+:root {
+  /* Deep-charcoal dark palette. Variable names are kept from the old
+     paper theme so the rest of the sheet keeps working — meanings are
+     inverted: "paper" is now the near-black ground and "ink" is the
+     warm off-white text. Accent color is pale limestone. */
+  --paper: #0e0f12; /* page ground */
+  --cream: #16181d; /* elevated surface / alt sections */
+  --surface-2: #1c1e25; /* cards, form panel */
+  --ink: #edede7; /* primary text (warm off-white) */
+  --brick: #efe7ce; /* primary accent — pale limestone */
+  --brick-deep: #d6c99f; /* hover / stronger accent */
+  --accent-hi: #fffdf3;
+  --wood: #363944; /* card border — visible on both --paper and --cream */
+  --line: #22252c; /* subtle divider */
+  --line-strong: #454955; /* stronger divider / focus rings */
+  --muted: #9ea0a8;
+  --light-line: rgba(237, 237, 231, 0.1);
+  --clay: var(--brick);
+  --sans: "DM Sans", "Helvetica Neue", Arial, sans-serif;
+  --serif: "Instrument Serif", Georgia, serif;
+  --shell: 1160px;
+  --shell-wide: 1280px;
+  --shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  color-scheme: dark;
+}
