@@ -22,17 +22,18 @@ const API_VERSION = "2026-07-29.dahlia";
 const TAG = "forge_ct_catalog";
 
 /**
- * Site and System bills in thirds against the "from $6,000" floor published on
- * /services, so each installment is $2,000. If that project is really a $9,000
- * build, change this to 300000 and update the services page in the same commit
- * — the page and the catalog have to agree.
+ * Full Shop Site bills in halves against the $1,200 price on /services,
+ * so each installment is $600. The $500 Shop Site is a Payment Link in
+ * payments.js, not this catalog.
  */
-const SYSTEM_INSTALLMENT = 200000;
+const SITE_INSTALLMENT = 60000;
 
 /**
- * Local Business Site bills in halves against the "from $2,000" floor.
+ * Shop + System bills in two halves against the $2,500 price, so each
+ * installment is $1,250. The deposit price already exists in Stripe at
+ * lookup key forge_shop_system_deposit. Do not create a third installment.
  */
-const SITE_INSTALLMENT = 100000;
+const SYSTEM_INSTALLMENT = 125000;
 
 /**
  * Stripe product tax codes drive Stripe Tax. The Dashboard default of
@@ -64,57 +65,57 @@ const CATALOG = [
     name: "Care+",
     aliases: ["Website Maintenance Plus", "Care Plus"],
     description:
-      "Everything in Care, plus one extra block or small page change a month and same-week turns when the floor moves.",
+      "Everything in Care, plus one extra block or small page change a month. Same or next business day.",
     unitAmount: 7900,
     recurring: { interval: "month" },
     taxCode: TAX_CODE.care,
   },
   {
     key: "site_deposit",
+    lookupKey: "forge_full_shop_site_deposit",
     envVar: "STRIPE_PRICE_SITE_DEPOSIT",
-    name: "Local Business Site — deposit",
-    aliases: ["Site - First Deposit", "Local Business Site"],
+    name: "Full Shop Site, deposit",
+    aliases: [
+      "Site - First Deposit",
+      "Local Business Site",
+      "Local Business Site — deposit",
+    ],
     description:
-      "Books the build and starts a three to five page shop site — hours, the floor, and how to walk in. Half now, half at launch.",
+      "Books a Full Shop Site. $600 to start, $600 at launch. Up to 6 pages.",
     unitAmount: SITE_INSTALLMENT,
     taxCode: TAX_CODE.service,
   },
   {
     key: "site_final",
-    name: "Local Business Site — final",
-    aliases: ["Site - Final Payment"],
+    name: "Full Shop Site, launch",
+    aliases: ["Site - Final Payment", "Local Business Site — final"],
     description:
-      "The balance on a Local Business Site, due when the page goes live. Covers launch and the handoff. The page is yours.",
+      "The balance on a Full Shop Site, due when the page goes live. Covers launch and the handoff. The page is yours.",
     unitAmount: SITE_INSTALLMENT,
     taxCode: TAX_CODE.service,
     invoiceOnly: true,
   },
   {
     key: "system_deposit",
+    lookupKey: "forge_shop_system_deposit",
     envVar: "STRIPE_PRICE_SYSTEM_DEPOSIT",
-    name: "Site and System — deposit",
-    aliases: ["Site and System - Deposit", "Site and System"],
+    name: "Shop + System, deposit",
+    aliases: [
+      "Site and System - Deposit",
+      "Site and System",
+      "Site and System — deposit",
+    ],
     description:
-      "First of three. Books the calendar and starts a five to ten page site with events, play nights, and intake.",
+      "First of two. Books Shop + System: a Full Shop Site plus one working system. $1,250 to start, $1,250 at launch.",
     unitAmount: SYSTEM_INSTALLMENT,
     taxCode: TAX_CODE.service,
-  },
-  {
-    key: "system_build",
-    name: "Site and System — build",
-    aliases: ["Site and System - Build"],
-    description:
-      "Second of three. The full build — every page, events and intake wired up, and a private link to walk through before it is public.",
-    unitAmount: SYSTEM_INSTALLMENT,
-    taxCode: TAX_CODE.service,
-    invoiceOnly: true,
   },
   {
     key: "system_launch",
-    name: "Site and System — launch",
-    aliases: ["Site and System - Launch"],
+    name: "Shop + System, launch",
+    aliases: ["Site and System - Launch", "Site and System — launch"],
     description:
-      "Third of three, due when the page goes live. Covers launch and the handoff. The page is yours.",
+      "Second of two, due when the page goes live. Covers launch and the handoff. The page is yours.",
     unitAmount: SYSTEM_INSTALLMENT,
     taxCode: TAX_CODE.service,
     invoiceOnly: true,
@@ -143,12 +144,12 @@ const notes = [];
 const warnings = [];
 
 function lookupKeyFor(entry) {
-  return `forge_${entry.key}`;
+  return entry.lookupKey || `forge_${entry.key}`;
 }
 
 function normalize(name) {
   // Hand-typed names drift on dashes, spacing, and case. Compare on letters
-  // and digits only so "Site and System - Deposit" adopts cleanly.
+  // and digits only so a former product name still adopts cleanly.
   return String(name)
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, " ")

@@ -7,7 +7,7 @@
  * product a shop already saw at checkout:
  *
  *   STRIPE_SECRET_KEY=rk_… node scripts/stripe-invoice.mjs \
- *     --email owner@shop.com --name "Shop Name" --lookup forge_system_build --send
+ *     --email owner@shop.com --name "Shop Name" --lookup forge_system_launch --send
  *
  * Or bill a one-off amount:
  *
@@ -15,8 +15,8 @@
  *     --email owner@shop.com --name "Shop Name" \
  *     --amount 2400 --label "Extra page — intake form" --send
  *
- * Lookup keys: forge_site_deposit, forge_site_final, forge_system_deposit,
- * forge_system_build, forge_system_launch.
+ * Lookup keys: forge_full_shop_site_deposit, forge_site_final,
+ * forge_shop_system_deposit, forge_system_launch.
  *
  * Without --send it leaves a draft you can read in the Dashboard first.
  */
