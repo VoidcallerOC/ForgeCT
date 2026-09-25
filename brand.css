@@ -198,3 +198,26 @@ h2 em {
     grid-template-columns: 1fr;
   }
 }
+
+/* Pricing cards: do not pin the milestone list to the bottom.
+   Absolute positioning collided with wrapped descriptions on narrow screens. */
+.price-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.price-card ul {
+  position: static !important;
+  right: auto;
+  bottom: auto;
+  left: auto;
+  width: 100%;
+  margin-top: auto;
+  padding-top: 1.25rem;
+}
+
+@media (max-width: 800px) {
+  .price-card {
+    min-height: 0;
+  }
+}
