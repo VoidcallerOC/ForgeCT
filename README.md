@@ -70,22 +70,24 @@ is required, and the practice stays at PCI SAQ A. Two separate paths:
   Customer Portal so a shop can update a card or cancel without emailing anyone.
   That is what makes the "cancel anytime" promise on `/care` self-serve.
 - **Build deposits and milestones** — Stripe Invoicing with ACH bank transfer
-  enabled, sent from the dashboard. Card fees on a $6,000 deposit run into the
-  low hundreds; ACH is capped at a few dollars.
+  enabled, sent from the dashboard. Card fees on a $1,250 deposit still add up;
+  ACH is capped at a few dollars.
 
-`/pay` is the landing route for both. The three destinations live in the
+`/pay` is the landing route for both. The destinations live in the
 `PAYMENT_LINKS` object at the top of `payments.js`:
 
-| Key        | Source                                   |
-| ---------- | ---------------------------------------- |
-| `care`     | Stripe Payment Link, $35/month recurring |
-| `carePlus` | Stripe Payment Link, $79/month recurring |
-| `portal`   | Stripe Customer Portal login link        |
+| Key               | Source                                      |
+| ----------------- | ------------------------------------------- |
+| `care`            | Stripe Payment Link, $35/month recurring    |
+| `carePlus`        | Stripe Payment Link, $79/month recurring    |
+| `portal`          | Stripe Customer Portal login link           |
+| `shopSite`        | Stripe Payment Link, $500 Shop Site         |
+| `shopSiteDeposit` | Stripe Payment Link, $250 Shop Site deposit |
 
 These are public URLs, not secrets, so they are committed rather than read from
 the environment. While a value is empty, that link falls back to the href in the
-markup, which points at the inquiry form — an unconfigured button is never a dead
-button. Enabling real payments is editing those three strings.
+markup, which points at the inquiry form. An unconfigured button is never a dead
+button. Enabling real payments is editing those strings.
 
 ### Stripe webhook fulfillment
 

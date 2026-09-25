@@ -66,7 +66,7 @@ test.describe("business-critical flows", () => {
     await page
       .getByLabel("Email for your Stripe receipt")
       .fill("owner@example.com");
-    await page.getByRole("button", { name: "Pay the $1,000 deposit" }).click();
+    await page.getByRole("button", { name: "Pay the $600 deposit" }).click();
 
     await expect
       .poll(() => request)
