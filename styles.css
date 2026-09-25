@@ -1981,3 +1981,44 @@ h1 em {
   letter-spacing: 0.07em;
   text-transform: uppercase;
 }
+
+/* Speed proof, directly under the home hero. */
+.section--speed {
+  padding: clamp(3rem, 6vw, 5rem) 0;
+  background: var(--paper);
+  border-top: 1px solid var(--line);
+}
+
+.section--speed .section-heading h2 {
+  max-width: 14ch;
+  margin-bottom: 0;
+  font-size: clamp(2rem, 4.4vw, 3.5rem);
+}
+
+.speed-proof {
+  max-width: 42rem;
+  margin: clamp(1.6rem, 3vw, 2.4rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.speed-proof li {
+  margin: 0;
+  padding: 0.95rem 0;
+  border-top: 1px solid var(--line);
+  color: var(--ink);
+  font-size: clamp(1.05rem, 1.6vw, 1.2rem);
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+.speed-proof li:last-child {
+  border-bottom: 1px solid var(--line);
+}
+
+.speed-byline {
+  margin: 1.15rem 0 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
