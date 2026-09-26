@@ -8,31 +8,40 @@ v22).
 
 ## What maps to what
 
-| On the site                       | Stripe product | Mechanism                                         |
-| --------------------------------- | -------------- | ------------------------------------------------- |
-| Local Business Site — from $2,000 | Payments       | Checkout Session, `mode: "payment"` — first half  |
-| Site and System — from $6,000     | Payments       | Checkout Session, `mode: "payment"` — first third |
-| Care — $35/mo                     | Billing        | Checkout Session, `mode: "subscription"`          |
-| Care+ — $79/mo                    | Billing        | Checkout Session, `mode: "subscription"`          |
-| Later installments                | Invoicing      | `scripts/stripe-invoice.mjs --lookup …`           |
-| Card change, receipts, cancel     | Billing        | Customer Portal, from `/thanks`                   |
+| On the site                   | Stripe product | Mechanism                                       |
+| ----------------------------- | -------------- | ----------------------------------------------- |
+| Shop Site, $500               | Payment Link   | `payments.js` `shopSite` and `shopSiteDeposit`  |
+| Full Shop Site, $1,200        | Payments       | Checkout Session, `mode: "payment"`, first half |
+| Shop + System, $2,500         | Payments       | Checkout Session, `mode: "payment"`, first half |
+| Care, $35/mo                  | Billing        | Checkout Session, `mode: "subscription"`        |
+| Care+, $79/mo                 | Billing        | Checkout Session, `mode: "subscription"`        |
+| Later installments            | Invoicing      | `scripts/stripe-invoice.mjs --lookup …`         |
+| Card change, receipts, cancel | Billing        | Customer Portal, from `/thanks`                 |
 
 ## Installments
 
-The published prices are floors ("from $2,000"), so the site sells only the
-**first** installment. Everything after it goes out as an invoice, once scope is
-settled and the real number is known.
+Full Shop Site is $1,200, split $600 and $600. Shop + System is $2,500, split
+$1,250 and $1,250. The site sells the first half through Checkout. The launch
+half goes out as an invoice. The $500 Shop Site is not in this catalog. It is
+the Payment Link pair in `payments.js`, paid after the preview, or $250 now.
 
-| Build               | Total  | Split                           |
-| ------------------- | ------ | ------------------------------- |
-| Local Business Site | $2,000 | halves — deposit, final         |
-| Site and System     | $6,000 | thirds — deposit, build, launch |
+| Build          | Total  | Split                      |
+| -------------- | ------ | -------------------------- |
+| Full Shop Site | $1,200 | halves, deposit and launch |
+| Shop + System  | $2,500 | halves, deposit and launch |
 
 The installment amounts live in two constants at the top of
-`scripts/stripe-bootstrap.mjs` (`SITE_INSTALLMENT`, `SYSTEM_INSTALLMENT`). **The
-catalog and the services page have to agree.** If a Site and System build is
-really $9,000, change `SYSTEM_INSTALLMENT` to `300000` and change the "from
-$6,000" copy on `/services` in the same commit.
+`scripts/stripe-bootstrap.mjs` (`SITE_INSTALLMENT` is `60000`,
+`SYSTEM_INSTALLMENT` is `125000`). **The catalog and the services page have to
+agree.** The $600 and $1,250 deposit prices already exist in Stripe. Their
+lookup keys are `forge_full_shop_site_deposit` and `forge_shop_system_deposit`.
+The catalog points at those keys so `--apply` finds them instead of creating
+duplicates. Do not run `stripe-bootstrap.mjs --apply` for this price change.
+After merge, switch `STRIPE_PRICE_SITE_DEPOSIT` and `STRIPE_PRICE_SYSTEM_DEPOSIT`
+in Vercel to those prices.
+
+Launch invoices keep the webhook lookup keys `forge_site_final` and
+`forge_system_launch`. There is no middle Shop + System installment.
 
 Each installment is its own Stripe **Product**, because Checkout and invoices
 print the product name on the line item. A shop that clicks "Start Care" should
@@ -86,7 +95,7 @@ Stripe retries cannot create a duplicate subscription.
    The script **adopts products that already exist**, including ones created by
    hand in the Dashboard. It matches on a metadata tag, then the canonical name,
    then any known former name (`Website Maintenance` → `Care`,
-   `Site - First Deposit` → `Local Business Site — deposit`, and so on), then
+   `Site - First Deposit` to `Full Shop Site, deposit`, and so on), then
    renames and re-describes what it finds. Re-running is safe and it never
    creates a duplicate of a product it can recognise.
 
@@ -236,7 +245,7 @@ following owner/accounting checks:
 Also settle these before the first real charge:
 
 - Product tax codes are not the SaaS default (see **Tax**).
-- The services page and `SYSTEM_INSTALLMENT` agree on what a Site and System costs.
+- The services page and `SYSTEM_INSTALLMENT` agree on the $2,500 Shop + System price.
 - The deposit descriptions say whether a deposit is refundable. That sentence is
   the one people look for, and burying it costs the dispute later.
 - The privacy notice covers payments — it currently reads as though the site has

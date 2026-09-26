@@ -4,11 +4,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex,follow" />
-    <meta name="description" content="Start a FORGE care plan or pay a build deposit. Care $35/month, Care+ $79/month, cancel anytime. Build deposits from $1,000 with secure Stripe Checkout." />
+    <meta name="description" content="Start a FORGE care plan or pay a build deposit. Care $35/month, Care+ $79/month, cancel anytime. Shop Site $500. Build deposits from $600 with secure Stripe Checkout." />
     <meta name="theme-color" content="#0A0A0A" />
     <link rel="canonical" href="https://www.forge-ct.com/pay" />
     <meta property="og:title" content="Pay FORGE CT — care plans and build deposits" />
-    <meta property="og:description" content="Care $35/month, Care+ $79/month, cancel anytime. Build deposits from $1,000 with secure Stripe Checkout." />
+    <meta property="og:description" content="Care $35/month, Care+ $79/month, cancel anytime. Shop Site $500. Build deposits from $600 with secure Stripe Checkout." />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="/styles.css?v=20260905n" />
     <link rel="stylesheet" href="/brand.css?v=20260905n" />
     <title>Pay FORGE CT — care plans and build deposits</title>
-    <script src="/payments.js?v=20260905n" defer></script>
+    <script src="/payments.js?v=20260924a" defer></script>
     <script src="/checkout.js?v=20260905n" defer></script>
   </head>
   <body>
@@ -55,7 +55,7 @@
             <ul>
               <li>Everything in Care.</li>
               <li>One extra block or small page change a month.</li>
-              <li>Same-week turn when the shop is busy.</li>
+              <li>Same or next business day.</li>
             </ul>
             <p><a class="button" href="/#contact" data-payment-link="carePlus" data-payment-label="Start Care+ — $79/month">Ask about Care+ — $79/month</a></p>
           </div>
@@ -64,7 +64,7 @@
         <p class="pricing-note" data-payment-when="portal:set" hidden>Already on a plan? <a href="/#contact" data-payment-link="portal">Update your card or cancel</a>. No email required, no retainer trap.</p>
         <h2>Build deposits</h2>
         <p>Once we scope the shop, choose the deposit that matches the build. Stripe Checkout supports card and eligible bank-account payments, including ACH Direct Debit. ACH payments can take time to settle, so work begins after Stripe confirms the funds have arrived.</p>
-        <p><strong>Half to start, half at launch.</strong> On a $2,000 shop page that is $1,000 to put it on the calendar and $1,000 when the page goes live. Same split at every tier. No surprise line at the end.</p>
+        <p><strong>Half to start, half at launch.</strong> On a $1,200 site that is $600 to start and $600 when it goes live. Same split at every tier. The $500 Shop Site is paid after you see the preview. No surprise line at the end.</p>
         <aside class="payment-notice" aria-label="Important payment timing and limits">
           <p class="payment-notice-title">Important for larger deposits</p>
           <ul>
@@ -89,15 +89,21 @@
         </div>
         <div class="compare-grid">
           <div class="compare-col compare-col--us">
-            <p class="compare-kicker">Local Business Site — $1,000 deposit</p>
-            <p>For a focused shop page, local business site, or small launch build.</p>
-            <p><button class="button" type="button" data-stripe-plan="site-deposit" aria-describedby="site-deposit-status">Pay the $1,000 deposit</button></p>
-            <p class="form-status" id="site-deposit-status" role="status" aria-live="polite"></p>
+            <p class="compare-kicker">Shop Site, $500</p>
+            <p>You see the preview first. Then $500, or $250 now and $250 when it is live.</p>
+            <p><a class="button" href="/#contact" data-payment-link="shopSite" data-payment-label="Pay $500">Ask about paying $500</a></p>
+            <p><a class="button" href="/#contact" data-payment-link="shopSiteDeposit" data-payment-label="Pay $250 now">Ask about paying $250 now</a></p>
           </div>
           <div class="compare-col">
-            <p class="compare-kicker">Site and System — scoped deposit</p>
-            <p>For a larger build with systems, automations, or a deeper launch plan.</p>
-            <p><button class="button" type="button" data-stripe-plan="system-deposit" aria-describedby="system-deposit-status">Pay the system deposit</button></p>
+            <p class="compare-kicker">Full Shop Site, $600 deposit</p>
+            <p>For a Full Shop Site. $600 to start, $600 at launch.</p>
+            <p><button class="button" type="button" data-stripe-plan="site-deposit" aria-describedby="site-deposit-status">Pay the $600 deposit</button></p>
+            <p class="form-status" id="site-deposit-status" role="status" aria-live="polite"></p>
+          </div>
+          <div class="compare-col compare-col--us">
+            <p class="compare-kicker">Shop + System, $1,250 deposit</p>
+            <p>For Shop + System. $1,250 to start, $1,250 at launch.</p>
+            <p><button class="button" type="button" data-stripe-plan="system-deposit" aria-describedby="system-deposit-status">Pay the $1,250 deposit</button></p>
             <p class="form-status" id="system-deposit-status" role="status" aria-live="polite"></p>
           </div>
         </div>

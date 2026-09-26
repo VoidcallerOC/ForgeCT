@@ -8,7 +8,7 @@
       "url": "https://www.forge-ct.com/",
       "email": "create@forge-ct.com",
       "description": "Sites and apps for card and tabletop shops around Greater Hartford. Care from $35 a month.",
-      "priceRange": "$35+",
+      "priceRange": "$35 to $5,000+",
       "founder": { "@type": "Person", "name": "Nick Sousa" },
       "address": {
         "@type": "PostalAddress",
@@ -25,13 +25,50 @@
       "itemListElement": [
         {
           "@type": "Offer",
-          "name": "Local Business Site",
-          "price": "2000",
+          "name": "Shop Site",
+          "price": "500",
           "priceCurrency": "USD",
           "itemOffered": {
             "@type": "Service",
-            "name": "Local Business Site",
-            "description": "Hours, the floor, how to walk in."
+            "name": "Shop Site",
+            "description": "One long page or up to 3 short pages. Preview in a day. You see it before you pay."
+          }
+        },
+        {
+          "@type": "Offer",
+          "name": "Full Shop Site",
+          "price": "1200",
+          "priceCurrency": "USD",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Full Shop Site",
+            "description": "Up to 6 pages. $600 to start, $600 at launch. About 3 business days."
+          }
+        },
+        {
+          "@type": "Offer",
+          "name": "Shop + System",
+          "price": "2500",
+          "priceCurrency": "USD",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Shop + System",
+            "description": "Full Shop Site plus one working system. $1,250 to start, $1,250 at launch. About a week."
+          }
+        },
+        {
+          "@type": "Offer",
+          "name": "Custom Build",
+          "priceCurrency": "USD",
+          "priceSpecification": {
+            "@type": "PriceSpecification",
+            "minPrice": "5000",
+            "priceCurrency": "USD"
+          },
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Custom Build",
+            "description": "Full catalog and checkout, a custom app or dashboard, or more than one system. Half to start, half at launch. 2 to 3 weeks."
           }
         },
         {
@@ -50,7 +87,7 @@
             "@type": "Service",
             "name": "Care",
             "serviceType": "Website care plan",
-            "description": "Hours, events, and restocks stay current. Cancel anytime."
+            "description": "Hours, events, and restocks stay current. Changes within 2 business days. Cancel anytime."
           }
         },
         {
@@ -69,7 +106,7 @@
             "@type": "Service",
             "name": "Care+",
             "serviceType": "Website care plan",
-            "description": "Care plus one extra monthly change and same-week turnaround."
+            "description": "Care plus one extra monthly change. Same or next business day."
           }
         }
       ]
