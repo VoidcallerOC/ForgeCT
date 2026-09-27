@@ -17,12 +17,12 @@ test.describe("business-critical flows", () => {
     await mockContact(page);
     await page.goto("/contact");
 
-    await page.getByLabel("Name").fill("  Test Shop  ");
+    await page.getByLabel("Name").fill("  Test Business  ");
     await page.getByLabel("Email").fill("owner@example.com");
-    await page.getByLabel("Company").fill("Test Shop");
+    await page.getByLabel("Company").fill("Test Business");
     await page
-      .getByLabel("What’s your shop?")
-      .fill("A local shop looking for clearer hours.");
+      .getByLabel("What’s your business?")
+      .fill("A local service business looking for clearer information.");
     await page.getByRole("button", { name: /Send inquiry/ }).click();
 
     await expect(page.locator("[data-form-status]")).toHaveText(
@@ -43,6 +43,26 @@ test.describe("business-critical flows", () => {
     ).toHaveAttribute("href", /^https:\/\/buy\.stripe\.com\//);
     await expect(page.locator('[data-payment-when="care:unset"]')).toBeHidden();
     await expect(page.locator('[data-payment-when="care:set"]')).toBeVisible();
+  });
+
+  test("Care welcomes local businesses across multiple industries", async ({
+    page,
+  }) => {
+    await page.goto("/care");
+    const audienceFaq = page
+      .locator(".faq-grid details")
+      .filter({ hasText: "Who is this for?" });
+
+    await expect(audienceFaq).toContainText(
+      "local retail, restaurants, and service businesses",
+    );
+    await expect(audienceFaq).toContainText("FORGE-built websites");
+    await expect(page.locator("main")).not.toContainText(
+      "card or tabletop shop",
+    );
+    await expect(page.locator("main")).toContainText(
+      "Tell me about your business",
+    );
   });
 
   test("canonical website packages and add-ons are visible and the package picker works on mobile", async ({
