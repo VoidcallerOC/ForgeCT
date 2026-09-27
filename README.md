@@ -38,8 +38,8 @@ Open `http://localhost:8000` in a browser while the local server is running. The
 `npm test` runs the release checks for formatting, HTML, links, and application
 logic. CI also runs `npm run test:browser` against a local static server using
 Chromium. Those browser checks intentionally cover only the business-critical
-contact submission, Care/Care+ links, deposit checkout hand-off, and receipt-bound
-customer portal path; they do not attempt visual regression testing.
+contact submission, package pricing and mobile behavior, Care/Care+ links, and the
+receipt-bound customer portal path; they do not attempt visual regression testing.
 
 | Command                | Purpose                                                           |
 | ---------------------- | ----------------------------------------------------------------- |
@@ -69,22 +69,20 @@ is required, and the practice stays at PCI SAQ A. Two separate paths:
 - **Care and Care+** — Stripe Payment Links in subscription mode, plus the Stripe
   Customer Portal so a shop can update a card or cancel without emailing anyone.
   That is what makes the "cancel anytime" promise on `/care` self-serve.
-- **Build deposits and milestones** — Stripe Invoicing with ACH bank transfer
-  enabled, sent from the dashboard. Card fees on a $1,250 deposit still add up;
-  ACH is capped at a few dollars.
+- **Website builds** — published package scope and add-ons are listed on
+  `/services`. Build payments are arranged after scope is confirmed; the public
+  site does not offer the retired build-deposit checkout.
 
-`/pay` is the landing route for both. The destinations live in the
+`/pay` is the landing route for Care subscriptions. The destinations live in the
 `PAYMENT_LINKS` object at the top of `payments.js`:
 
-| Key               | Source                                      |
-| ----------------- | ------------------------------------------- |
-| `care`            | Stripe Payment Link, $35/month recurring    |
-| `carePlus`        | Stripe Payment Link, $79/month recurring    |
-| `portal`          | Stripe Customer Portal login link           |
-| `shopSite`        | Stripe Payment Link, $500 Shop Site         |
-| `shopSiteDeposit` | Stripe Payment Link, $250 Shop Site deposit |
+| Key        | Source                                   |
+| ---------- | ---------------------------------------- |
+| `care`     | Stripe Payment Link, $35/month recurring |
+| `carePlus` | Stripe Payment Link, $79/month recurring |
+| `portal`   | Stripe Customer Portal login link        |
 
-These are public URLs, not secrets, so they are committed rather than read from
+These care and portal URLs are public, not secrets, so they are committed rather than read from
 the environment. While a value is empty, that link falls back to the href in the
 markup, which points at the inquiry form. An unconfigured button is never a dead
 button. Enabling real payments is editing those strings.

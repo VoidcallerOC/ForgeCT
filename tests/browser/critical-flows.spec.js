@@ -45,36 +45,63 @@ test.describe("business-critical flows", () => {
     await expect(page.locator('[data-payment-when="care:set"]')).toBeVisible();
   });
 
-  test("deposit checkout posts the selected Care plan and email", async ({
+  test("canonical website packages and add-ons are visible and the package picker works on mobile", async ({
     page,
   }) => {
-    let request;
-    await page.route("**/api/checkout", async (route) => {
-      request = route.request().postDataJSON();
-      await route.fulfill({
-        status: 200,
-        contentType: "application/json",
-        body: JSON.stringify({
-          ok: true,
-          url: "https://checkout.stripe.test/session",
-        }),
-      });
-    });
-    await page.goto("/pay");
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto("/");
 
-    await page.getByLabel("Care plan after launch").selectOption("care-plus");
-    await page
-      .getByLabel("Email for your Stripe receipt")
-      .fill("owner@example.com");
-    await page.getByRole("button", { name: "Pay the $600 deposit" }).click();
+    const cards = page.locator("#pricing .price-card");
+    await expect(cards).toHaveCount(3);
+    await expect(page.locator("#pricing")).toContainText("$750");
+    await expect(page.locator("#pricing")).toContainText("$1,500");
+    await expect(page.locator("#pricing")).toContainText("$2,500");
+    await expect(page.locator("#pricing")).toContainText("Hosting setup");
+    await expect(
+      page.locator("#pricing .price-card").filter({ hasText: "Hosting setup" }),
+    ).toHaveCount(3);
+    await expect(page.locator("#pricing")).toContainText("Extra-fast delivery");
 
-    await expect
-      .poll(() => request)
-      .toEqual({
-        plan: "site-deposit",
-        email: "owner@example.com",
-        care_plan: "care-plus",
-      });
+    await expect(page.locator("[data-package-price]")).toHaveText("$750");
+    await expect(page.locator("[data-package-name]")).toHaveText(
+      "Basic — Starter Website",
+    );
+    await page.getByRole("tab", { name: "Standard", exact: true }).click();
+    await expect(page.locator("[data-package-price]")).toHaveText("$1,500");
+    await expect(page.locator("[data-package-name]")).toHaveText(
+      "Standard — Business Website",
+    );
+    await page.getByRole("tab", { name: "Premium", exact: true }).click();
+    await expect(page.locator("[data-package-price]")).toHaveText("$2,500");
+    await expect(page.locator("[data-package-name]")).toHaveText(
+      "Premium — Forge Website",
+    );
+
+    const pricingFits = await page
+      .locator("#pricing")
+      .evaluate(
+        (section) =>
+          section.scrollWidth <= document.documentElement.clientWidth,
+      );
+    expect(pricingFits).toBe(true);
+
+    await page.goto("/services");
+    const serviceCopy = page.locator("main");
+    await expect(serviceCopy).toContainText("Basic: +$250 for 1-day delivery");
+    await expect(serviceCopy).toContainText(
+      "Standard: +$500 for 3-day delivery",
+    );
+    await expect(serviceCopy).toContainText(
+      "Premium: +$750 for 5-day delivery",
+    );
+    await expect(serviceCopy).toContainText("+$150 · +1 day");
+    await expect(serviceCopy).toContainText("+$100 · +1 day");
+    await expect(serviceCopy).toContainText("+$750 · +5 days");
+    await expect(serviceCopy).toContainText("+$250 · +2 days");
+    await expect(serviceCopy).toContainText(
+      "E-commerce is a paid add-on, not part of the base package.",
+    );
+    await expect(serviceCopy).toContainText("Need something more complex?");
   });
 
   test("receipt-bound portal button posts the receipt session id", async ({

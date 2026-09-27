@@ -22,20 +22,6 @@ const API_VERSION = "2026-07-29.dahlia";
 const TAG = "forge_ct_catalog";
 
 /**
- * Full Shop Site bills in halves against the $1,200 price on /services,
- * so each installment is $600. The $500 Shop Site is a Payment Link in
- * payments.js, not this catalog.
- */
-const SITE_INSTALLMENT = 60000;
-
-/**
- * Shop + System bills in two halves against the $2,500 price, so each
- * installment is $1,250. The deposit price already exists in Stripe at
- * lookup key forge_shop_system_deposit. Do not create a third installment.
- */
-const SYSTEM_INSTALLMENT = 125000;
-
-/**
  * Stripe product tax codes drive Stripe Tax. The Dashboard default of
  * "Software as a service (SaaS)" is wrong for bespoke design work and for a
  * monthly care plan, and it will mis-rate invoices the day Stripe Tax is
@@ -69,56 +55,6 @@ const CATALOG = [
     unitAmount: 7900,
     recurring: { interval: "month" },
     taxCode: TAX_CODE.care,
-  },
-  {
-    key: "site_deposit",
-    lookupKey: "forge_full_shop_site_deposit",
-    envVar: "STRIPE_PRICE_SITE_DEPOSIT",
-    name: "Full Shop Site, deposit",
-    aliases: [
-      "Site - First Deposit",
-      "Local Business Site",
-      "Local Business Site — deposit",
-    ],
-    description:
-      "Books a Full Shop Site. $600 to start, $600 at launch. Up to 6 pages.",
-    unitAmount: SITE_INSTALLMENT,
-    taxCode: TAX_CODE.service,
-  },
-  {
-    key: "site_final",
-    name: "Full Shop Site, launch",
-    aliases: ["Site - Final Payment", "Local Business Site — final"],
-    description:
-      "The balance on a Full Shop Site, due when the page goes live. Covers launch and the handoff. The page is yours.",
-    unitAmount: SITE_INSTALLMENT,
-    taxCode: TAX_CODE.service,
-    invoiceOnly: true,
-  },
-  {
-    key: "system_deposit",
-    lookupKey: "forge_shop_system_deposit",
-    envVar: "STRIPE_PRICE_SYSTEM_DEPOSIT",
-    name: "Shop + System, deposit",
-    aliases: [
-      "Site and System - Deposit",
-      "Site and System",
-      "Site and System — deposit",
-    ],
-    description:
-      "First of two. Books Shop + System: a Full Shop Site plus one working system. $1,250 to start, $1,250 at launch.",
-    unitAmount: SYSTEM_INSTALLMENT,
-    taxCode: TAX_CODE.service,
-  },
-  {
-    key: "system_launch",
-    name: "Shop + System, launch",
-    aliases: ["Site and System - Launch", "Site and System — launch"],
-    description:
-      "Second of two, due when the page goes live. Covers launch and the handoff. The page is yours.",
-    unitAmount: SYSTEM_INSTALLMENT,
-    taxCode: TAX_CODE.service,
-    invoiceOnly: true,
   },
 ];
 
