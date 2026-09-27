@@ -174,12 +174,55 @@ test.describe("business-critical flows", () => {
     );
     await expect(serviceCopy).toContainText("Need something more complex?");
 
+    const addonCards = page.locator(
+      ".compare-grid:not(.compare-grid--packages) .compare-col",
+    );
+    const customScope = page.locator(".payment-cta");
+    const serviceLayoutFits = async () =>
+      page.evaluate(
+        () => document.documentElement.scrollWidth <= window.innerWidth,
+      );
+    const cardsAreCenteredAndNonOverlapping = async () =>
+      addonCards.evaluateAll((cards) =>
+        cards.every((card) => {
+          const cardRect = card.getBoundingClientRect();
+          const content = card.querySelectorAll(".compare-kicker, h3, li");
+          const boxes = [...card.children]
+            .map((child) => child.getBoundingClientRect())
+            .filter((box) => box.width > 0 && box.height > 0);
+          return (
+            getComputedStyle(card).textAlign === "center" &&
+            boxes.every((box, index) =>
+              boxes
+                .slice(index + 1)
+                .every((next) => box.bottom <= next.top + 1),
+            ) &&
+            [...content].every((element) => {
+              const rect = element.getBoundingClientRect();
+              return rect.left > cardRect.left && rect.right < cardRect.right;
+            })
+          );
+        }),
+      );
+    const customScopeChildrenFit = async () =>
+      customScope.evaluate((panel) => {
+        const panelRect = panel.getBoundingClientRect();
+        return [...panel.children].every((child) => {
+          const rect = child.getBoundingClientRect();
+          return rect.left >= panelRect.left && rect.right <= panelRect.right;
+        });
+      });
+
+    await expect(addonCards).toHaveCount(4);
+    expect(await cardsAreCenteredAndNonOverlapping()).toBe(true);
+    expect(await customScopeChildrenFit()).toBe(true);
+    expect(await serviceLayoutFits()).toBe(true);
+
     await page.setViewportSize({ width: 990, height: 900 });
     expect(await packageCardsAreCenteredAndInset()).toBe(true);
-    const servicesDesktopFits = await page.evaluate(
-      () => document.documentElement.scrollWidth <= window.innerWidth,
-    );
-    expect(servicesDesktopFits).toBe(true);
+    expect(await cardsAreCenteredAndNonOverlapping()).toBe(true);
+    expect(await customScopeChildrenFit()).toBe(true);
+    expect(await serviceLayoutFits()).toBe(true);
   });
 
   test("receipt-bound portal button posts the receipt session id", async ({

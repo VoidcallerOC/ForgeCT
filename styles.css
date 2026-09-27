@@ -717,9 +717,9 @@ h2 em {
 }
 
 .payment-cta {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  justify-content: space-between;
   gap: 2rem;
   margin-top: 2.4rem;
   padding: clamp(1.35rem, 3vw, 2rem);
@@ -952,7 +952,7 @@ h2 em {
 
   .payment-cta {
     align-items: flex-start;
-    flex-direction: column;
+    grid-template-columns: 1fr;
   }
 
   .button--large {
@@ -1050,6 +1050,19 @@ h2 em {
 .policy-content .compare-grid--packages .compare-col {
   padding: 1.35rem 1.4rem 1.5rem;
   border: 1px solid var(--wood);
+  text-align: center;
+}
+
+.policy-content .compare-grid:not(.compare-grid--packages) .compare-col {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: stretch;
+  text-align: center;
+}
+
+.policy-content .compare-grid:not(.compare-grid--packages) .compare-col ul {
+  width: 100%;
   text-align: center;
 }
 
