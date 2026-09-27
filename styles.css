@@ -622,6 +622,8 @@ h2 em {
 
 .price-card {
   position: relative;
+  display: flex;
+  flex-direction: column;
   min-height: 25.25rem;
   padding: 1.65rem;
   color: var(--ink);
@@ -656,10 +658,10 @@ h2 em {
 }
 
 .price-card ul {
-  position: absolute;
-  right: 1.65rem;
-  bottom: 1.25rem;
-  left: 1.65rem;
+  position: static;
+  width: 100%;
+  margin-top: auto;
+  padding-top: 1.25rem;
 }
 
 .price-card li {
