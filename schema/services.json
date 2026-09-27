@@ -7,8 +7,8 @@
       "name": "FORGE CT",
       "url": "https://www.forge-ct.com/",
       "email": "create@forge-ct.com",
-      "description": "Sites and apps for card and tabletop shops around Greater Hartford. Care from $35 a month.",
-      "priceRange": "$35 to $5,000+",
+      "description": "Custom websites and web systems for small businesses, local retailers, restaurants, specialty shops, and other local businesses. Custom functionality and larger builds are scoped separately.",
+      "priceRange": "$750 to $2,500+",
       "founder": { "@type": "Person", "name": "Nick Sousa" },
       "address": {
         "@type": "PostalAddress",
@@ -21,54 +21,119 @@
     {
       "@type": "OfferCatalog",
       "@id": "https://www.forge-ct.com/services#catalog",
-      "name": "FORGE CT services",
+      "name": "FORGE CT website packages and add-ons",
       "itemListElement": [
         {
           "@type": "Offer",
-          "name": "Shop Site",
+          "name": "Basic — Starter Website",
+          "price": "750",
+          "priceCurrency": "USD",
+          "url": "https://www.forge-ct.com/services",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Basic — Starter Website",
+            "description": "Up to 3 pages; custom design and development; responsive, mobile-first functional website; hosting setup; social media icons; 1 revision."
+          }
+        },
+        {
+          "@type": "Offer",
+          "name": "Standard — Business Website",
+          "price": "1500",
+          "priceCurrency": "USD",
+          "url": "https://www.forge-ct.com/services",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Standard — Business Website",
+            "description": "Up to 5 pages; custom design and development; responsive, mobile-first functional website; hosting setup; social media icons; speed and performance optimization; 2 revisions."
+          }
+        },
+        {
+          "@type": "Offer",
+          "name": "Premium — Forge Website",
+          "price": "2500",
+          "priceCurrency": "USD",
+          "url": "https://www.forge-ct.com/services",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Premium — Forge Website",
+            "description": "Up to 8 pages; custom design and development; responsive, mobile-first functional website; advanced functionality; hosting setup; social media icons; speed and performance optimization; 3 revisions. E-commerce is a paid add-on."
+          }
+        },
+        {
+          "@type": "Offer",
+          "name": "Extra-fast delivery — Basic",
+          "price": "250",
+          "priceCurrency": "USD",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Extra-fast delivery for the defined Basic package scope",
+            "description": "1-day delivery."
+          }
+        },
+        {
+          "@type": "Offer",
+          "name": "Extra-fast delivery — Standard",
           "price": "500",
           "priceCurrency": "USD",
           "itemOffered": {
             "@type": "Service",
-            "name": "Shop Site",
-            "description": "One long page or up to 3 short pages. Preview in a day. You see it before you pay."
+            "name": "Extra-fast delivery for the defined Standard package scope",
+            "description": "3-day delivery."
           }
         },
         {
           "@type": "Offer",
-          "name": "Full Shop Site",
-          "price": "1200",
+          "name": "Extra-fast delivery — Premium",
+          "price": "750",
           "priceCurrency": "USD",
           "itemOffered": {
             "@type": "Service",
-            "name": "Full Shop Site",
-            "description": "Up to 6 pages. $600 to start, $600 at launch. About 3 business days."
+            "name": "Extra-fast delivery for the defined Premium package scope",
+            "description": "5-day delivery."
           }
         },
         {
           "@type": "Offer",
-          "name": "Shop + System",
-          "price": "2500",
+          "name": "Additional page",
+          "price": "150",
           "priceCurrency": "USD",
           "itemOffered": {
             "@type": "Service",
-            "name": "Shop + System",
-            "description": "Full Shop Site plus one working system. $1,250 to start, $1,250 at launch. About a week."
+            "name": "One additional page",
+            "description": "Adds 1 day."
           }
         },
         {
           "@type": "Offer",
-          "name": "Custom Build",
+          "name": "Additional revision",
+          "price": "100",
           "priceCurrency": "USD",
-          "priceSpecification": {
-            "@type": "PriceSpecification",
-            "minPrice": "5000",
-            "priceCurrency": "USD"
-          },
           "itemOffered": {
             "@type": "Service",
-            "name": "Custom Build",
-            "description": "Full catalog and checkout, a custom app or dashboard, or more than one system. Half to start, half at launch. 2 to 3 weeks."
+            "name": "One additional revision",
+            "description": "Adds 1 day."
+          }
+        },
+        {
+          "@type": "Offer",
+          "name": "E-commerce functionality add-on",
+          "price": "750",
+          "priceCurrency": "USD",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "E-commerce functionality for an otherwise applicable package",
+            "description": "Adds 5 days; exact product, catalog, integration, and custom-functionality scope is agreed separately."
+          }
+        },
+        {
+          "@type": "Offer",
+          "name": "Additional product",
+          "price": "250",
+          "priceCurrency": "USD",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "One defined additional product build",
+            "description": "Adds 2 days. Not unlimited product uploads or simple data entry; broader system requirements are scoped separately."
           }
         },
         {

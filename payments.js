@@ -1,9 +1,7 @@
 (() => {
   "use strict";
 
-  // Stripe hosted destinations. Fill these in from the Stripe dashboard:
-  //   care, carePlus — Payment Links created in subscription mode
-  //   portal         — Customer Portal login link, for self-serve cancel and card updates
+  // Stripe hosted destinations for the Care plans and billing portal.
   //
   // These are public URLs, not secrets; no key ever belongs in this file. Every
   // one of them is a plain outbound link, which is why the Content Security
@@ -13,8 +11,6 @@
     care: "https://buy.stripe.com/4gMbJ30Cc07sd525Mt5EY06",
     carePlus: "https://buy.stripe.com/4gM9AV84Ef2m4yw3El5EY07",
     portal: "https://billing.stripe.com/p/login/14A00l1Gg2fAaWUcaR5EY00",
-    shopSite: "https://buy.stripe.com/6oUbJ3bgQ7zU5CAcaR5EY08",
-    shopSiteDeposit: "https://buy.stripe.com/4gMdRb0CcaM68OM0s95EY09",
   };
 
   // The page ships written for the unconfigured state: buttons ask about a

@@ -1,81 +1,61 @@
 # Stripe integration — FORGE CT
 
-How forge-ct.com takes money: **Payments** for deposits, **Billing** for the Care
-plans, **Invoicing** for project balances that are quoted rather than listed.
+Current site payments: **Billing** for Care plans; build packages are scoped on
+`/services`, then payment is arranged by invoice. The site does not offer a build
+deposit Checkout.
 
 Built against Stripe API version `2026-07-29.dahlia` with the Node SDK (`stripe`
 v22).
 
 ## What maps to what
 
-| On the site                   | Stripe product | Mechanism                                       |
-| ----------------------------- | -------------- | ----------------------------------------------- |
-| Shop Site, $500               | Payment Link   | `payments.js` `shopSite` and `shopSiteDeposit`  |
-| Full Shop Site, $1,200        | Payments       | Checkout Session, `mode: "payment"`, first half |
-| Shop + System, $2,500         | Payments       | Checkout Session, `mode: "payment"`, first half |
-| Care, $35/mo                  | Billing        | Checkout Session, `mode: "subscription"`        |
-| Care+, $79/mo                 | Billing        | Checkout Session, `mode: "subscription"`        |
-| Later installments            | Invoicing      | `scripts/stripe-invoice.mjs --lookup …`         |
-| Card change, receipts, cancel | Billing        | Customer Portal, from `/thanks`                 |
+| On the site                       | Stripe product | Mechanism                                           |
+| --------------------------------- | -------------- | --------------------------------------------------- |
+| Basic, Standard, Premium packages | —              | Published on `/services`; build payment after scope |
+| Package add-ons                   | —              | Published on `/services`; scoped with the project   |
+| Care, $35/mo                      | Care           | Stripe Payment Link in subscription mode            |
+| Care+, $79/mo                     | Care+          | Stripe Payment Link in subscription mode            |
+| Card change, receipts, cancel     | Billing        | Customer Portal, from `/thanks`                     |
 
-## Installments
+Build package and add-on prices are authoritative on `/services`. The public site
+does not expose build-deposit checkout; build payments are arranged after scope
+is confirmed. Do not use the old deposit products or saved build Payment Links as
+current package prices.
 
-Full Shop Site is $1,200, split $600 and $600. Shop + System is $2,500, split
-$1,250 and $1,250. The site sells the first half through Checkout. The launch
-half goes out as an invoice. The $500 Shop Site is not in this catalog. It is
-the Payment Link pair in `payments.js`, paid after the preview, or $250 now.
+## Legacy build deposits
 
-| Build          | Total  | Split                      |
-| -------------- | ------ | -------------------------- |
-| Full Shop Site | $1,200 | halves, deposit and launch |
-| Shop + System  | $2,500 | halves, deposit and launch |
+Historical deposit Checkout IDs and invoice lookup keys are not part of the
+current bootstrap catalog and are not linked from the public site. The webhook
+can continue to process previously created sessions, and the invoice script
+retains legacy lookup keys for already-agreed project balances. The bootstrap
+script now manages only Care and Care+; do not add build products or enable build
+Checkout without an agreed payment schedule and matching Stripe prices.
 
-The installment amounts live in two constants at the top of
-`scripts/stripe-bootstrap.mjs` (`SITE_INSTALLMENT` is `60000`,
-`SYSTEM_INSTALLMENT` is `125000`). **The catalog and the services page have to
-agree.** The $600 and $1,250 deposit prices already exist in Stripe. Their
-lookup keys are `forge_full_shop_site_deposit` and `forge_shop_system_deposit`.
-The catalog points at those keys so `--apply` finds them instead of creating
-duplicates. Do not run `stripe-bootstrap.mjs --apply` for this price change.
-After merge, switch `STRIPE_PRICE_SITE_DEPOSIT` and `STRIPE_PRICE_SYSTEM_DEPOSIT`
-in Vercel to those prices.
+Each separately invoiced service should have a distinct Stripe **Product**, so
+the invoice line item identifies the work the customer agreed to.
 
-Launch invoices keep the webhook lookup keys `forge_site_final` and
-`forge_system_launch`. There is no middle Shop + System installment.
+## Historical build Checkout fulfillment
 
-Each installment is its own Stripe **Product**, because Checkout and invoices
-print the product name on the line item. A shop that clicks "Start Care" should
-get a receipt that says Care — not a shared or generic product name.
-
-## Care starts after launch
-
-Deposit Checkout asks the customer to choose Care or Care+. The choice is stored
-on the Stripe Customer when the deposit settles. The webhook provisions no
-subscription at that point. When the final invoice is paid (`forge_site_final`
-or `forge_system_launch`), the webhook creates the selected subscription with a
-one-month trial ending one month after Stripe's settlement event timestamp.
-For ACH, the handler consumes `payment_intent.succeeded`—Stripe emits it after
-the bank settles the debit—and records `care_payment_settled_at` and
-`care_countdown_ends_at` on the Customer and subscription metadata.
-The first Care charge therefore follows the final build payment, which is the
-launch event. ACH and other delayed payment methods cannot provision Care early:
-the handler ignores unpaid Checkout completions and waits for the asynchronous
-settlement event. Subscription creation is keyed by final invoice and plan so
-Stripe retries cannot create a duplicate subscription.
+Previously created build Checkout sessions may still deliver webhook events.
+The webhook continues to honor their existing metadata so an in-flight historical
+project can finish fulfillment; this does not make retired deposit products
+available for new purchases. Care and Care+ are now purchased through their
+subscription links, and webhook idempotency and delayed-payment handling remain
+in place for historical sessions.
 
 ## Files
 
 | Path                           | Role                                                                  |
 | ------------------------------ | --------------------------------------------------------------------- |
-| `api/_stripe.js`               | `StripeClient` singleton, plan catalog, tax switch                    |
+| `api/_stripe.js`               | `StripeClient` singleton, current Care checkout catalog, tax switch   |
 | `api/_ratelimit.js`            | Per-instance request throttle shared by the endpoints                 |
-| `api/checkout.js`              | `POST` → Checkout Session → hosted Stripe page                        |
+| `api/checkout.js`              | `POST` → Care subscription Checkout Session                           |
 | `api/portal.js`                | `POST` → Customer Portal session                                      |
 | `api/stripe-webhook.js`        | Signature-verified event handler; **this is where fulfillment lives** |
 | `checkout.js`                  | Client script that binds `[data-stripe-plan]` buttons                 |
 | `thanks/index.html`            | Success page; hosts the "Open billing" button                         |
-| `scripts/stripe-bootstrap.mjs` | Creates products and prices, prints the env vars                      |
-| `scripts/stripe-invoice.mjs`   | Sends a project invoice                                               |
+| `scripts/stripe-bootstrap.mjs` | Reconciles Care products and prices                                   |
+| `scripts/stripe-invoice.mjs`   | Sends a scoped project invoice; supports legacy lookup keys           |
 
 ## Setup
 
@@ -94,34 +74,32 @@ Stripe retries cannot create a duplicate subscription.
 
    The script **adopts products that already exist**, including ones created by
    hand in the Dashboard. It matches on a metadata tag, then the canonical name,
-   then any known former name (`Website Maintenance` → `Care`,
-   `Site - First Deposit` to `Full Shop Site, deposit`, and so on), then
-   renames and re-describes what it finds. Re-running is safe and it never
-   creates a duplicate of a product it can recognise.
+   then the known former name (`Website Maintenance` → `Care`), then renames and
+   re-describes what it finds. Re-running is safe and it never creates a
+   duplicate of a product it can recognise.
 
    Read the dry run before applying. It reports three things worth acting on:
    active products it did not claim (archive the duplicates), prices at the
    wrong amount (Stripe prices are immutable, so it creates the right one and
    names the old price for you to archive), and unset tax codes.
 
-   It prints the four `STRIPE_PRICE_*` values the site needs, plus the lookup
-   keys for the installments that are invoiced later.
+   The bootstrap manages Care and Care+ only. Build package prices are published
+   on `/services` and invoiced after scope is agreed; they are not managed in
+   Stripe Checkout.
 
 3. **Set the environment** (Vercel → Project → Settings → Environment Variables):
 
-   | Variable                      | Notes                                          |
-   | ----------------------------- | ---------------------------------------------- |
-   | `STRIPE_SECRET_KEY`           | The `rk_…` key                                 |
-   | `STRIPE_WEBHOOK_SECRET`       | `whsec_…` from step 4                          |
-   | `STRIPE_PRICE_CARE`           | from bootstrap                                 |
-   | `STRIPE_PRICE_CARE_PLUS`      | from bootstrap                                 |
-   | `STRIPE_PRICE_SITE_DEPOSIT`   | from bootstrap                                 |
-   | `STRIPE_PRICE_SYSTEM_DEPOSIT` | from bootstrap                                 |
-   | `SITE_URL`                    | `https://www.forge-ct.com`                     |
-   | `STRIPE_AUTOMATIC_TAX`        | leave unset — see **Tax**                      |
-   | `RESEND_API_KEY`              | already set; the webhook reuses it for notices |
-   | `SUPABASE_URL`                | Supabase project URL for webhook event storage |
-   | `SUPABASE_SERVICE_ROLE_KEY`   | server-only Supabase service-role key          |
+   | Variable                    | Notes                                          |
+   | --------------------------- | ---------------------------------------------- |
+   | `STRIPE_SECRET_KEY`         | The `rk_…` key                                 |
+   | `STRIPE_WEBHOOK_SECRET`     | `whsec_…` from step 4                          |
+   | `STRIPE_PRICE_CARE`         | from bootstrap                                 |
+   | `STRIPE_PRICE_CARE_PLUS`    | from bootstrap                                 |
+   | `SITE_URL`                  | `https://www.forge-ct.com`                     |
+   | `STRIPE_AUTOMATIC_TAX`      | leave unset — see **Tax**                      |
+   | `RESEND_API_KEY`            | already set; the webhook reuses it for notices |
+   | `SUPABASE_URL`              | Supabase project URL for webhook event storage |
+   | `SUPABASE_SERVICE_ROLE_KEY` | server-only Supabase service-role key          |
 
    Keys belong in the platform's environment store, never in the repo. Nothing
    here is a `NEXT_PUBLIC_`-style client value — the browser only ever talks to
@@ -245,7 +223,7 @@ following owner/accounting checks:
 Also settle these before the first real charge:
 
 - Product tax codes are not the SaaS default (see **Tax**).
-- The services page and `SYSTEM_INSTALLMENT` agree on the $2,500 Shop + System price.
+- The public website does not enable build Checkout. Re-enable only after an agreed payment schedule and current Stripe products/prices are configured.
 - The deposit descriptions say whether a deposit is refundable. That sentence is
   the one people look for, and burying it costs the dispute later.
 - The privacy notice covers payments — it currently reads as though the site has

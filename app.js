@@ -201,54 +201,40 @@
     counters.forEach((el) => counterIO.observe(el));
   }
 
-  // Package picker
+  // Package picker: package scope stays bounded; larger functionality is scoped separately.
   const packages = {
-    shop: {
-      name: "Shop Site",
-      price: "$500",
+    basic: {
+      name: "Basic — Starter Website",
+      price: "$750",
       blurb:
-        "You see the preview first. Then $500, or $250 now and $250 when it is live. Preview in a day.",
+        "Up to 3 pages with custom design and development. Extra-fast 1-day delivery is available for this defined scope.",
       bullets: [
-        "One long page or up to 3 short pages",
-        "Hours, address and map, what you carry, events",
-        "Tap to call and text, reviews and social links",
-        "Hooked up to your domain. First month of changes free.",
+        "Responsive, mobile-first functional website",
+        "Hosting setup and social media icons",
+        "1 revision",
       ],
     },
-    full: {
-      name: "Full Shop Site",
-      price: "$1,200 total, 2 × $600",
+    standard: {
+      name: "Standard — Business Website",
+      price: "$1,500",
       blurb:
-        "$600 to start, $600 at launch. Up to 6 pages. About 3 business days.",
+        "Up to 5 pages with custom design, development, and speed/performance optimization.",
       bullets: [
-        "Events or calendar page",
-        "What-we-buy or trade-in page",
-        "Photo gallery and contact form",
-        "Google Business Profile cleanup",
+        "Responsive, mobile-first functional website",
+        "Hosting setup and social media icons",
+        "2 revisions",
       ],
     },
-    system: {
-      name: "Shop + System",
-      price: "$2,500 total, 2 × $1,250",
+    premium: {
+      name: "Premium — Forge Website",
+      price: "$2,500",
       blurb:
-        "Full Shop Site plus one working system. $1,250 to start, $1,250 at launch. About a week.",
+        "Up to 8 pages with advanced functionality, custom design, development, and speed/performance optimization.",
       bullets: [
-        "Booking or event sign-ups",
-        "An events or photo and text editor you run",
-        "Live inventory from Square or a sheet",
-        "A buylist or trade-in form",
-      ],
-    },
-    custom: {
-      name: "Custom Build",
-      price: "From $5,000, half to start, half at launch",
-      blurb:
-        "Full catalog and checkout, a custom app or dashboard, or more than one system. 2 to 3 weeks.",
-      bullets: [
-        "Half to start, half at launch",
-        "Full catalog and checkout",
-        "Custom app or dashboard",
-        "More than one system",
+        "Responsive, mobile-first functional website",
+        "Hosting setup and social media icons",
+        "3 revisions",
+        "E-commerce is a paid add-on; larger systems are scoped separately",
       ],
     },
   };

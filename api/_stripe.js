@@ -8,7 +8,6 @@ export const STRIPE_API_VERSION = "2026-07-29.dahlia";
 // Keep these stable so Dashboard reporting stays comparable across deploys.
 export const INTEGRATION_ID = {
   care: "forge-care-mtjqvzxd",
-  deposit: "forge-deposit-rlbcgnwp",
 };
 
 let client;
@@ -46,18 +45,6 @@ export const CATALOG = {
     label: "Care+",
     priceEnv: "STRIPE_PRICE_CARE_PLUS",
     integrationIdentifier: INTEGRATION_ID.care,
-  },
-  "site-deposit": {
-    mode: "payment",
-    label: "Full Shop Site, deposit",
-    priceEnv: "STRIPE_PRICE_SITE_DEPOSIT",
-    integrationIdentifier: INTEGRATION_ID.deposit,
-  },
-  "system-deposit": {
-    mode: "payment",
-    label: "Shop + System, deposit",
-    priceEnv: "STRIPE_PRICE_SYSTEM_DEPOSIT",
-    integrationIdentifier: INTEGRATION_ID.deposit,
   },
 };
 

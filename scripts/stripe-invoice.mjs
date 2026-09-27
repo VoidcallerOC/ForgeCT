@@ -15,8 +15,9 @@
  *     --email owner@shop.com --name "Shop Name" \
  *     --amount 2400 --label "Extra page — intake form" --send
  *
- * Lookup keys: forge_full_shop_site_deposit, forge_site_final,
- * forge_shop_system_deposit, forge_system_launch.
+ * Legacy lookup keys for already-agreed projects only: forge_full_shop_site_deposit,
+ * forge_site_final, forge_shop_system_deposit, forge_system_launch. Current
+ * package invoices should use the agreed scope and amount, not these old keys.
  *
  * Without --send it leaves a draft you can read in the Dashboard first.
  */
@@ -72,7 +73,7 @@ if (lookup) {
   price = found.data[0];
   if (!price) {
     console.error(
-      `No price with lookup key "${lookup}". Run scripts/stripe-bootstrap.mjs --apply first.`,
+      `No price with lookup key "${lookup}". This may be a retired legacy key; verify the agreed invoice in Stripe.`,
     );
     process.exit(1);
   }

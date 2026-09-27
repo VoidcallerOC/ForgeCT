@@ -4,11 +4,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex,follow" />
-    <meta name="description" content="Start a FORGE care plan or pay a build deposit. Care $35/month, Care+ $79/month, cancel anytime. Shop Site $500. Build deposits from $600 with secure Stripe Checkout." />
+    <meta name="description" content="Start a FORGE CT Care or Care+ plan. Website package payments are arranged after project scope is confirmed." />
     <meta name="theme-color" content="#0A0A0A" />
     <link rel="canonical" href="https://www.forge-ct.com/pay" />
     <meta property="og:title" content="Pay FORGE CT — care plans and build deposits" />
-    <meta property="og:description" content="Care $35/month, Care+ $79/month, cancel anytime. Shop Site $500. Build deposits from $600 with secure Stripe Checkout." />
+    <meta property="og:description" content="Start Care at $35/month or Care+ at $79/month. Website package payments are arranged after project scope is confirmed." />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -17,7 +17,6 @@
     <link rel="stylesheet" href="/brand.css?v=20260905n" />
     <title>Pay FORGE CT — care plans and build deposits</title>
     <script src="/payments.js?v=20260924a" defer></script>
-    <script src="/checkout.js?v=20260905n" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to content</a>
@@ -62,52 +61,9 @@
         </div>
         <p class="pricing-note" data-payment-when="portal:unset">Already on a plan? <a href="/#contact">Tell me to change the card or stop the plan</a> and it is done that day. No retainer trap, no notice period.</p>
         <p class="pricing-note" data-payment-when="portal:set" hidden>Already on a plan? <a href="/#contact" data-payment-link="portal">Update your card or cancel</a>. No email required, no retainer trap.</p>
-        <h2>Build deposits</h2>
-        <p>Once we scope the shop, choose the deposit that matches the build. Stripe Checkout supports card and eligible bank-account payments, including ACH Direct Debit. ACH payments can take time to settle, so work begins after Stripe confirms the funds have arrived.</p>
-        <p><strong>Half to start, half at launch.</strong> On a $1,200 site that is $600 to start and $600 when it goes live. Same split at every tier. The $500 Shop Site is paid after you see the preview. No surprise line at the end.</p>
-        <aside class="payment-notice" aria-label="Important payment timing and limits">
-          <p class="payment-notice-title">Important for larger deposits</p>
-          <ul>
-            <li>ACH settlement is not instant. Work begins after Stripe confirms the funds have settled.</li>
-            <li>Deposits are subject to Stripe account eligibility, risk checks, and weekly ACH limits.</li>
-            <li>Card checkout or an invoice paid by bank transfer may be available as alternatives.</li>
-          </ul>
-        </aside>
-        <div class="field-group">
-          <label for="deposit-care-plan">Care plan after launch</label>
-          <select id="deposit-care-plan" data-checkout-care-plan name="care_plan" required>
-            <option value="">Choose a plan</option>
-            <option value="care">Care — $35/month</option>
-            <option value="care-plus">Care+ — $79/month</option>
-          </select>
-          <p class="form-note">Your selected plan is scheduled to begin one month after the final build payment settles.</p>
-        </div>
-        <div class="field-group">
-          <label for="deposit-email">Email for your Stripe receipt</label>
-          <input id="deposit-email" data-checkout-email type="email" name="email" autocomplete="email" placeholder="you@example.com" required />
-          <p class="form-note">Stripe uses this address for your receipt and payment-status updates.</p>
-        </div>
-        <div class="compare-grid">
-          <div class="compare-col compare-col--us">
-            <p class="compare-kicker">Shop Site, $500</p>
-            <p>You see the preview first. Then $500, or $250 now and $250 when it is live.</p>
-            <p><a class="button" href="/#contact" data-payment-link="shopSite" data-payment-label="Pay $500">Ask about paying $500</a></p>
-            <p><a class="button" href="/#contact" data-payment-link="shopSiteDeposit" data-payment-label="Pay $250 now">Ask about paying $250 now</a></p>
-          </div>
-          <div class="compare-col">
-            <p class="compare-kicker">Full Shop Site, $600 deposit</p>
-            <p>For a Full Shop Site. $600 to start, $600 at launch.</p>
-            <p><button class="button" type="button" data-stripe-plan="site-deposit" aria-describedby="site-deposit-status">Pay the $600 deposit</button></p>
-            <p class="form-status" id="site-deposit-status" role="status" aria-live="polite"></p>
-          </div>
-          <div class="compare-col compare-col--us">
-            <p class="compare-kicker">Shop + System, $1,250 deposit</p>
-            <p>For Shop + System. $1,250 to start, $1,250 at launch.</p>
-            <p><button class="button" type="button" data-stripe-plan="system-deposit" aria-describedby="system-deposit-status">Pay the $1,250 deposit</button></p>
-            <p class="form-status" id="system-deposit-status" role="status" aria-live="polite"></p>
-          </div>
-        </div>
-        <p class="pricing-note">Prefer an invoice or bank transfer? <a href="/#contact">Scope a build first</a> and we can arrange it.</p>
+        <h2>Website builds</h2>
+        <p>Review the <a href="/services">Basic, Standard, and Premium packages and their add-ons</a>. Build payments are arranged after the project scope is confirmed; e-commerce, custom functionality, and larger systems may need a separate quote.</p>
+        <p class="pricing-note">Ready to scope a build? <a href="/#contact">Tell FORGE CT about your project</a>. You will receive a payment request only after the work and scope are agreed.</p>
         <div class="faq-grid">
           <details open>
             <summary>Where does my card go?</summary>
