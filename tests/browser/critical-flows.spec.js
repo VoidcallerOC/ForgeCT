@@ -115,6 +115,29 @@ test.describe("business-critical flows", () => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto("/services");
     const serviceCopy = page.locator("main");
+    const packageCompareCards = page.locator(
+      ".compare-grid--packages .compare-col",
+    );
+    await expect(packageCompareCards).toHaveCount(3);
+    const packageCardsAreCenteredAndInset = async () =>
+      packageCompareCards.evaluateAll((packageCards) =>
+        packageCards.every((card) => {
+          const cardRect = card.getBoundingClientRect();
+          const padding = Number.parseFloat(getComputedStyle(card).paddingLeft);
+          const content = card.querySelectorAll(
+            ".compare-kicker, h3, li, .form-note",
+          );
+          return (
+            getComputedStyle(card).textAlign === "center" &&
+            padding >= 16 &&
+            [...content].every((element) => {
+              const rect = element.getBoundingClientRect();
+              return rect.left > cardRect.left && rect.right < cardRect.right;
+            })
+          );
+        }),
+      );
+    expect(await packageCardsAreCenteredAndInset()).toBe(true);
     await expect(serviceCopy).toContainText("Basic: +$250 for 1-day delivery");
     await expect(serviceCopy).toContainText(
       "Standard: +$500 for 3-day delivery",
@@ -130,6 +153,13 @@ test.describe("business-critical flows", () => {
       "E-commerce is a paid add-on, not part of the base package.",
     );
     await expect(serviceCopy).toContainText("Need something more complex?");
+
+    await page.setViewportSize({ width: 990, height: 900 });
+    expect(await packageCardsAreCenteredAndInset()).toBe(true);
+    const servicesDesktopFits = await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    );
+    expect(servicesDesktopFits).toBe(true);
   });
 
   test("receipt-bound portal button posts the receipt session id", async ({
