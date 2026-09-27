@@ -85,6 +85,34 @@ test.describe("business-critical flows", () => {
       );
     expect(pricingFits).toBe(true);
 
+    const cardContentDoesNotOverlap = async () =>
+      cards.evaluateAll((priceCards) =>
+        priceCards.every((card) => {
+          const boxes = [...card.children]
+            .map((child) => child.getBoundingClientRect())
+            .filter((box) => box.width > 0 && box.height > 0);
+          return boxes.every((box, index) =>
+            boxes.slice(index + 1).every((next) => box.bottom <= next.top + 1),
+          );
+        }),
+      );
+    expect(await cardContentDoesNotOverlap()).toBe(true);
+
+    await page.setViewportSize({ width: 514, height: 844 });
+    expect(await cardContentDoesNotOverlap()).toBe(true);
+    const narrowPricingFits = await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    );
+    expect(narrowPricingFits).toBe(true);
+
+    await page.setViewportSize({ width: 1440, height: 900 });
+    expect(await cardContentDoesNotOverlap()).toBe(true);
+    const desktopPricingFits = await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    );
+    expect(desktopPricingFits).toBe(true);
+
+    await page.setViewportSize({ width: 390, height: 844 });
     await page.goto("/services");
     const serviceCopy = page.locator("main");
     await expect(serviceCopy).toContainText("Basic: +$250 for 1-day delivery");
