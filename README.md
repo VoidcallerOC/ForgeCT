@@ -20,6 +20,7 @@ The site is a dependency-light static implementation plus a small Vercel functio
 | Security and cache headers | `vercel.json`                                                         |
 | Quality checks             | `package.json`, `.htmlvalidate.json`, `scripts/check-local-links.mjs` |
 | Continuous integration     | `.github/workflows/quality.yml`                                       |
+| Production smoke checks    | `scripts/smoke-production.mjs`, `docs/PRODUCTION-SMOKE.md`            |
 
 ## Local development
 
@@ -40,15 +41,24 @@ logic. CI also runs `npm run test:browser` against a local static server using
 Chromium. Those browser checks intentionally cover only the business-critical
 contact submission, package pricing and mobile behavior, Care/Care+ links, and the
 receipt-bound customer portal path; they do not attempt visual regression testing.
+On pushes to `main`, CI additionally runs `npm run test:smoke:production`, a
+GET-only smoke suite against the canonical production origin and approved public
+client URLs. It never submits a form or creates a payment.
 
-| Command                | Purpose                                                           |
-| ---------------------- | ----------------------------------------------------------------- |
-| `npm run format:check` | Ensures source files follow the shared Prettier configuration.    |
-| `npm run lint:html`    | Detects invalid or inconsistent HTML.                             |
-| `npm run test:links`   | Detects broken local routes and static assets referenced by HTML. |
-| `npm run test:browser` | Exercises the contact and payment-critical flows in Chromium.     |
+| Command                         | Purpose                                                                                     |
+| ------------------------------- | ------------------------------------------------------------------------------------------- |
+| `npm run format:check`          | Ensures source files follow the shared Prettier configuration.                              |
+| `npm run lint:html`             | Detects invalid or inconsistent HTML.                                                       |
+| `npm run test:links`            | Detects broken local routes and static assets referenced by HTML.                           |
+| `npm run test:browser`          | Exercises the contact and payment-critical flows in Chromium.                               |
+| `npm run test:smoke:unit`       | Tests the production smoke runner against a local controlled server.                        |
+| `npm run test:smoke:production` | Checks production routes, APIs, headers, redirects, and approved public URLs with GET only. |
 
 GitHub Actions runs these checks on pull requests and pushes to `main`. Branch protection is active: changes to `main` require a pull request and the passing `Validate site` check before merging.
+
+Production smoke scope, safe integration-test procedures for Resend/Stripe/Supabase,
+and the current alerting limitation are documented in
+[`docs/PRODUCTION-SMOKE.md`](docs/PRODUCTION-SMOKE.md).
 
 ## Content and contact updates
 
@@ -115,8 +125,12 @@ Two operational details remain:
 
 The contact endpoint accepts JSON only, rejects request bodies over 12 KiB, applies
 Unicode normalization and bounded email validation, and logs validation and delivery
-failures with the client IP but never the submitted message. The existing honeypot and
-shared IP rate limiter remain the primary anti-abuse controls.
+outcomes with the client IP but never the submitted message. Successful Resend
+acceptance logs include only the provider message ID when available; transport and
+provider failures return an explicit non-success response. This remains an email-only
+pipeline with no durable lead queue, so Vercel runtime-log monitoring is required to
+detect delivery failures. The existing honeypot and shared IP rate limiter remain the
+primary anti-abuse controls.
 
 Embedding Stripe.js or a pricing table instead of linking out would require
 adding `https://js.stripe.com` to `script-src`, adding a `frame-src`, and

@@ -99,6 +99,66 @@ test("normalizes Unicode input and lowercases the reply address", async () => {
   assert.match(sent.text, /First line\nsecond line/);
 });
 
+test("returns an explicit failure when Resend rejects delivery", async () => {
+  process.env.RESEND_API_KEY = "resend-test-key";
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async () => ({
+    ok: false,
+    status: 429,
+    async json() {
+      return { message: "rate limited" };
+    },
+  });
+  const response = responseMock();
+
+  try {
+    await handler(
+      request({
+        name: "Test Shop",
+        email: "owner@example.com",
+        message: "Hello",
+      }),
+      response,
+    );
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+
+  assert.equal(response.statusCode, 502);
+  assert.deepEqual(response.body, {
+    ok: false,
+    error: "The message could not be delivered. Please email directly.",
+  });
+});
+
+test("returns an explicit failure when the Resend request throws", async () => {
+  process.env.RESEND_API_KEY = "resend-test-key";
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async () => {
+    throw new Error("network unavailable");
+  };
+  const response = responseMock();
+
+  try {
+    await handler(
+      request({
+        name: "Test Shop",
+        email: "owner@example.com",
+        message: "Hello",
+      }),
+      response,
+    );
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+
+  assert.equal(response.statusCode, 502);
+  assert.deepEqual(response.body, {
+    ok: false,
+    error: "The message could not be delivered. Please email directly.",
+  });
+});
+
 test("rejects malformed email addresses", async () => {
   const response = responseMock();
 
