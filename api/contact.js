@@ -201,20 +201,36 @@ export default async function handler(request, response) {
     .filter(Boolean)
     .join("\n");
 
-  const resendResponse = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      from,
-      to: [to],
-      reply_to: email,
-      subject: `Shop inquiry from ${name}`,
-      text,
-    }),
-  });
+  let resendResponse;
+  let resendBody = {};
+  try {
+    resendResponse = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from,
+        to: [to],
+        reply_to: email,
+        subject: `Shop inquiry from ${name}`,
+        text,
+      }),
+    });
+    if (typeof resendResponse.json === "function") {
+      resendBody = await resendResponse.json().catch(() => ({}));
+    }
+  } catch (error) {
+    console.error("contact delivery request failed", {
+      error: error instanceof Error ? error.name : "unknown",
+      ip: clientIp(request),
+    });
+    return response.status(502).json({
+      ok: false,
+      error: "The message could not be delivered. Please email directly.",
+    });
+  }
 
   if (!resendResponse.ok) {
     console.error("contact delivery failed", {
@@ -227,5 +243,12 @@ export default async function handler(request, response) {
     });
   }
 
+  console.info("contact delivery accepted", {
+    provider: "resend",
+    providerMessageId:
+      typeof resendBody.id === "string" ? resendBody.id : "unavailable",
+    status: resendResponse.status,
+    ip: clientIp(request),
+  });
   return response.status(200).json({ ok: true });
 }
