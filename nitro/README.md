@@ -62,7 +62,7 @@ Every page is prerendered to static HTML. Only `/api/*` and unknown URLs (404) r
 
 ## Cutover checklist (all open)
 
-1. Create a Vercel project from this repository with **Root Directory `nitro`**. Nitro is auto-detected and `npm run build` writes `.vercel/output`. The repo-root `.vercelignore` excludes `nitro/` from the *current* static deployment. Check on the first preview that the new project reads ignores from `nitro/`, not from the repo root.
+1. Create a Vercel project from this repository with **Root Directory `nitro`**. Nitro is auto-detected and `npm run build` writes `.vercel/output`. Do not add a repo-root `.vercelignore` that lists `nitro`: Vercel applies the repo-root ignore file even when Root Directory is `nitro`, and it strips the whole app before the build.
 2. Copy the production environment variables: `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL`, `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_CARE`, `STRIPE_PRICE_CARE_PLUS`, `STRIPE_AUTOMATIC_TAX`, `SITE_URL`.
 3. Review the preview deployment on a real phone and on desktop. Submit one real inquiry and confirm it arrives in the inbox. Confirm `/_vercel/speed-insights/script.js` and analytics load.
 4. Confirm the apex redirect keeps query strings on Vercel. This is not verifiable locally. If it does not, move the apex → www redirect to Vercel Domains settings.

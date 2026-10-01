@@ -1,3 +1,0 @@
-# The Nitro rebuild lives in nitro/ and deploys from its own Vercel project (Root Directory: nitro).
-# Keep its source out of the certified static deployment served from this root.
-nitro
