@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="FORGE CT">
+  <rect width="64" height="64" rx="14" fill="#0A0A0A"/>
+  <g transform="translate(14,8) scale(0.3)">
+    <path fill="#E6E6E6" d="M36 26 L104 26 L88 48 L20 48 Z"/>
+    <path fill="#E6E6E6" d="M20 60 H84 L66 86 H42 V126 H20 Z"/>
+  </g>
+</svg>
