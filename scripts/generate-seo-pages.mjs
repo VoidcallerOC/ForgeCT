@@ -59,6 +59,22 @@ const projects = [
     need: "Make trade-ins, services, and a real walk-in path easy to find.",
     tags: ["Shop page", "Trade-ins", "Directions"],
   },
+  {
+    slug: "infinite-heroes",
+    name: "Infinite Heroes",
+    short: "Infinite Heroes",
+    category: "Card and tabletop shop",
+    place: "Watertown",
+    image: "/images/work/IMG_2604.jpg",
+    height: 1459,
+    site: "https://infiniteheroes.net/",
+    siteLabel: "infiniteheroes.net",
+    desc: "A clear local shop page built around the Wednesday rhythm and the floor.",
+    built:
+      "A clear local shop page built around the Wednesday rhythm and the floor.",
+    need: "Help a Main Street walk-in find new comics and collectibles when the door is open.",
+    tags: ["Comics", "Collectibles", "Main Street"],
+  },
 ];
 
 const head = (title, description, canonical, jsonld) => `<!doctype html>
@@ -97,7 +113,7 @@ const shell = (content) =>
 const workCards = projects
   .map(
     (p) =>
-      `<article class="seo-card"><a href="/work/${p.slug}"><img src="${p.image}" alt="${p.name} website shown on a mobile phone" width="720" height="1429" loading="lazy" /><div><p class="work-meta"><span>${p.category}</span><span aria-hidden="true">·</span><span>${p.place}</span></p><h2>${p.name}</h2><p>${p.desc}</p><span class="text-link">Read the case study <span class="glyph glyph--inline" aria-hidden="true">→</span></span></div></a></article>`,
+      `<article class="seo-card"><a href="/work/${p.slug}"><img src="${p.image}" alt="${p.name} website shown on a mobile phone" width="720" height="${p.height || 1429}" loading="lazy" /><div><p class="work-meta"><span>${p.category}</span><span aria-hidden="true">·</span><span>${p.place}</span></p><h2>${p.name}</h2><p>${p.desc}</p><span class="text-link">Read the case study <span class="glyph glyph--inline" aria-hidden="true">→</span></span></div></a></article>`,
   )
   .join("");
 const workJson = {
@@ -135,7 +151,7 @@ for (const p of projects) {
       url: "https://www.forge-ct.com/",
     },
   };
-  const content = `<main id="main-content" class="seo-main"><section class="case-hero"><div class="shell"><p class="eyebrow">Forge CT case study · ${p.category}</p><h1>${p.name}</h1><p class="case-deck">${p.desc}</p><div class="case-meta"><span>${p.place}</span><span aria-hidden="true">·</span><span>Forge CT project</span></div></div></section><section class="section section--cream"><div class="shell case-layout"><div><img class="case-image" src="${p.image}" alt="${p.name} website shown on a mobile phone" width="720" height="1429" /><div class="case-copy"><h2>A clearer place for the business to be found.</h2><h3>The need</h3><p>${p.need}</p><h3>What Forge CT built</h3><p>${p.built}</p><h3>Project context</h3><p>This case study records the project information currently documented in the Forge CT portfolio. It does not add performance claims or outcomes that are not documented.</p></div></div><aside class="case-aside"><p class="eyebrow">Project notes</p><h2>${p.short}</h2><ul>${p.tags.map((t) => `<li>${t}</li>`).join("")}</ul><div class="case-cta">${p.site ? `<a class="button button--small" href="${p.site}" target="_blank" rel="noopener noreferrer">Visit ${p.siteLabel} <span class="glyph glyph--inline" aria-hidden="true">↗︎</span></a>` : ""}<a class="text-link" href="/work">Back to all work</a></div></aside></div></section><section class="section section--paper"><div class="shell seo-links"><p class="eyebrow">Continue with Forge CT</p><a href="/services">See web design and development services</a><a href="/connecticut-web-design">Connecticut web design for local businesses</a><a href="/contact">Contact Forge CT</a><a href="/book">Book a project conversation</a></div></section></main>`;
+  const content = `<main id="main-content" class="seo-main"><section class="case-hero"><div class="shell"><p class="eyebrow">Forge CT case study · ${p.category}</p><h1>${p.name}</h1><p class="case-deck">${p.desc}</p><div class="case-meta"><span>${p.place}</span><span aria-hidden="true">·</span><span>Forge CT project</span></div></div></section><section class="section section--cream"><div class="shell case-layout"><div><img class="case-image" src="${p.image}" alt="${p.name} website shown on a mobile phone" width="720" height="${p.height || 1429}" /><div class="case-copy"><h2>A clearer place for the business to be found.</h2><h3>The need</h3><p>${p.need}</p><h3>What Forge CT built</h3><p>${p.built}</p><h3>Project context</h3><p>This case study records the project information currently documented in the Forge CT portfolio. It does not add performance claims or outcomes that are not documented.</p></div></div><aside class="case-aside"><p class="eyebrow">Project notes</p><h2>${p.short}</h2><ul>${p.tags.map((t) => `<li>${t}</li>`).join("")}</ul><div class="case-cta">${p.site ? `<a class="button button--small" href="${p.site}" target="_blank" rel="noopener noreferrer">Visit ${p.siteLabel} <span class="glyph glyph--inline" aria-hidden="true">↗︎</span></a>` : ""}<a class="text-link" href="/work">Back to all work</a></div></aside></div></section><section class="section section--paper"><div class="shell seo-links"><p class="eyebrow">Continue with Forge CT</p><a href="/services">See web design and development services</a><a href="/connecticut-web-design">Connecticut web design for local businesses</a><a href="/contact">Contact Forge CT</a><a href="/book">Book a project conversation</a></div></section></main>`;
   fs.writeFileSync(
     `${root}work/${p.slug}/index.html`,
     `${head(title, description, canonical, json)}${shell(content)}`,

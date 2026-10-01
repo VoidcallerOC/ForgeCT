@@ -7,6 +7,7 @@ const routes = [
   "work/hard-hittin",
   "work/harris-in-wonderland",
   "work/m-and-j-video-games",
+  "work/infinite-heroes",
 ];
 const required = [
   "<title>",
@@ -47,6 +48,7 @@ const sitemapRoutes = [
   "/work/hard-hittin",
   "/work/harris-in-wonderland",
   "/work/m-and-j-video-games",
+  "/work/infinite-heroes",
 ];
 for (const route of sitemapRoutes) {
   if (!sitemap.includes(`https://www.forge-ct.com${route}`)) {
