@@ -22,7 +22,7 @@ export type Project = {
   place: string;
   image: string;
   imageHeight: number;
-  /** Outbound live URL. Omitted where the certified case study does not link out (Harris in Wonderland). */
+  /** Outbound live URL. */
   site?: string;
   siteLabel?: string;
   need: string;
@@ -42,6 +42,9 @@ export const PROJECTS: Project[] = [
     place: "Canton",
     image: "/images/work/harrisinwonderland.jpg",
     imageHeight: 1429,
+    // Live per the owner (2026-10-01) and linked on the certified homepage; the certified case study omitted it.
+    site: "https://harrisinwonderland.com/",
+    siteLabel: "harrisinwonderland.com",
     need: "Help customers understand the animals, care, and inventory beyond the storefront.",
     built: "Live inventory, a feeder locker, care sheets, and a beginner chooser in one experience.",
     story:

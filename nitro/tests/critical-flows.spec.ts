@@ -146,6 +146,7 @@ test.describe("approved portfolio taxonomy", () => {
       "https://mjvideogames.com/",
       "https://hardhittincardshop.com/",
       "https://infiniteheroes.net/",
+      "https://harrisinwonderland.com/",
       "https://voidcaller.enterthegrotto.xyz/",
     ]);
     for (const path of ROUTES) {
@@ -235,4 +236,19 @@ test.describe("layout and platform", () => {
     await page.keyboard.press("Enter");
     await expect(page).toHaveURL(/#main$/);
   });
+});
+
+test("phone rail cards are equal in size and aligned on desktop", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  for (const path of ["/", "/connecticut-web-design"]) {
+    await page.goto(path);
+    const boxes = await page.locator("ul.rail .phone-frame").evaluateAll((els) =>
+      els.map((e) => {
+        const r = e.getBoundingClientRect();
+        return { top: Math.round(r.top), w: Math.round(r.width), h: Math.round(r.height) };
+      }),
+    );
+    expect(boxes.length, path).toBeGreaterThan(1);
+    for (const b of boxes) expect(b, path).toEqual(boxes[0]);
+  }
 });

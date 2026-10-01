@@ -1023,7 +1023,7 @@ export const STRUCTURED_DATA: Record<string, unknown[]> = {
       "@id": "https://www.forge-ct.com/work/harris-in-wonderland#case-study",
       "url": "https://www.forge-ct.com/work/harris-in-wonderland",
       "name": "Harris in Wonderland",
-      "description": "Harris in Wonderland: Live inventory, a feeder locker, care sheets, and a beginner chooser in one experience. See the Forge CT case study and project details.",
+      "description": "Harris in Wonderland: Live inventory, a feeder locker, care sheets, and a beginner chooser in one experience. See the Forge CT case study and live site.",
       "image": "https://www.forge-ct.com/images/work/harrisinwonderland.jpg",
       "creator": {
         "@type": "Organization",

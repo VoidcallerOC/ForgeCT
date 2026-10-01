@@ -459,15 +459,10 @@ p {
   }
 }
 @media (min-width: 900px) {
+  /* All five phones the same size and level; captions top-aligned under them. */
   .rail {
     overflow: visible;
-    align-items: end;
-  }
-  .rail > li:nth-child(odd) .phone {
-    transform: translateY(-28px);
-  }
-  .rail > li:nth-child(odd) .phone:hover {
-    transform: translateY(-36px);
+    align-items: start;
   }
 }
 .rail > li {

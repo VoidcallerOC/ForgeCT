@@ -44,10 +44,16 @@ function NavLinks({ className, strip = false }: { className: string; strip?: boo
   const path = useRouterState({ select: (s) => s.location.pathname });
 
   // Mobile strip: bring the current item into view horizontally without scrolling the page.
+  // The masthead persists across client-side navigation, so on a route with no primary-nav item
+  // (e.g. /audit) reset to the start instead of keeping the previous page's scroll offset.
   useEffect(() => {
     const nav = ref.current;
-    const active = nav?.querySelector<HTMLElement>("[aria-current]");
-    if (!strip || !nav || !active) return;
+    if (!strip || !nav) return;
+    const active = nav.querySelector<HTMLElement>("[aria-current]");
+    if (!active) {
+      nav.scrollLeft = 0;
+      return;
+    }
     const left = active.offsetLeft - nav.offsetLeft;
     if (left < nav.scrollLeft || left + active.offsetWidth > nav.scrollLeft + nav.clientWidth) {
       nav.scrollLeft = Math.max(0, left - 16);
