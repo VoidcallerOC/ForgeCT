@@ -10,12 +10,9 @@ const NAV = [
   { to: "/contact", label: "Contact" },
 ] as const;
 
-export function Wordmark() {
-  return (
-    <>
-      FORGE<span>-CT</span>
-    </>
-  );
+/** The FORGE-CT wordmark from the certified site (fog FORGE, slate CT), same asset as /brand/DTsjw.png. */
+export function Wordmark({ width = 200 }: { width?: number }) {
+  return <img src="/brand/forge-ct-wordmark.png" alt="FORGE CT" width={width} height={Math.round((width * 132) / 901)} />;
 }
 
 type Current = "page" | "true" | undefined;
@@ -138,8 +135,10 @@ export function Footer() {
             </ul>
           </nav>
         </div>
-        <p className="footer-mark" aria-hidden="true">
-          <Wordmark />
+        <p className="footer-mark">
+          <Link to="/" aria-label="FORGE CT home">
+            <Wordmark width={240} />
+          </Link>
         </p>
         <div className="footer-base">
           <span suppressHydrationWarning>© {new Date().getFullYear()} {BUSINESS.name}. All rights reserved.</span>

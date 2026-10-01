@@ -46,7 +46,7 @@ Every page is prerendered to static HTML. Only `/api/*` and unknown URLs (404) r
 - **Engine (reused from `captital-bail`/`UpScale`):** Vite and TanStack Start config, the router, `nitro({ preset: "vercel" })`, the ESLint setup, and the pattern of keeping facts in a single file.
 - **Composition (new):** the site is built around the *parking-lot test*. A local business site gets judged on a phone, in seconds.
   - Home: hero, then a **phone rail** showing the 5 live client sites, then the four questions a customer asks, then the **audit ticket** (with a 24h stub), then the **work ledger** (a filterable table, with the lab build set apart), then the **rate sheet** (packages as one spec table), then a signed line from the founder, then the inquiry form.
-  - Visual system: fog paper for reading and void black for the masthead and heroes. **Ember** is used only for action. Archivo wide (matching the FORGE-CT wordmark) is paired with IBM Plex Mono spec plates.
+  - Brand: the forge-ct.com brand, unchanged. Void `#0a0a0a` and charcoal `#1a1c1f` surfaces, fog `#e6e6e6` text, slate `#8a9099` for eyebrows and actions, DM Sans (self-hosted), and the FORGE-CT wordmark image (`public/brand/forge-ct-wordmark.png`, the same file as `/brand/DTsjw.png`). The rebuild is monochrome, as the live site is.
 
 ### Differentiation check
 
@@ -57,7 +57,7 @@ Every page is prerendered to static HTML. Only `/api/*` and unknown URLs (404) r
 | Proof | 3-item "what to expect" strip | Filterable image cards | Ledger table (client / town / what it does / links) |
 | Pricing | None | Cards + JS package picker | Single comparison table (rate sheet) |
 | Process | Dark numbered steps | Five-step "Discover → Launch" | Four customer questions (Q1–Q4) |
-| Type / colour | DM Sans, purple, offset shadows | DM Sans + Instrument Serif, all-dark | Archivo wide + Plex Mono, fog/void + ember |
+| Type / colour | DM Sans, purple, offset shadows | forge-ct.com brand: DM Sans, void/charcoal/fog/slate | Same forge-ct.com brand (brand is kept; layout is new) |
 | Interaction | Call-first | Cursor spotlight, magnetic buttons, marquee | No decorative JS. One filter, forms only |
 
 ## Cutover checklist (all open)
