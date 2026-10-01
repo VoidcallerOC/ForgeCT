@@ -333,10 +333,10 @@ p {
   color: var(--slate-light);
 }
 .nav a:hover,
-.nav a[aria-current="page"] {
+.nav a[aria-current] {
   color: var(--fog);
 }
-.nav a[aria-current="page"]::after {
+.nav a[aria-current]::after {
   content: "";
   position: absolute;
   left: 0.7rem;
@@ -350,6 +350,11 @@ p {
   padding: 0 1rem;
   font-size: 0.92rem;
 }
+/* On /audit the CTA is the current page: outlined instead of filled, same as hover. */
+.masthead .btn[aria-current="page"] {
+  background: transparent;
+  color: var(--ember);
+}
 .nav--desk {
   display: none;
 }
@@ -357,11 +362,15 @@ p {
   overflow-x: auto;
   scrollbar-width: none;
   margin-inline: calc(var(--gutter) * -1);
-  padding: 0 calc(var(--gutter) - 0.7rem) 0.4rem;
+  /* Vertical padding leaves room for the 3px focus ring, which overflow-x:auto would otherwise clip. */
+  padding: 0.45rem calc(var(--gutter) - 0.7rem) 0.45rem;
   border-top: 1px solid var(--rule-dark);
 }
 .nav--strip::-webkit-scrollbar {
   display: none;
+}
+.nav--strip a:focus-visible {
+  outline-offset: -3px;
 }
 @media (min-width: 900px) {
   .nav--desk {
