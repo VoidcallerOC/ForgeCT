@@ -164,3 +164,58 @@ test("nav switches cleanly at the 900px breakpoint without overflow", async ({ p
     expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBeLessThanOrEqual(0);
   }
 });
+
+test.describe("mobile strip scroll position across client-side navigation", () => {
+  test.use({ viewport: { width: 360, height: 780 } });
+
+  const strip = (page: Page) => page.locator("nav.nav--strip");
+  const scrollLeft = (page: Page) => strip(page).evaluate((n) => n.scrollLeft);
+  const linkInView = (page: Page, label: string) =>
+    strip(page)
+      .getByRole("link", { name: label, exact: true })
+      .evaluate((a) => {
+        const r = a.getBoundingClientRect();
+        const s = a.closest("nav")!.getBoundingClientRect();
+        return r.left >= s.left - 1 && r.right <= s.right + 1;
+      });
+  const go = async (page: Page, label: string, url: RegExp) => {
+    if (label === "Get audit") await masthead(page).locator("a.btn").click();
+    else await strip(page).getByRole("link", { name: label, exact: true }).click();
+    await expect(page).toHaveURL(url);
+  };
+
+  test("regression: Home → Contact → Audit resets the strip so Work is visible", async ({ page }) => {
+    await page.goto("/");
+    await go(page, "Contact", /\/contact$/);
+    await expect.poll(() => linkInView(page, "Contact")).toBe(true);
+    expect(await scrollLeft(page)).toBeGreaterThan(0);
+    await go(page, "Get audit", /\/audit$/);
+    await expect.poll(() => scrollLeft(page)).toBe(0);
+    expect(await linkInView(page, "Work")).toBe(true);
+  });
+
+  test("every hop keeps the current item (or the strip start) in view", async ({ page }) => {
+    const hops: [string, RegExp, string | null][] = [
+      ["Work", /\/work$/, "Work"],
+      ["Contact", /\/contact$/, "Contact"],
+      ["Get audit", /\/audit$/, null],
+      ["Work", /\/work$/, "Work"],
+      ["Get audit", /\/audit$/, null],
+      ["Services", /\/services$/, "Services"],
+      ["Get audit", /\/audit$/, null],
+      ["Why Forge", /\/why$/, "Why Forge"],
+      ["Get audit", /\/audit$/, null],
+      ["Contact", /\/contact$/, "Contact"],
+    ];
+    await page.goto("/");
+    for (const [label, url, current] of hops) {
+      await go(page, label, url);
+      if (current) {
+        await expect.poll(() => linkInView(page, current), { message: `${label} in view` }).toBe(true);
+      } else {
+        await expect.poll(() => scrollLeft(page), { message: `strip reset on ${url}` }).toBe(0);
+        expect(await linkInView(page, "Work")).toBe(true);
+      }
+    }
+  });
+});
