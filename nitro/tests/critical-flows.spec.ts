@@ -146,6 +146,7 @@ test.describe("approved portfolio taxonomy", () => {
       "https://mjvideogames.com/",
       "https://hardhittincardshop.com/",
       "https://infiniteheroes.net/",
+      "https://harrisinwonderland.com/",
       "https://voidcaller.enterthegrotto.xyz/",
     ]);
     for (const path of ROUTES) {

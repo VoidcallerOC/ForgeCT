@@ -22,6 +22,11 @@ const fail = (msg) => failures.push(msg);
 
 /** Pages where the certified HTML had no meta description; this build adds one. */
 const NEW_DESCRIPTIONS = new Set(["/audit", "/contact"]);
+/**
+ * Pages whose description and JSON-LD intentionally differ from the certified page. Harris in Wonderland is
+ * live (owner confirmed, 2026-10-01), so its case study now says "and live site" like the other four clients.
+ */
+const CHANGED_SEO = new Set(["/work/harris-in-wonderland"]);
 /** Pages where the certified robots tag was absent (= index,follow); this build states it. */
 const ROBOTS_DEFAULT = "index,follow";
 /** Certified smoke markers (scripts/smoke-production.mjs). */
@@ -98,14 +103,17 @@ for (const route of routes) {
       c.jsonld.push(JSON.parse(await readFile(path.join(certifiedRoot, "schema/services.json"), "utf8")));
     }
     if (h.title !== c.title) fail(`${route}: title drift\n    built:     ${h.title}\n    certified: ${c.title}`);
-    if (c.description ? h.description !== c.description : !NEW_DESCRIPTIONS.has(route))
+    if (CHANGED_SEO.has(route)) {
+      if (!h.description) fail(`${route}: missing description`);
+    } else if (c.description ? h.description !== c.description : !NEW_DESCRIPTIONS.has(route))
       fail(`${route}: description drift\n    built:     ${h.description}\n    certified: ${c.description}`);
     if (h.canonical !== c.canonical) fail(`${route}: canonical drift (${h.canonical} vs ${c.canonical})`);
     if (h.robots.replace(/\s/g, "") !== (c.robots || ROBOTS_DEFAULT).replace(/\s/g, ""))
       fail(`${route}: robots drift (${h.robots} vs ${c.robots})`);
     if (c.ogTitle && h.ogTitle !== c.ogTitle) fail(`${route}: og:title drift`);
-    if (c.ogDescription && h.ogDescription !== c.ogDescription) fail(`${route}: og:description drift`);
-    if (JSON.stringify(h.jsonld) !== JSON.stringify(c.jsonld)) fail(`${route}: JSON-LD differs from certified page`);
+    if (c.ogDescription && h.ogDescription !== c.ogDescription && !CHANGED_SEO.has(route)) fail(`${route}: og:description drift`);
+    if (!CHANGED_SEO.has(route) && JSON.stringify(h.jsonld) !== JSON.stringify(c.jsonld))
+      fail(`${route}: JSON-LD differs from certified page`);
   }
 }
 
