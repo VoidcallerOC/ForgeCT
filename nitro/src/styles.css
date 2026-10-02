@@ -127,7 +127,7 @@ p {
   padding-block: clamp(44px, 6vw, 80px);
 }
 .band--fog {
-  background: rgba(26, 28, 31, 0.86);
+  background: transparent;
 }
 .band + .band,
 .band + .band--fog,
