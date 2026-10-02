@@ -1,6 +1,7 @@
 import { createRootRoute, HeadContent, Link, Outlet, Scripts, useRouterState } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { Footer, Masthead } from "@/components/chrome";
+import { Starfield } from "@/components/starfield";
 import { CONVERSION_PAGES, VA_STUB, track } from "@/lib/analytics";
 import appCss from "../styles.css?url";
 
@@ -74,6 +75,7 @@ function RootDocument() {
         <HeadContent />
       </head>
       <body>
+        <Starfield />
         <a className="skip" href="#main">
           Skip to content
         </a>

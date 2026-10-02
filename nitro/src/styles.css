@@ -127,7 +127,7 @@ p {
   padding-block: clamp(44px, 6vw, 80px);
 }
 .band--fog {
-  background: var(--steel);
+  background: rgba(26, 28, 31, 0.86);
 }
 .band + .band,
 .band + .band--fog,
@@ -135,7 +135,7 @@ p {
   border-top: 1px solid var(--rule);
 }
 .band--void {
-  background: var(--void);
+  background: transparent;
   color: var(--fog);
 }
 .band--void .lede,
@@ -292,7 +292,7 @@ p {
   top: 12px;
 }
 .masthead {
-  background: var(--void);
+  background: rgba(10, 10, 10, 0.72);
   color: var(--fog);
   border-bottom: 1px solid var(--rule-dark);
 }
@@ -400,7 +400,7 @@ p {
 
 /* ---------- hero (home) ---------- */
 .hero {
-  background: var(--void);
+  background: transparent;
   color: var(--fog);
   overflow: hidden;
   padding-top: clamp(40px, 7vw, 96px);
@@ -1072,7 +1072,7 @@ p {
 
 /* ---------- page head (inner pages) ---------- */
 .page-head {
-  background: var(--void);
+  background: transparent;
   color: var(--fog);
   padding-block: clamp(48px, 8vw, 112px) clamp(48px, 7vw, 96px);
 }
@@ -1390,7 +1390,7 @@ p {
 
 /* ---------- footer ---------- */
 .footer {
-  background: var(--void);
+  background: transparent;
   color: var(--fog);
   padding-top: clamp(56px, 8vw, 104px);
   overflow: hidden;
@@ -1473,4 +1473,26 @@ h2 + .lede,
 h2 + .plans,
 h2 + .faq {
   margin-top: 1rem;
+}
+
+/* ---------- ambient starfield (components/starfield.tsx) ---------- */
+.starfield {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.masthead,
+main,
+.footer {
+  position: relative;
+  z-index: 1;
+}
+@media print {
+  .starfield {
+    display: none;
+  }
 }

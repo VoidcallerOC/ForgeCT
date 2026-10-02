@@ -252,3 +252,45 @@ test("phone rail cards are equal in size and aligned on desktop", async ({ page 
     for (const b of boxes) expect(b, path).toEqual(boxes[0]);
   }
 });
+
+test.describe("ambient starfield", () => {
+  test("is decorative, behind the content, and never intercepts input", async ({ page }) => {
+    await page.goto("/");
+    const canvas = page.locator("canvas.starfield");
+    await expect(canvas).toHaveAttribute("aria-hidden", "true");
+    await expect(canvas).toHaveAttribute("data-mode", "animated");
+    expect(await canvas.evaluate((c) => getComputedStyle(c).pointerEvents)).toBe("none");
+    const cta = page.locator(".hero .btn").first();
+    const hit = await cta.evaluate((el) => {
+      const r = el.getBoundingClientRect();
+      return el.contains(document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2));
+    });
+    expect(hit).toBe(true);
+    await cta.click();
+    await expect(page).toHaveURL(/\/audit$/);
+  });
+
+  test("renders one static frame when reduced motion is requested", async ({ browser }) => {
+    const context = await browser.newContext({ reducedMotion: "reduce" });
+    const page = await context.newPage();
+    await page.goto("/");
+    const canvas = page.locator("canvas.starfield");
+    await expect(canvas).toHaveAttribute("data-mode", "static");
+    const snapshot = () =>
+      canvas.evaluate((c: HTMLCanvasElement) => c.toDataURL().length + ":" + c.toDataURL().slice(-64));
+    const first = await snapshot();
+    await page.mouse.move(400, 300);
+    await page.waitForTimeout(600);
+    expect(await snapshot()).toBe(first);
+    await context.close();
+  });
+
+  test("keeps the canvas light on phones", async ({ browser }) => {
+    const context = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 3, hasTouch: true, isMobile: true });
+    const page = await context.newPage();
+    await page.goto("/");
+    const width = await page.locator("canvas.starfield").evaluate((c: HTMLCanvasElement) => c.width);
+    expect(width).toBeLessThanOrEqual(Math.round(390 * 1.25));
+    await context.close();
+  });
+});
