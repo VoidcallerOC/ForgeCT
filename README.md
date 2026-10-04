@@ -97,6 +97,13 @@ the environment. While a value is empty, that link falls back to the href in the
 markup, which points at the inquiry form. An unconfigured button is never a dead
 button. Enabling real payments is editing those strings.
 
+The Customer Portal from a paid receipt is opened on `/thanks` by `checkout.js`
+(`[data-stripe-portal]` posts to `/api/portal`). Public pages such as `/services`
+and `/care` do **not** post to `/api/checkout` and do not use `[data-stripe-plan]`;
+Care purchase CTAs point at `/pay` (Payment Links). Plan, environment variables,
+webhook setup, and tax posture are documented in
+[`docs/STRIPE.md`](docs/STRIPE.md).
+
 ### Stripe webhook fulfillment
 
 The production webhook is live at `/api/stripe-webhook`. It verifies Stripe
@@ -147,17 +154,6 @@ is the cost of an embedded checkout, and the reason this site links out.
 6. Verify that HTTPS works on both the apex and `www` hostnames, that the apex permanently redirects to `https://www.forge-ct.com`, and that mail delivery works before requesting indexing.
 7. After the first real payment, confirm the Stripe delivery, Care countdown metadata,
    subscription timing, and Resend notification in the live Dashboard.
-
-## Payments
-
-Deposits, the Care plans, and project invoices run through Stripe. The plan,
-environment variables, webhook setup, and tax posture are documented in
-[`docs/STRIPE.md`](docs/STRIPE.md).
-
-Buttons on `/services` and `/care` post to `/api/checkout`, which returns a
-Stripe-hosted Checkout URL — no card data touches this origin and the Content
-Security Policy is unchanged. Fulfillment runs in `api/stripe-webhook.js`, not
-on the `/thanks` page.
 
 ## Privacy notice
 
