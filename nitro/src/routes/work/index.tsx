@@ -20,11 +20,11 @@ function WorkIndex() {
           established.
         </p>
         <div className="actions">
-          <Link to="/contact" className="btn">
-            Talk about your project <Arrow />
+          <Link to="/audit" className="btn" data-track="work_audit_cta">
+            Get your Forge-CT Audit <Arrow />
           </Link>
-          <Link to="/services" className="btn btn--line">
-            See services
+          <Link to="/book" className="btn btn--line" data-track="work_book_cta">
+            Book a working session
           </Link>
         </div>
       </PageHead>

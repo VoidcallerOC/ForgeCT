@@ -41,6 +41,22 @@ function CaseStudy() {
                 <dt>What Forge CT built</dt>
                 <dd>{project.built}</dd>
               </div>
+              {project.designIntent ? (
+                <div>
+                  <dt>Design intent</dt>
+                  <dd>{project.designIntent}</dd>
+                </div>
+              ) : null}
+              {project.customerPath ? (
+                <div>
+                  <dt>What visitors can do</dt>
+                  <dd>
+                    <ul className="case-path">
+                      {project.customerPath.map((step) => <li key={step}>{step}</li>)}
+                    </ul>
+                  </dd>
+                </div>
+              ) : null}
               <div>
                 <dt>Where</dt>
                 <dd>
@@ -60,8 +76,8 @@ function CaseStudy() {
               <div>
                 <dt>Project context</dt>
                 <dd className="muted">
-                  This case study records the project information currently documented in the Forge CT portfolio. It
-                  does not add performance claims or outcomes that are not documented.
+                  This is a feature-level account of the project. No conversion, revenue or other performance result is
+                  claimed here.
                 </dd>
               </div>
             </dl>

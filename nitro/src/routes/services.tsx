@@ -25,13 +25,14 @@ function Services() {
           custom applications are scoped separately.
         </p>
         <div className="actions">
-          <Link to="/contact" className="btn" data-track="services_hero_contact">
-            Talk about your project <Arrow />
+          <Link to="/audit" className="btn" data-track="services_hero_audit">
+            Get your Forge-CT Audit <Arrow />
           </Link>
-          <a href="#addons" className="btn btn--line">
-            Add-ons <Arrow dir="down" />
-          </a>
+          <Link to="/book" className="btn btn--line" data-track="services_hero_book">
+            Book a working session
+          </Link>
         </div>
+        <p className="fine">Reviewing the details? <a className="link" href="#addons">Jump to add-ons</a>.</p>
       </PageHead>
 
       <section className="band" aria-labelledby="packages-title">
