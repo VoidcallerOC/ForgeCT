@@ -45,19 +45,19 @@ in place for historical sessions.
 
 ## Files
 
-| Path                           | Role                                                                                          |
-| ------------------------------ | --------------------------------------------------------------------------------------------- |
-| `pay/index.html`               | Care payment landing page; CTAs rewritten by `payments.js`                                    |
-| `payments.js`                  | Rewrites `/pay` links from committed `PAYMENT_LINKS` (live Care path)                         |
-| `api/_stripe.js`               | `StripeClient` singleton, Care price catalog helpers, tax switch                              |
+| Path                           | Role                                                                                                   |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------ |
+| `pay/index.html`               | Care payment landing page; CTAs rewritten by `payments.js`                                             |
+| `payments.js`                  | Rewrites `/pay` links from committed `PAYMENT_LINKS` (live Care path)                                  |
+| `api/_stripe.js`               | `StripeClient` singleton, Care price catalog helpers, tax switch                                       |
 | `api/_ratelimit.js`            | Shared throttle; production uses Supabase RPC (`increment_rate_limit`); memory only outside production |
-| `api/checkout.js`              | Optional/unused `POST` Care Checkout Session API (public Care path is Payment Links on `/pay`) |
-| `api/portal.js`                | `POST` → Customer Portal session (used from `/thanks`)                                        |
-| `api/stripe-webhook.js`        | Signature-verified event handler; **this is where fulfillment lives**                         |
-| `checkout.js`                  | Live use: `[data-stripe-portal]` on `/thanks`. `[data-stripe-plan]` binding is unused on public pages |
-| `thanks/index.html`            | Success page; hosts the "Open billing" button                                                 |
-| `scripts/stripe-bootstrap.mjs` | Reconciles Care products and prices                                                           |
-| `scripts/stripe-invoice.mjs`   | Sends a scoped project invoice; supports legacy lookup keys                                   |
+| `api/checkout.js`              | Optional/unused `POST` Care Checkout Session API (public Care path is Payment Links on `/pay`)         |
+| `api/portal.js`                | `POST` → Customer Portal session (used from `/thanks`)                                                 |
+| `api/stripe-webhook.js`        | Signature-verified event handler; **this is where fulfillment lives**                                  |
+| `checkout.js`                  | Live use: `[data-stripe-portal]` on `/thanks`. `[data-stripe-plan]` binding is unused on public pages  |
+| `thanks/index.html`            | Success page; hosts the "Open billing" button                                                          |
+| `scripts/stripe-bootstrap.mjs` | Reconciles Care products and prices                                                                    |
+| `scripts/stripe-invoice.mjs`   | Sends a scoped project invoice; supports legacy lookup keys                                            |
 
 ## Setup
 
