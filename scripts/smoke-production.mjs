@@ -15,7 +15,6 @@ export const CORE_ROUTES = [
 
 export const API_GET_ROUTES = [
   { path: "/api/contact", allowedMethods: ["POST"] },
-  { path: "/api/checkout", allowedMethods: ["POST"] },
   { path: "/api/portal", allowedMethods: ["POST"] },
   { path: "/api/stripe-webhook", allowedMethods: ["POST"] },
 ];
