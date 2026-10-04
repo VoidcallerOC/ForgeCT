@@ -49,10 +49,9 @@ in place for historical sessions.
 | ------------------------------ | --------------------------------------------------------------------- |
 | `api/_stripe.js`               | `StripeClient` singleton, current Care checkout catalog, tax switch   |
 | `api/_ratelimit.js`            | Per-instance request throttle shared by the endpoints                 |
-| `api/checkout.js`              | `POST` → Care subscription Checkout Session                           |
 | `api/portal.js`                | `POST` → Customer Portal session                                      |
 | `api/stripe-webhook.js`        | Signature-verified event handler; **this is where fulfillment lives** |
-| `checkout.js`                  | Client script that binds `[data-stripe-plan]` buttons                 |
+| `checkout.js`                  | Client script that binds `[data-stripe-portal]` on `/thanks`          |
 | `thanks/index.html`            | Success page; hosts the "Open billing" button                         |
 | `scripts/stripe-bootstrap.mjs` | Reconciles Care products and prices                                   |
 | `scripts/stripe-invoice.mjs`   | Sends a scoped project invoice; supports legacy lookup keys           |
@@ -60,10 +59,10 @@ in place for historical sessions.
 ## Setup
 
 1. **Create a restricted key.** Dashboard → Developers → API keys → _Create
-   restricted key_ (`rk_…`). Grant write on Checkout Sessions, Customers,
-   Products, Prices, Subscriptions, Invoices, and Billing Portal; leave
-   everything else at _None_. Use a restricted key rather than `sk_…` so a leak
-   from the deployment cannot move money out or read the whole account.
+   restricted key_ (`rk_…`). Grant write on Customers, Products, Prices,
+   Subscriptions, Invoices, and Billing Portal; leave everything else at
+   _None_. Use a restricted key rather than `sk_…` so a leak from the
+   deployment cannot move money out or read the whole account.
 
 2. **Reconcile the catalog** against a test key first:
 
@@ -172,8 +171,8 @@ accountant, then pin the codes in the `TAX_CODE` constant in
 an active tax registration is the most common Stripe Tax mistake: Stripe
 calculates and collects nothing, returns no error, and the Dashboard reads as
 though tax is handled. Register first (Dashboard → Tax → Registrations), confirm
-CT is active, then set `STRIPE_AUTOMATIC_TAX=true` — both the Checkout endpoints
-and the invoice script read that one switch. See
+CT is active, then set `STRIPE_AUTOMATIC_TAX=true` — the portal
+endpoint and the invoice script read that one switch. See
 <https://docs.stripe.com/billing/taxes/collect-taxes.md>.
 
 ## Content Security Policy
@@ -203,7 +202,7 @@ Apple Pay and Google Pay.
   tests may explicitly use `WEBHOOK_EVENT_STORE=memory`.
 - **Rate limiting uses Supabase in production.** Run the current
   `sql/stripe-webhook-events.sql` to create the shared atomic fixed-window
-  counter. `/api/checkout`, `/api/contact`, and `/api/portal` use the existing
+  counter. `/api/contact` and `/api/portal` use the existing
   `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` variables. Local and test
   environments use an in-memory fallback; production returns a temporary
   unavailable response rather than silently falling back to per-instance
