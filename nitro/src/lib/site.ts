@@ -10,14 +10,8 @@ export const BUSINESS = {
   founder: "Nick Sousa",
   email: "create@forge-ct.com",
   locality: "Farmington",
-  region: "CT",
   regionLong: "Connecticut",
   area: "Greater Hartford",
-  priceRange: "$750 to $2,500+",
-  description:
-    "Custom websites and web systems for local retailers, restaurants, specialty shops, and other small businesses around Greater Hartford.",
-  /** Audit reply promise, as published on /audit and /hartford-web-design. */
-  auditPromise: "three practical fixes within 24 hours",
 } as const;
 
 export const MAILTO = `mailto:${BUSINESS.email}`;
@@ -34,7 +28,6 @@ export type Package = {
   performance: boolean;
   advanced: boolean;
   rush: { fee: number; days: number };
-  schemaDescription: string;
 };
 
 export const PACKAGES: Package[] = [
@@ -48,8 +41,6 @@ export const PACKAGES: Package[] = [
     performance: false,
     advanced: false,
     rush: { fee: 250, days: 1 },
-    schemaDescription:
-      "Up to 3 pages; custom design and development; responsive, mobile-first functional website; hosting setup; social media icons; 1 revision.",
   },
   {
     id: "standard",
@@ -61,8 +52,6 @@ export const PACKAGES: Package[] = [
     performance: true,
     advanced: false,
     rush: { fee: 500, days: 3 },
-    schemaDescription:
-      "Up to 5 pages; custom design and development; responsive, mobile-first functional website; hosting setup; social media icons; speed and performance optimization; 2 revisions.",
   },
   {
     id: "premium",
@@ -74,8 +63,6 @@ export const PACKAGES: Package[] = [
     performance: true,
     advanced: true,
     rush: { fee: 750, days: 5 },
-    schemaDescription:
-      "Up to 8 pages; custom design and development; responsive, mobile-first functional website; advanced functionality; hosting setup; social media icons; speed and performance optimization; 3 revisions. E-commerce is a paid add-on.",
   },
 ];
 

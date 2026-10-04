@@ -15,7 +15,6 @@ export const FILTERS: { id: Filter; label: string }[] = [
 export type Project = {
   slug: string;
   name: string;
-  short: string;
   filter: Filter;
   /** Case-study category label, as certified. */
   category: string;
@@ -36,7 +35,6 @@ export const PROJECTS: Project[] = [
   {
     slug: "harris-in-wonderland",
     name: "Harris in Wonderland",
-    short: "Harris in Wonderland",
     filter: "retail-local",
     category: "Retail and local business",
     place: "Canton",
@@ -54,7 +52,6 @@ export const PROJECTS: Project[] = [
   {
     slug: "thousand-sunny",
     name: "Thousand Sunny Cards and Collectibles",
-    short: "Thousand Sunny",
     filter: "card-tabletop",
     category: "Card and tabletop shop",
     place: "West Hartford",
@@ -70,7 +67,6 @@ export const PROJECTS: Project[] = [
   {
     slug: "m-and-j-video-games",
     name: "M and J Video Games",
-    short: "M and J Video Games",
     filter: "card-tabletop",
     category: "Neighborhood video-game shop",
     place: "Southington",
@@ -87,7 +83,6 @@ export const PROJECTS: Project[] = [
   {
     slug: "hard-hittin",
     name: "Hard Hittin Card Shop",
-    short: "Hard Hittin",
     filter: "card-tabletop",
     category: "Card shop",
     place: "Connecticut",
@@ -104,7 +99,6 @@ export const PROJECTS: Project[] = [
   {
     slug: "infinite-heroes",
     name: "Infinite Heroes",
-    short: "Infinite Heroes",
     filter: "card-tabletop",
     category: "Card and tabletop shop",
     place: "Watertown",
