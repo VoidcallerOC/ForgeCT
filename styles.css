@@ -1,1 +1,5 @@
-{{LOAD_FROM_FILE:/workspace/styles.css.final}}
+:root{--paper:#0e0f12;--cream:#16181d;--surface-2:#1c1e25;--ink:#edede7;--brick:#efe7ce;--brick-deep:#d6c99f;--accent-hi:#fffdf3;--wood:#363944;--line:#22252c;--line-strong:#454955;--muted:#9ea0a8;--light-line:rgba(237,237,231,0.1);--clay:var(--brick);--sans:"DM Sans","Helvetica Neue",Arial,sans-serif;--serif:"Instrument Serif",Georgia,serif;--shell:1160px;--shell-wide:1280px;--shadow:0 18px 50px rgba(0,0,0,0.35);--ease:cubic-bezier(0.22,1,0.36,1);color-scheme:dark;}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;background:var(--cream);}
+body{margin:0;color:var(--ink);background:var(--paper);font-family:var(--sans);font-size:1rem;line-height:1.55;text-rendering:optimizeLegibility;}
+PLACEHOLDER_WILL_FAIL_IF_NOT_REPLACED
