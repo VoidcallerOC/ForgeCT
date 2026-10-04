@@ -45,17 +45,19 @@ in place for historical sessions.
 
 ## Files
 
-| Path                           | Role                                                                  |
-| ------------------------------ | --------------------------------------------------------------------- |
-| `api/_stripe.js`               | `StripeClient` singleton, current Care checkout catalog, tax switch   |
-| `api/_ratelimit.js`            | Per-instance request throttle shared by the endpoints                 |
-| `api/checkout.js`              | `POST` → Care subscription Checkout Session                           |
-| `api/portal.js`                | `POST` → Customer Portal session                                      |
-| `api/stripe-webhook.js`        | Signature-verified event handler; **this is where fulfillment lives** |
-| `checkout.js`                  | Client script that binds `[data-stripe-plan]` buttons                 |
-| `thanks/index.html`            | Success page; hosts the "Open billing" button                         |
-| `scripts/stripe-bootstrap.mjs` | Reconciles Care products and prices                                   |
-| `scripts/stripe-invoice.mjs`   | Sends a scoped project invoice; supports legacy lookup keys           |
+| Path                           | Role                                                                                          |
+| ------------------------------ | --------------------------------------------------------------------------------------------- |
+| `pay/index.html`               | Care payment landing page; CTAs rewritten by `payments.js`                                    |
+| `payments.js`                  | Rewrites `/pay` links from committed `PAYMENT_LINKS` (live Care path)                         |
+| `api/_stripe.js`               | `StripeClient` singleton, Care price catalog helpers, tax switch                              |
+| `api/_ratelimit.js`            | Shared throttle; production uses Supabase RPC (`increment_rate_limit`); memory only outside production |
+| `api/checkout.js`              | Optional/unused `POST` Care Checkout Session API (public Care path is Payment Links on `/pay`) |
+| `api/portal.js`                | `POST` → Customer Portal session (used from `/thanks`)                                        |
+| `api/stripe-webhook.js`        | Signature-verified event handler; **this is where fulfillment lives**                         |
+| `checkout.js`                  | Live use: `[data-stripe-portal]` on `/thanks`. `[data-stripe-plan]` binding is unused on public pages |
+| `thanks/index.html`            | Success page; hosts the "Open billing" button                                                 |
+| `scripts/stripe-bootstrap.mjs` | Reconciles Care products and prices                                                           |
+| `scripts/stripe-invoice.mjs`   | Sends a scoped project invoice; supports legacy lookup keys                                   |
 
 ## Setup
 
@@ -87,7 +89,11 @@ in place for historical sessions.
    on `/services` and invoiced after scope is agreed; they are not managed in
    Stripe Checkout.
 
-3. **Set the environment** (Vercel → Project → Settings → Environment Variables):
+3. **Publish Payment Links and set the environment.** Create Care and Care+
+   Payment Links in the Dashboard (subscription mode) and paste their URLs into
+   `PAYMENT_LINKS` in `payments.js`. That is the live Care purchase path on
+   `/pay`. Then set these Vercel project environment variables (Project →
+   Settings → Environment Variables):
 
    | Variable                    | Notes                                          |
    | --------------------------- | ---------------------------------------------- |
@@ -101,9 +107,11 @@ in place for historical sessions.
    | `SUPABASE_URL`              | Supabase project URL for webhook event storage |
    | `SUPABASE_SERVICE_ROLE_KEY` | server-only Supabase service-role key          |
 
-   Keys belong in the platform's environment store, never in the repo. Nothing
-   here is a `NEXT_PUBLIC_`-style client value — the browser only ever talks to
-   `/api/*` on this origin.
+   Keys belong in the platform's environment store, never in the repo. Payment
+   Link URLs are public and committed in `payments.js`. The programmatic
+   `api/checkout.js` + `[data-stripe-plan]` path is unused on public pages; the
+   browser reaches Stripe via Payment Links on `/pay`, and the receipt-bound
+   portal posts only to same-origin `/api/portal`.
 
 4. **Register the webhook.** Dashboard → Developers → Webhooks → endpoint
    `https://www.forge-ct.com/api/stripe-webhook`, subscribed to:
@@ -118,9 +126,10 @@ in place for historical sessions.
 5. **Turn on the Customer Portal** at Dashboard → Settings → Billing → Customer
    portal: allow payment-method updates, invoice history, and cancellation.
 
-6. **Enable payment methods** at Settings → Payment methods. The code never
-   passes `payment_method_types`, so Stripe shows each shop the methods most
-   likely to convert and the set is changed from the Dashboard with no deploy.
+6. **Enable payment methods** at Settings → Payment methods. For Payment Links,
+   methods are chosen in the Dashboard link settings. The optional
+   `api/checkout.js` path never passes `payment_method_types`, so Stripe would
+   show each shop the methods most likely to convert if that path were re-enabled.
 
 ## Fulfillment happens in the webhook, not on `/thanks`
 
@@ -172,16 +181,17 @@ accountant, then pin the codes in the `TAX_CODE` constant in
 an active tax registration is the most common Stripe Tax mistake: Stripe
 calculates and collects nothing, returns no error, and the Dashboard reads as
 though tax is handled. Register first (Dashboard → Tax → Registrations), confirm
-CT is active, then set `STRIPE_AUTOMATIC_TAX=true` — both the Checkout endpoints
-and the invoice script read that one switch. See
+CT is active, then set `STRIPE_AUTOMATIC_TAX=true` — both the optional Checkout
+endpoint and the invoice script read that one switch. See
 <https://docs.stripe.com/billing/taxes/collect-taxes.md>.
 
 ## Content Security Policy
 
 `vercel.json` keeps `script-src 'self'` and `connect-src 'self'`. Nothing here
-loosens it: the browser fetches only same-origin `/api/*` and is then redirected
-to a Stripe-hosted page, so no Stripe script runs on this origin and no card data
-touches it.
+loosens it: Care purchases leave this origin via ordinary Payment Links on
+`/pay`, and the receipt-bound portal fetches only same-origin `/api/portal`
+before redirecting to a Stripe-hosted page. No Stripe script runs on this origin
+and no card data touches it.
 
 If the site ever moves to an embedded Payment Element, that changes — it needs
 `https://js.stripe.com` in `script-src`, `https://api.stripe.com` in
