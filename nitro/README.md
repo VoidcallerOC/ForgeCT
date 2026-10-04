@@ -24,7 +24,7 @@ node scripts/serve-output.mjs   # serve .vercel/output locally, the way Vercel r
 | Titles, descriptions, canonicals, robots, Open Graph | `src/lib/seo.ts` | `scripts/check-build-output.mjs` compares the build with the root HTML |
 | JSON-LD | `src/lib/structured-data.ts` (same as the certified pages) | same check, byte-for-byte JSON |
 | Sitemap, robots, favicon, OG image, client screenshots | `public/` | output check |
-| `/api/contact`, `/api/checkout`, `/api/portal`, `/api/stripe-webhook` | `server/core/` (exact copies of `../api`), run through `src/lib/node-handler.ts` | `npm run test:parity` fails if a file drifts; the certified unit tests run here too |
+| `/api/contact`, `/api/portal`, `/api/stripe-webhook` | `server/core/` (exact copies of `../api`), run through `src/lib/node-handler.ts` | `npm run test:parity` fails if a file drifts; the certified unit tests run here too |
 | Form payload `{ name, email, company, siteUrl, message, website }` | `src/components/inquiry-form.tsx` | e2e checks the exact payload |
 | Security headers, apex → www 308 | `security-headers.ts`, `vite.config.ts` → `.vercel/output/config.json` | output check and e2e |
 | Vercel Analytics events (`landing_page_view`, `lead_form_success`, `data-track`) | `src/lib/analytics.ts`, `__root.tsx` | — |

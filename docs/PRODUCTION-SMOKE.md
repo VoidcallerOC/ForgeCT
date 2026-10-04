@@ -17,7 +17,7 @@ default) for:
 - the required Forge routes: `/`, `/audit`, `/services`, `/care`, `/contact`,
   `/book`, `/connecticut-web-design`, `/hartford-web-design`, and `/work`
 - all four Forge portfolio case-study routes
-- safe `GET` behavior for `/api/contact`, `/api/checkout`, `/api/portal`, and
+- safe `GET` behavior for `/api/contact`, `/api/portal`, and
   `/api/stripe-webhook` (expected `405` with `Allow: POST`)
 - the approved live client URLs currently linked by the Forge portfolio:
   `thousandsunnytcg.com`, `mjvideogames.com`, and `hardhittincardshop.com`

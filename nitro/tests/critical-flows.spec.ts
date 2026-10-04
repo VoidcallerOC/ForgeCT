@@ -208,7 +208,7 @@ test.describe("layout and platform", () => {
   });
 
   test("API routes answer GET with 405 and Allow: POST", async ({ request }) => {
-    for (const path of ["/api/contact", "/api/checkout", "/api/portal", "/api/stripe-webhook"]) {
+    for (const path of ["/api/contact", "/api/portal", "/api/stripe-webhook"]) {
       const res = await request.get(path);
       expect(res.status(), path).toBe(405);
       expect(res.headers()["allow"], path).toContain("POST");
