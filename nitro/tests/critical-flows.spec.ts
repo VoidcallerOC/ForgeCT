@@ -66,6 +66,37 @@ test.describe("certified business-critical flows", () => {
     expect(bodies[0]).toMatchObject({ name: "Pat Owner", siteUrl: "https://example.com", message: "" });
   });
 
+  test("sample Audit is explicitly fictional and pairs three observations with practical changes", async ({ page }) => {
+    await page.goto("/audit#sample-audit");
+    const sample = page.locator("#sample-audit");
+    await expect(sample).toContainText("Fictional specialty shop");
+    await expect(sample).toContainText("not a real business, client project, or Forge-CT Audit");
+    await expect(sample.locator("ol > li")).toHaveCount(3);
+    await expect(sample.getByText("What a visitor may miss")).toHaveCount(3);
+    await expect(sample.getByText("A practical change")).toHaveCount(3);
+  });
+
+  test("three featured case studies explain the documented customer path without outcome claims", async ({ page }) => {
+    for (const path of ["/work/harris-in-wonderland", "/work/thousand-sunny", "/work/m-and-j-video-games"]) {
+      await page.goto(path);
+      await expect(page.locator(".facts")).toContainText("Design intent");
+      await expect(page.locator(".facts")).toContainText("What visitors can do");
+      await expect(page.locator(".case-path li")).toHaveCount(3);
+      await expect(page.locator(".facts")).toContainText("No conversion, revenue or other performance result is claimed");
+    }
+  });
+
+  test("homepage ends with an Audit-first path and keeps Care management in the footer", async ({ page }) => {
+    await page.goto("/");
+    const finalCta = page.locator("#contact");
+    await expect(finalCta.getByRole("link", { name: /Get your Forge-CT Audit/ })).toHaveAttribute("href", "/audit");
+    await expect(finalCta.getByRole("link", { name: /Already know\? Book a working session/ })).toHaveAttribute("href", "/book");
+    const manageCare = page.getByRole("link", { name: "Manage Care", exact: true });
+    await expect(manageCare).toHaveAttribute("href", "/pay");
+    await expect(page.locator("header.masthead").getByRole("link", { name: "Manage Care" })).toHaveCount(0);
+    await expect(page.locator(".client-notes")).toHaveCount(0);
+  });
+
   test("booking folds date, time and time zone into the message", async ({ page }) => {
     const bodies = await captureContact(page);
     await page.goto("/book");

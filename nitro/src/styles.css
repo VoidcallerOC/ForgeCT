@@ -1496,3 +1496,129 @@ main,
     display: none;
   }
 }
+
+
+/* ---------- conversion and credibility pass ---------- */
+.builder-proof {
+  align-items: start;
+}
+.builder-points {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--rule-strong);
+}
+.builder-points li {
+  padding: 1.05rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+.builder-points h3 {
+  margin-bottom: 0.35rem;
+}
+.builder-points p {
+  color: var(--slate-light);
+}
+.audit-sample-link {
+  margin-top: 1.2rem;
+}
+.audit-example-head {
+  max-width: 52rem;
+}
+.audit-example-list {
+  margin: 2.4rem 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--rule-strong);
+}
+.audit-example-list li {
+  display: grid;
+  grid-template-columns: minmax(7.5rem, 0.8fr) repeat(2, minmax(0, 1.2fr));
+  gap: 1.2rem 2rem;
+  align-items: start;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+.audit-example-list li > div > .mono {
+  margin-bottom: 0.45rem;
+}
+.audit-example-list li > div > p:last-child {
+  max-width: 42ch;
+}
+.audit-example-number {
+  color: var(--ember-ink);
+}
+.next-steps-inner {
+  max-width: 58rem;
+}
+.next-steps-inner h2 {
+  margin-top: 0.7rem;
+}
+.next-steps-inner .lede {
+  margin-top: 0.8rem;
+}
+.next-steps-inner .fine {
+  margin-top: 1.1rem;
+}
+.case-path {
+  display: grid;
+  gap: 0.55rem;
+  margin: 0;
+  padding-left: 1.15rem;
+}
+.case-path li::marker {
+  color: var(--ember-ink);
+}
+.client-notes-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+  gap: 1.5rem 2rem;
+  margin: 2.4rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+.client-notes-list li {
+  border-top: 1px solid var(--rule-strong);
+}
+.client-notes-list figure {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  min-height: 100%;
+  margin: 0;
+  padding: 1.2rem 0;
+}
+.client-notes-list blockquote {
+  margin: 0;
+  font-size: clamp(1.1rem, 1.8vw, 1.35rem);
+  line-height: 1.45;
+}
+.client-notes-list figcaption {
+  display: grid;
+  gap: 0.15rem;
+  margin-top: auto;
+  color: var(--slate-light);
+  font-size: 0.9rem;
+}
+.client-notes-list figcaption strong {
+  color: var(--fog);
+}
+.footer-client-access {
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--rule-dark);
+}
+.footer-client-access .mono {
+  display: block;
+  margin-bottom: 0.2rem;
+  font-size: 0.66rem;
+}
+
+@media (max-width: 719px) {
+  .audit-example-list li {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+  .audit-example-number {
+    margin-bottom: 0.1rem;
+  }
+}

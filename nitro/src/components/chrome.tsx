@@ -136,7 +136,7 @@ export function Footer() {
               <li><Link to="/contact">Contact</Link></li>
               <li><Link to="/hartford-web-design">Hartford web design</Link></li>
               <li><Link to="/connecticut-web-design">Connecticut web design</Link></li>
-              <li><Link to="/pay">Pay or manage Care</Link></li>
+              <li className="footer-client-access"><span className="mono">Existing clients</span><Link to="/pay">Manage Care</Link></li>
               <li><Link to="/privacy">Privacy</Link></li>
             </ul>
           </nav>

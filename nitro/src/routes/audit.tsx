@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Arrow, PageHead, Plate } from "@/components/chrome";
+import { AuditExample } from "@/components/audit-example";
 import { InquiryForm } from "@/components/inquiry-form";
 import { pageHead } from "@/lib/seo";
 
@@ -54,6 +55,8 @@ function Audit() {
           </ul>
         </div>
       </section>
+
+      <AuditExample />
 
       <section className="band band--fog" id="audit-form" aria-labelledby="form-title">
         <div className="wrap form-grid">

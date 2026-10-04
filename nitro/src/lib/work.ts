@@ -29,6 +29,9 @@ export type Project = {
   built: string;
   /** Longer homepage line from the certified work grid. */
   story: string;
+  /** Feature-level explanation of the intended customer path, only where documented. */
+  designIntent?: string;
+  customerPath?: string[];
   tags: string[];
 };
 
@@ -49,6 +52,13 @@ export const PROJECTS: Project[] = [
     built: "Live inventory, a feeder locker, care sheets, and a beginner chooser in one experience.",
     story:
       "The deepest build here: live Square inventory, a feeder locker, care sheets, and a beginner chooser that helps customers pick the right animal.",
+    designIntent:
+      "Bring inventory, practical care information and a beginner chooser together so visitors can explore the offer and learn what they need before a visit.",
+    customerPath: [
+      "Browse live Square inventory.",
+      "Use the beginner chooser to explore which animal may be a fit.",
+      "Find care sheets and feeder-locker information alongside the shop offer.",
+    ],
     tags: ["Live inventory", "Square", "Care sheets", "Care plan"],
   },
   {
@@ -65,6 +75,13 @@ export const PROJECTS: Project[] = [
     need: "Turn a search into a visit with hours, events, and a clear path to the floor.",
     built: "A shop page with event context and custom illustration that feels like the store.",
     story: "A shop page that turns a search into a visit with clear hours, events, and a direct path to the floor.",
+    designIntent:
+      "Pair practical shop and event context with custom illustration, so the page gives visitors both useful details and a feel for the store.",
+    customerPath: [
+      "Find the shop's hours and location before heading over.",
+      "See the event context on the shop page.",
+      "Get a direct path from the page to the store experience.",
+    ],
     tags: ["Shop page", "Events", "Custom illustration", "Care plan"],
   },
   {
@@ -82,6 +99,13 @@ export const PROJECTS: Project[] = [
     built: "A neighborhood storefront online, built for the phone check from the parking lot.",
     story:
       "Neighborhood storefront online. Trade-ins, services, and a clear way to call or walk in — the page a walk-in checks from the parking lot.",
+    designIntent:
+      "Put trade-ins, services and the walk-in path in one neighborhood storefront page that can be checked on a phone before the trip.",
+    customerPath: [
+      "See trade-in and service information in one place.",
+      "Check the shop from a phone before making the trip.",
+      "Find a clear way to call or walk in.",
+    ],
     tags: ["Shop page", "Trade-ins", "Directions"],
   },
   {

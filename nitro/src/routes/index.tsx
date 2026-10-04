@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Arrow, Plate } from "@/components/chrome";
-import { InquiryForm } from "@/components/inquiry-form";
+import { ClientNotes } from "@/components/client-notes";
+import { NextSteps } from "@/components/next-steps";
 import { RateSheet, SheetNotes } from "@/components/rate-sheet";
 import { LabNote, Ledger, PhoneRail } from "@/components/work";
 import { pageHead } from "@/lib/seo";
@@ -19,6 +20,12 @@ const QUESTIONS = [
   { q: "Is this my kind of place?", a: "Why you started, what you care about and what makes you different — said in your shop’s own voice." },
 ];
 
+const BUILDER_PLEDGES = [
+  { title: "Talk to the builder.", copy: "Your first conversation is with Nick, not an account manager passing notes along." },
+  { title: "One hand from audit to launch.", copy: "The person who reads your Audit is the person who shapes and builds the site." },
+  { title: "Start with your storefront.", copy: "The structure and language come from your business and its customers — not a template marketplace." },
+];
+
 function Home() {
   return (
     <main id="main">
@@ -32,8 +39,8 @@ function Home() {
             Custom websites for the businesses people <em>drive&nbsp;to.</em>
           </h1>
           <p className="lede">
-            Purpose-built sites for local retailers, restaurants, specialty shops and small businesses around{" "}
-            {BUSINESS.area} — so the phone check from the parking lot ends with someone walking in. Clearly scoped
+            Purpose-built sites for local retailers, restaurants, specialty shops and small businesses around {BUSINESS.area} —
+            so the phone check from the parking lot ends with someone walking in. Clearly scoped
             packages from {usd(PACKAGES[0].price)}; anything bigger is scoped on its own.
           </p>
           <div className="actions">
@@ -93,6 +100,9 @@ function Home() {
                   <span>Keep the fixes, or talk about a build.</span>
                 </li>
               </ol>
+              <p className="fine audit-sample-link">
+                Want to see the format first? <a className="link" href="/audit#sample-audit">Read an illustrated sample Audit</a>.
+              </p>
             </div>
             <div className="ticket-stub">
               <div>
@@ -107,55 +117,26 @@ function Home() {
         </div>
       </section>
 
-      <section className="band" id="work" aria-labelledby="work-title">
+      <section className="band band--void" aria-labelledby="builder-title">
         <div className="wrap">
-          <Plate items={["Work", `${PROJECTS.length} live client sites`, "Connecticut"]} />
-          <div className="split">
-            <h2 id="work-title">Real businesses. Real reasons to build.</h2>
-            <p className="lede">
-              Not mockups and not logos: each row is a live business with something specific to share — a floor, a
-              collection, a community, a way of doing things. Open any of them.
-            </p>
+          <div className="split builder-proof">
+            <div className="stack">
+              <Plate items={["Who builds it", "No agency handoff"]} />
+              <h2 id="builder-title">One person, start to finish.</h2>
+              <p className="lede">
+                Nick is the person you talk to, the person who reads your Audit, and the person who designs and builds
+                your site. Direct conversation; no relay chain between an account team and a separate build team.
+              </p>
+            </div>
+            <ul className="builder-points">
+              {BUILDER_PLEDGES.map((item) => (
+                <li key={item.title}>
+                  <h3>{item.title}</h3>
+                  <p>{item.copy}</p>
+                </li>
+              ))}
+            </ul>
           </div>
-          <Ledger headingId="work-title" />
-          <LabNote />
-        </div>
-      </section>
-
-      <section className="band band--fog" id="pricing" aria-labelledby="pricing-title">
-        <div className="wrap">
-          <Plate items={["Rate sheet", "Published pricing"]} />
-          <div className="split">
-            <h2 id="pricing-title">Three clear packages. The scope is on the page.</h2>
-            <p className="lede">
-              Defined package scope for local businesses. Admin systems, databases, APIs, integrations and larger
-              e-commerce are scoped separately — <Link className="link" to="/services">see services and add-ons</Link>.
-            </p>
-          </div>
-          <RateSheet caption="FORGE CT website packages" />
-          <SheetNotes />
-          <p className="actions">
-            <span>
-              After launch, <Link className="link" to="/care">Care</Link> keeps the details true for {usd(CARE.care.price)} a
-              month — first month free after any build.
-            </span>
-          </p>
-        </div>
-      </section>
-
-      <section className="band band--void" aria-labelledby="signed-title">
-        <div className="wrap">
-          <h2 id="signed-title" className="sr-only">
-            Who builds it
-          </h2>
-          <figure className="signed">
-            <blockquote>
-              <p>One person, start to finish. The one who reads your audit is the one who builds the site.</p>
-            </blockquote>
-            <figcaption>
-              {BUSINESS.founder} · {BUSINESS.locality}, CT
-            </figcaption>
-          </figure>
           <dl className="counts">
             <div>
               <dt>Live client sites</dt>
@@ -173,22 +154,44 @@ function Home() {
         </div>
       </section>
 
-      <section className="band" id="contact" aria-labelledby="contact-title">
-        <div className="wrap form-grid">
-          <div className="stack">
-            <Plate items={["Contact", BUSINESS.email]} />
-            <h2 id="contact-title">Tell me what you built.</h2>
+      <section className="band" id="work" aria-labelledby="work-title">
+        <div className="wrap">
+          <Plate items={["Work", `${PROJECTS.length} live client sites`, "Connecticut"]} />
+          <div className="split">
+            <h2 id="work-title">Real businesses. Real reasons to build.</h2>
             <p className="lede">
-              Why you started it, what you are trying to build, and what is not coming through online right now. I’ll
-              start with the business, not a sales script.
-            </p>
-            <p className="muted">
-              Already know what you need? <Link className="link" to="/book">Book a working session</Link>. Pay is step two.
+              Not mockups and not logos: each row is a live business with something specific to share — a floor, a
+              collection, a community, a way of doing things. Open any of them.
             </p>
           </div>
-          <InquiryForm variant="inquiry" source="home" />
+          <Ledger headingId="work-title" />
+          <LabNote />
         </div>
       </section>
+      <ClientNotes />
+
+      <section className="band band--fog" id="pricing" aria-labelledby="pricing-title">
+        <div className="wrap">
+          <Plate items={["Rate sheet", "Published pricing"]} />
+          <div className="split">
+            <h2 id="pricing-title">Three clear packages. The scope is on the page.</h2>
+            <p className="lede">
+              Basic is the straightforward entry point. Standard, Premium and larger custom systems add room for more
+              content, functionality and integration — <Link className="link" to="/services">see services and add-ons</Link>.
+            </p>
+          </div>
+          <RateSheet caption="FORGE CT website packages" />
+          <SheetNotes />
+          <p className="actions">
+            <span>
+              After launch, <Link className="link" to="/care">Care</Link> keeps the details true for {usd(CARE.care.price)} a
+              month — first month free after any build.
+            </span>
+          </p>
+        </div>
+      </section>
+
+      <NextSteps sectionId="contact" />
     </main>
   );
 }
