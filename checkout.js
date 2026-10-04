@@ -1,11 +1,12 @@
-/* FORGE CT — Stripe Checkout and Customer Portal hand-off.
-   Buttons post to a same-origin function, then send the shop to a
-   Stripe-hosted page. No card data ever touches this site. */
+/* FORGE CT — Stripe Customer Portal hand-off.
+   The thanks/ page posts to a same-origin function, then sends the shop to
+   Stripe-hosted billing. Care purchases use Payment Links (payments.js).
+   No card data ever touches this site. */
 (() => {
   "use strict";
 
   const FALLBACK =
-    "Could not open checkout. Email create@forge-ct.com and I will send an invoice.";
+    "Could not open billing. Email create@forge-ct.com.";
 
   function setStatus(button, message) {
     const target = document.getElementById(
@@ -34,7 +35,7 @@
       button.addEventListener("click", async (event) => {
         event.preventDefault();
         button.disabled = true;
-        setStatus(button, "Opening secure checkout…");
+        setStatus(button, "Opening secure billing…");
         try {
           window.location.assign(await handler(button));
         } catch (error) {
@@ -44,29 +45,6 @@
       });
     }
   }
-
-  function checkoutPayload(button) {
-    const emailField = document.querySelector("[data-checkout-email]");
-    const carePlanField = document.querySelector("[data-checkout-care-plan]");
-    if (!emailField && !carePlanField) {
-      return { plan: button.dataset.stripePlan };
-    }
-    if (emailField && !emailField.reportValidity()) {
-      throw new Error("Enter a valid email address to continue.");
-    }
-    if (carePlanField && !carePlanField.reportValidity()) {
-      throw new Error("Choose a Care plan to continue.");
-    }
-    return {
-      plan: button.dataset.stripePlan,
-      ...(emailField ? { email: emailField.value.trim() } : {}),
-      ...(carePlanField ? { care_plan: carePlanField.value } : {}),
-    };
-  }
-
-  bind("[data-stripe-plan]", (button) =>
-    post("/api/checkout", checkoutPayload(button)),
-  );
 
   bind("[data-stripe-portal]", () => {
     const sessionId = new URLSearchParams(window.location.search).get(
