@@ -82,12 +82,6 @@
   font-size: 0.9rem;
 }
 
-.pitch-care {
-  margin-top: 1.1rem !important;
-  font-size: 0.92rem;
-  font-weight: 600;
-}
-
 .visit-lead {
   margin: 0 0 1.1rem;
   color: var(--muted);
@@ -210,38 +204,6 @@
 .work-card--crop-status:hover .work-thumb img,
 .work-card--crop-status:focus-within .work-thumb img {
   object-position: center bottom;
-}
-
-/* Light conversion hero: keep body copy readable on the ink ground. */
-.conversion-lede {
-  color: rgba(14, 15, 18, 0.78);
-}
-
-.conversion-lede strong {
-  color: var(--paper);
-}
-
-.conversion-proof-line {
-  color: rgba(14, 15, 18, 0.62);
-}
-
-.conversion-proof-line a {
-  color: var(--paper);
-}
-
-.conversion-section--contact .contact-copy > p:not(.eyebrow),
-.conversion-section--contact .contact-email,
-.conversion-section--contact .contact-email a {
-  color: rgba(14, 15, 18, 0.78);
-}
-
-.conversion-offer li {
-  grid-template-columns: 2.1rem minmax(0, 1fr);
-}
-
-.conversion-offer li strong,
-.conversion-offer li span {
-  grid-column: 2;
 }
 
 /* The Forge-CT Audit — FIND / MISS / FORGE / NEXT.
