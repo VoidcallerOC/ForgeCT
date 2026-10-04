@@ -37,7 +37,7 @@ Optional environment variables:
 
 - `SMOKE_BASE_URL` — override the Forge origin for controlled verification
 - `SMOKE_TIMEOUT_MS` — per-request timeout, default `15000`
-- `SMOKE_MAX_MS` — response-time threshold, default `5000`
+- `SMOKE_MAX_MS` — response-time threshold, default `15000`
 - `SMOKE_JSON=1` — emit machine-readable JSON for CI artifacts
 
 CI runs production smoke after the existing quality and browser checks, only on a
