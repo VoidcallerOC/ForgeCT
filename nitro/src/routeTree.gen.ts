@@ -21,7 +21,6 @@ import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as ThanksRouteImport } from './routes/thanks'
 import { Route as WhyRouteImport } from './routes/why'
-import { Route as ApiCheckoutRouteImport } from './routes/api/checkout'
 import { Route as ApiContactRouteImport } from './routes/api/contact'
 import { Route as ApiPortalRouteImport } from './routes/api/portal'
 import { Route as ApiStripeWebhookRouteImport } from './routes/api/stripe-webhook'
@@ -88,11 +87,6 @@ const WhyRoute = WhyRouteImport.update({
   path: '/why',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiCheckoutRoute = ApiCheckoutRouteImport.update({
-  id: '/api/checkout',
-  path: '/api/checkout',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ApiContactRoute = ApiContactRouteImport.update({
   id: '/api/contact',
   path: '/api/contact',
@@ -132,7 +126,6 @@ export interface FileRoutesByFullPath {
   '/services': typeof ServicesRoute
   '/thanks': typeof ThanksRoute
   '/why': typeof WhyRoute
-  '/api/checkout': typeof ApiCheckoutRoute
   '/api/contact': typeof ApiContactRoute
   '/api/portal': typeof ApiPortalRoute
   '/api/stripe-webhook': typeof ApiStripeWebhookRoute
@@ -152,7 +145,6 @@ export interface FileRoutesByTo {
   '/services': typeof ServicesRoute
   '/thanks': typeof ThanksRoute
   '/why': typeof WhyRoute
-  '/api/checkout': typeof ApiCheckoutRoute
   '/api/contact': typeof ApiContactRoute
   '/api/portal': typeof ApiPortalRoute
   '/api/stripe-webhook': typeof ApiStripeWebhookRoute
@@ -173,7 +165,6 @@ export interface FileRoutesById {
   '/services': typeof ServicesRoute
   '/thanks': typeof ThanksRoute
   '/why': typeof WhyRoute
-  '/api/checkout': typeof ApiCheckoutRoute
   '/api/contact': typeof ApiContactRoute
   '/api/portal': typeof ApiPortalRoute
   '/api/stripe-webhook': typeof ApiStripeWebhookRoute
@@ -195,7 +186,6 @@ export interface FileRouteTypes {
     | '/services'
     | '/thanks'
     | '/why'
-    | '/api/checkout'
     | '/api/contact'
     | '/api/portal'
     | '/api/stripe-webhook'
@@ -215,7 +205,6 @@ export interface FileRouteTypes {
     | '/services'
     | '/thanks'
     | '/why'
-    | '/api/checkout'
     | '/api/contact'
     | '/api/portal'
     | '/api/stripe-webhook'
@@ -235,7 +224,6 @@ export interface FileRouteTypes {
     | '/services'
     | '/thanks'
     | '/why'
-    | '/api/checkout'
     | '/api/contact'
     | '/api/portal'
     | '/api/stripe-webhook'
@@ -256,7 +244,6 @@ export interface RootRouteChildren {
   ServicesRoute: typeof ServicesRoute
   ThanksRoute: typeof ThanksRoute
   WhyRoute: typeof WhyRoute
-  ApiCheckoutRoute: typeof ApiCheckoutRoute
   ApiContactRoute: typeof ApiContactRoute
   ApiPortalRoute: typeof ApiPortalRoute
   ApiStripeWebhookRoute: typeof ApiStripeWebhookRoute
@@ -350,13 +337,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WhyRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/checkout': {
-      id: '/api/checkout'
-      path: '/api/checkout'
-      fullPath: '/api/checkout'
-      preLoaderRoute: typeof ApiCheckoutRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/api/contact': {
       id: '/api/contact'
       path: '/api/contact'
@@ -408,7 +388,6 @@ const rootRouteChildren: RootRouteChildren = {
   ServicesRoute: ServicesRoute,
   ThanksRoute: ThanksRoute,
   WhyRoute: WhyRoute,
-  ApiCheckoutRoute: ApiCheckoutRoute,
   ApiContactRoute: ApiContactRoute,
   ApiPortalRoute: ApiPortalRoute,
   ApiStripeWebhookRoute: ApiStripeWebhookRoute,

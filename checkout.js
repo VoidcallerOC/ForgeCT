@@ -5,8 +5,7 @@
 (() => {
   "use strict";
 
-  const FALLBACK =
-    "Could not open billing. Email create@forge-ct.com.";
+  const FALLBACK = "Could not open billing. Email create@forge-ct.com.";
 
   function setStatus(button, message) {
     const target = document.getElementById(
