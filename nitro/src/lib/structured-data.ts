@@ -30,10 +30,7 @@ export const STRUCTURED_DATA: Record<string, unknown[]> = {
             "addressRegion": "CT",
             "addressCountry": "US"
           },
-          "areaServed": {
-            "@type": "City",
-            "name": "Greater Hartford"
-          },
+          "areaServed": "Greater Hartford",
           "offers": [
             {
               "@type": "Offer",
