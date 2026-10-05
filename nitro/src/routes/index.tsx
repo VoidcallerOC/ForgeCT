@@ -2,8 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Arrow, Plate } from "@/components/chrome";
 import { ClientNotes } from "@/components/client-notes";
 import { NextSteps } from "@/components/next-steps";
-import { RateSheet, SheetNotes } from "@/components/rate-sheet";
-import { LabNote, Ledger, PhoneRail } from "@/components/work";
+import { PackageChooser, RateSheet, SheetNotes } from "@/components/rate-sheet";
+import { LabNote, Ledger, PhoneRail, ProofDeck } from "@/components/work";
 import { pageHead } from "@/lib/seo";
 import { BUSINESS, CARE, PACKAGES, usd } from "@/lib/site";
 import { PROJECTS } from "@/lib/work";
@@ -39,20 +39,23 @@ function Home() {
             Custom websites for the businesses people <em>drive&nbsp;to.</em>
           </h1>
           <p className="lede">
-            Purpose-built sites for local retailers, restaurants, specialty shops and small businesses around {BUSINESS.area} —
-            so the phone check from the parking lot ends with someone walking in. Clearly scoped
-            packages from {usd(PACKAGES[0].price)}; anything bigger is scoped on its own.
+            Websites for shops and local businesses around {BUSINESS.area}. Built for the phone check before someone
+            walks in. Packages from {usd(PACKAGES[0].price)}.
           </p>
           <div className="actions">
             <Link to="/audit" className="btn" data-track="hero_audit_cta">
               Get your Forge-CT Audit <Arrow />
             </Link>
-            <Link to="/book" className="btn btn--line" data-track="hero_book_cta">
-              Book a working session
-            </Link>
+            <a className="btn btn--line" href="#work" data-track="hero_work_cta">
+              See the work
+            </a>
           </div>
           <p className="hero-note">
-            Built and run by {BUSINESS.founder} in {BUSINESS.locality}, CT.
+            Built and run by {BUSINESS.founder} in {BUSINESS.locality}, CT. Already know the scope?{" "}
+            <Link to="/book" data-track="hero_book_cta">
+              Book a working session
+            </Link>
+            .
           </p>
           <PhoneRail />
         </div>
@@ -64,9 +67,8 @@ function Home() {
             <Plate items={["The parking-lot test"]} />
             <h2 id="test-title">Every local site gets judged from a phone, in seconds.</h2>
             <p className="lede">
-              Before there was a storefront, there was a reason — a craft, a collection, a community worth building. A
-              FORGE site starts there, not from a template, and is built to answer the four questions a customer asks
-              before they decide to come in.
+              A FORGE site starts from the business, not a template, and answers the four questions a customer asks
+              before they come in.
             </p>
           </div>
           <ol className="questions">
@@ -160,10 +162,12 @@ function Home() {
           <div className="split">
             <h2 id="work-title">Real businesses. Real reasons to build.</h2>
             <p className="lede">
-              Not mockups and not logos: each row is a live business with something specific to share — a floor, a
-              collection, a community, a way of doing things. Open any of them.
+              Five live client sites. The screenshot is the proof. The line under it is the documented need and the build —
+              not a result we did not measure.
             </p>
           </div>
+          <ProofDeck />
+          <h3 className="index-label">Index</h3>
           <Ledger headingId="work-title" />
           <LabNote />
         </div>
@@ -176,10 +180,14 @@ function Home() {
           <div className="split">
             <h2 id="pricing-title">Three clear packages. The scope is on the page.</h2>
             <p className="lede">
-              Basic is the straightforward entry point. Standard, Premium and larger custom systems add room for more
-              content, functionality and integration — <Link className="link" to="/services">see services and add-ons</Link>.
+              Pick a starting point. The table under the cards is the full spec —{" "}
+              <Link className="link" to="/services">
+                services and add-ons
+              </Link>
+              .
             </p>
           </div>
+          <PackageChooser />
           <RateSheet caption="FORGE CT website packages" />
           <SheetNotes />
           <p className="actions">

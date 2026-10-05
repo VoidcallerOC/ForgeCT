@@ -34,11 +34,11 @@ function CaseStudy() {
           <div className="stack">
             <dl className="facts">
               <div>
-                <dt>The need</dt>
+                <dt>The problem</dt>
                 <dd>{project.need}</dd>
               </div>
               <div>
-                <dt>What Forge CT built</dt>
+                <dt>The Forge</dt>
                 <dd>{project.built}</dd>
               </div>
               {project.designIntent ? (

@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Arrow, PageHead } from "@/components/chrome";
 import { NextSteps } from "@/components/next-steps";
-import { LabNote, Ledger } from "@/components/work";
+import { LabNote, Ledger, ProofDeck } from "@/components/work";
 import { pageHead } from "@/lib/seo";
 import { PROJECTS } from "@/lib/work";
 
@@ -31,10 +31,9 @@ function WorkIndex() {
       <section className="band" aria-labelledby="ledger-title">
         <div className="wrap">
           <h2 id="ledger-title">Built for the way people find a place.</h2>
-          <p className="lede">
-            From a phone in the parking lot to a deeper inventory experience, these five client projects give each
-            business a useful place to be found and understood.
-          </p>
+          <p className="lede">Open a case. The screenshot is the existing site. The lines are the documented need and build.</p>
+          <ProofDeck />
+          <h3 className="index-label">Index</h3>
           <Ledger headingId="ledger-title" />
           <LabNote />
         </div>

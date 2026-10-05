@@ -27,6 +27,34 @@ const ROWS: { label: string; cell: (i: number) => { text: string; yes?: boolean;
   },
 ];
 
+/** One-line reading of the published package differences. Not a new offer. */
+const OUTCOMES = [
+  "Get the shop page online.",
+  "More pages, plus performance.",
+  "Room for advanced functionality.",
+];
+
+/** Scannable starting points above the certified spec table. */
+export function PackageChooser() {
+  return (
+    <ul className="chooser">
+      {PACKAGES.map((p, i) => (
+        <li key={p.id}>
+          <p className="tier">{p.tier}</p>
+          <p className="price">{usd(p.price)}</p>
+          <p className="outcome">{OUTCOMES[i]}</p>
+          <p className="fine">
+            Up to {p.pages} pages · {p.revisions} revision{p.revisions > 1 ? "s" : ""}
+          </p>
+          <Link className="link" to="/book" data-track={`chooser_book_${p.id}`}>
+            Book a session about {p.tier} <Arrow />
+          </Link>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 /** Basic / Standard / Premium as one spec table. Every value is from the certified /services page. */
 export function RateSheet({ caption }: { caption?: string }) {
   return (

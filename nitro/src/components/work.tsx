@@ -18,6 +18,69 @@ export function PhoneFrame({ project, eager = false }: { project: Project; eager
   );
 }
 
+/** Visual emphasis only — labels taken from the documented category, not a claimed result. */
+const EMPHASIS: Record<string, string> = {
+  "harris-in-wonderland": "Systems",
+  "thousand-sunny": "Storefront",
+  "m-and-j-video-games": "Walk-in",
+  "hard-hittin": "Launch",
+  "infinite-heroes": "Main Street",
+};
+
+/**
+ * Case-study rhythm for the homepage and work index.
+ * Uses only documented need, build, tags, place, and existing screenshots.
+ */
+export function ProofDeck() {
+  return (
+    <div className="proof-deck">
+      {PROJECTS.map((p) => (
+        <article className="proof" key={p.slug} data-emphasis={EMPHASIS[p.slug] ?? p.category}>
+          <Link to="/work/$slug" params={{ slug: p.slug }} className="proof-shot" data-track={`proof_${p.slug}`}>
+            <img
+              src={p.image}
+              alt={`${p.name} website`}
+              width={720}
+              height={p.imageHeight}
+              loading="lazy"
+              decoding="async"
+            />
+          </Link>
+          <div className="proof-copy">
+            <p className="mono">
+              {EMPHASIS[p.slug] ?? p.category} · {p.place}
+            </p>
+            <h3>
+              <Link to="/work/$slug" params={{ slug: p.slug }}>
+                {p.name}
+              </Link>
+            </h3>
+            <p className="proof-kicker">The problem</p>
+            <p>{p.need}</p>
+            <p className="proof-kicker">The Forge</p>
+            <p>{p.built}</p>
+            <ul className="tag-row">
+              {p.tags.slice(0, 4).map((t) => (
+                <li key={t}>{t}</li>
+              ))}
+            </ul>
+            <div className="actions">
+              <Link className="btn btn--line" to="/work/$slug" params={{ slug: p.slug }}>
+                Case study <Arrow />
+              </Link>
+              {p.site ? (
+                <a className="link" href={p.site} target="_blank" rel="noopener noreferrer" data-track={`proof_live_${p.slug}`}>
+                  Visit {p.siteLabel} <Arrow dir="out" />
+                </a>
+              ) : null}
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  );
+}
+
 /** The five live client sites, as they look on the phone a customer is holding. */
 export function PhoneRail() {
   return (
