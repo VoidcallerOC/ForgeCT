@@ -84,13 +84,13 @@ The repository now contains the conversion-foundation changes from the execution
 
 ## Before → after
 
-| Before | After |
-| --- | --- |
-| Hero led with generic “Custom websites. Built fast.” | Hero names the businesses Forge serves and the physical storefront context. |
-| Real work appeared after speed, marquee, and story sections. | Five real projects appear immediately after the hero. |
-| Package prices were mainly a later-page decision point. | $750 / $1,500 / $2,500 are visible in the first viewport. |
-| Audit was a good standalone page but not a homepage signature. | Homepage now introduces the Audit as a Forge-specific inspection ticket. |
-| Production and repository HTML were assumed to be the same. | Drift is documented explicitly and production remains unclaimed/unverified. |
+| Before                                                         | After                                                                       |
+| -------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| Hero led with generic “Custom websites. Built fast.”           | Hero names the businesses Forge serves and the physical storefront context. |
+| Real work appeared after speed, marquee, and story sections.   | Five real projects appear immediately after the hero.                       |
+| Package prices were mainly a later-page decision point.        | $750 / $1,500 / $2,500 are visible in the first viewport.                   |
+| Audit was a good standalone page but not a homepage signature. | Homepage now introduces the Audit as a Forge-specific inspection ticket.    |
+| Production and repository HTML were assumed to be the same.    | Drift is documented explicitly and production remains unclaimed/unverified. |
 
 ## 10/10 scorecard
 
