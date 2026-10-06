@@ -1,13 +1,13 @@
 # Forge-CT 10/10 Execution Report
 
 **Date:** 2026-10-06  
-**Branch:** `forge-10-10-conversion`
+**Branch:** `main` (`2c584bf`, merged via PR #146)
 
 ## Status
 
-**PARTIAL — implementation and local verification complete; production deployment unverified.**
+**DEPLOYED — implementation, protected checks, and production verification complete.**
 
-The repository now contains the conversion-foundation changes from the execution brief. The production domain was checked before implementation, but it serves a different HTML snapshot from this repository’s `main` branch. No production deployment or merge was performed in this task.
+The conversion-focused changes shipped through PRs [#145](https://github.com/VoidcallerOC/ForgeCT/pull/145) and [#146](https://github.com/VoidcallerOC/ForgeCT/pull/146). The Vercel production deployment `dpl_HiQ5zbVGKZLcbUHkBuNAo22EuVac` is READY, aliases `www.forge-ct.com`, and serves GitHub commit `2c584bfb9b6be6ab1c9a9b53081c071a8c9fc0fd` from `VoidcallerOC/ForgeCT` `main`.
 
 ## Current-state audit before changes
 
@@ -45,11 +45,10 @@ The repository now contains the conversion-foundation changes from the execution
 - Existing form handling, security headers, accessibility basics, and browser coverage.
 - The existing charcoal/limestone visual identity and editorial serif/sans typography system.
 
-### Unknown
+### Resolved / still unknown
 
-- Which Vercel project/deployment is serving `www.forge-ct.com`; the configured Vercel connector did not return a matching project for the selected repository.
-- Production behavior of the new implementation, because it was not deployed.
-- Real business outcomes beyond the documented project/build facts; none were invented.
+- Production source/deployment identity; resolved by verifying the Vercel project, source commit, and production alias after merge.
+- Business outcome metrics beyond documented project/build facts; none are available, so none were inferred or added.
 
 ## What changed
 
@@ -73,28 +72,33 @@ The repository now contains the conversion-foundation changes from the execution
 - Local HTTP smoke test returned HTTP 200 for `/`, `/audit/`, `/work/`, `/services/`, and `/manus-routes.json`.
 - Local route manifest returned valid JSON with 18 declared page routes.
 - `git diff --check` passed.
+- Nitro release pipeline (`npm run check`) passed: typecheck, lint, API parity, unit tests, build, and output certification.
+- Nitro Playwright browser suite passed: **58/58 tests**.
+- Protected checks on PR #146 passed, including both **Validate site** and **Validate Nitro rebuild**; Vercel preview was READY before merge.
+- PR #146 merged as `2c584bfb9b6be6ab1c9a9b53081c071a8c9fc0fd`; the production Vercel deployment is READY and aliases `www.forge-ct.com`.
+- Production GET checks returned HTTP 200 for `/`, `/work`, `/services`, `/audit`, `/book`, and `/manus-routes.json`; the route manifest is valid JSON and includes `/audit`.
+- Production desktop and mobile browser checks confirmed the Audit headline, FIND / MISS / FORGE / NEXT ticket, no horizontal overflow, and no console or page errors.
+- Production homepage review confirmed all five real project names, all three published prices, and visible Audit CTAs.
 
-## Not verified
+## Not measured / not performed
 
-- The new implementation is not deployed to production.
-- Production deployment identity/source commit is not verified; the live domain currently differs from repository `main`.
-- Production Lighthouse/Core Web Vitals were not run.
-- Real inquiry delivery was not submitted; test-mode mocks were used, as required by the repository’s safe test setup.
+- Production Lighthouse/Core Web Vitals and field performance were not measured.
+- Real inquiry delivery was not submitted; the test suite used mocks and production verification used GET-only checks.
 - No unsupported case-study metrics, testimonials, conversion claims, rankings, revenue claims, or customer-growth claims were added.
 
 ## Before → after
 
-| Before                                                         | After                                                                       |
-| -------------------------------------------------------------- | --------------------------------------------------------------------------- |
-| Hero led with generic “Custom websites. Built fast.”           | Hero names the businesses Forge serves and the physical storefront context. |
-| Real work appeared after speed, marquee, and story sections.   | Five real projects appear immediately after the hero.                       |
-| Package prices were mainly a later-page decision point.        | $750 / $1,500 / $2,500 are visible in the first viewport.                   |
-| Audit was a good standalone page but not a homepage signature. | Homepage now introduces the Audit as a Forge-specific inspection ticket.    |
-| Production and repository HTML were assumed to be the same.    | Drift is documented explicitly and production remains unclaimed/unverified. |
+| Before                                                         | After                                                                         |
+| -------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| Hero led with generic “Custom websites. Built fast.”           | Hero names the businesses Forge serves and the physical storefront context.   |
+| Real work appeared after speed, marquee, and story sections.   | Five real projects appear immediately after the hero.                         |
+| Package prices were mainly a later-page decision point.        | $750 / $1,500 / $2,500 are visible in the first viewport.                     |
+| Audit was a good standalone page but not a homepage signature. | Homepage now introduces the Audit as a Forge-specific inspection ticket.      |
+| Production and repository HTML had drifted.                    | Vercel source was confirmed; the merged main commit is now live and verified. |
 
 ## 10/10 scorecard
 
-Scores reflect the checked-out implementation after these changes, not the unverified production snapshot.
+Scores reflect the implemented and production-verified site. They are not a claim that business outcomes or field performance have been measured.
 
 - **Positioning:** 8.5/10
 - **Proof:** 9/10
@@ -105,12 +109,12 @@ Scores reflect the checked-out implementation after these changes, not the unver
 - **Conversion:** 8.5/10
 - **Mobile:** 8/10
 - **Trust:** 9/10
-- **Production quality:** 5/10 — local checks pass, but the production source/deployment is not established
+- **Production quality:** 8/10 — protected release and production routes/responsive behavior verified; field performance not benchmarked
 
-## Overall score: 8.2/10
+## Overall score: 8.5/10
 
-This is not a 10/10 declaration. The implementation materially improves proof density, positioning, pricing visibility, and the Audit path, but production deployment alignment and a visual review of the deployed result remain open.
+This is not a 10/10 declaration. The implementation materially improves proof density, positioning, pricing visibility, and the Audit path, and the deployed result has been reviewed at desktop and mobile widths. The remaining evidence gap is measured field performance and real conversion outcomes; those are not fabricated or inferred.
 
-## Recommended next controlled step
+## Recommended next step
 
-Resolve the Vercel project/deployment mismatch first. Then deploy this branch through the repository’s protected PR flow, run the production GET-only smoke suite against the resulting deployment, and review the homepage and Audit route at desktop and mobile widths before calling the work complete.
+No deployment blocker remains. If the business wants to pursue a higher evidence-based score, measure Core Web Vitals and real inquiry/conversion outcomes over time, then revise the site only where those measurements identify a concrete problem.
