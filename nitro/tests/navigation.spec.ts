@@ -12,7 +12,7 @@ const PRIMARY = [
   { label: "Why Forge", path: "/why", h1: "Agencies quote you. I show you live shops." },
   { label: "Contact", path: "/contact", h1: "What’s on your floor?" },
 ];
-const CTA = { path: "/audit", h1: "What does your business look like before someone walks through the door?" };
+const CTA = { path: "/audit", h1: "The digital inspection ticket for your storefront." };
 
 const VIEWPORTS = [
   { name: "desktop", width: 1440, height: 900, nav: "nav.nav--desk" },

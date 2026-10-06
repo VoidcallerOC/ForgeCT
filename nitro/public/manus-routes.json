@@ -1,0 +1,22 @@
+{
+  "routes": [
+    { "path": "/", "title": "Home" },
+    { "path": "/audit", "title": "Forge-CT Audit" },
+    { "path": "/book", "title": "Book a project" },
+    { "path": "/care", "title": "Care" },
+    { "path": "/connecticut-web-design", "title": "Connecticut web design" },
+    { "path": "/contact", "title": "Contact" },
+    { "path": "/hartford-web-design", "title": "Hartford web design" },
+    { "path": "/pay", "title": "Care plans" },
+    { "path": "/privacy", "title": "Privacy" },
+    { "path": "/services", "title": "Services" },
+    { "path": "/thanks", "title": "Thanks" },
+    { "path": "/why", "title": "Why Forge CT" },
+    { "path": "/work", "title": "Work" },
+    { "path": "/work/harris-in-wonderland", "title": "Harris in Wonderland" },
+    { "path": "/work/thousand-sunny", "title": "Thousand Sunny" },
+    { "path": "/work/m-and-j-video-games", "title": "M and J Video Games" },
+    { "path": "/work/hard-hittin", "title": "Hard Hittin Card Shop" },
+    { "path": "/work/infinite-heroes", "title": "Infinite Heroes" }
+  ]
+}
