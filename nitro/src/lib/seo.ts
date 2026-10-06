@@ -20,11 +20,12 @@ const CT_OG_ALT = "FORGE CT web design and development for Connecticut businesse
  */
 export const META: Record<string, PageMeta> = {
   "/": {
-    title: "FORGE CT — Custom websites. Built fast.",
+    title: "FORGE CT — Websites for the businesses people drive to.",
     description:
-      "Custom websites and web development for local retailers, restaurants, specialty shops, and other small businesses in Greater Hartford. Packages from $750; custom functionality scoped separately.",
+      "Custom websites for the businesses people drive to. Forge CT builds clear, fast storefronts for local shops and businesses in Connecticut. Packages from $750.",
+    ogTitle: "FORGE CT — Custom websites for the businesses people drive to.",
     ogDescription:
-      "Custom business websites for local retailers, restaurants, specialty shops, and other small businesses around Greater Hartford. Packages from $750; larger systems scoped separately.",
+      "Clear, fast storefronts for local shops and businesses in Connecticut. Packages from $750; larger systems scoped separately.",
     ogImageAlt: "FORGE CT custom websites and systems for local businesses.",
   },
   "/audit": {
