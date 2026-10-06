@@ -19,7 +19,7 @@ const READS = [
 function Audit() {
   return (
     <main id="main">
-      <PageHead plate={["The Forge-CT Audit", "Farmington", "Greater Hartford"]} title="What does your business look like before someone walks through the door?">
+      <PageHead plate={["The Forge-CT Audit", "Farmington", "Greater Hartford"]} title="The digital inspection ticket for your storefront.">
         <p className="lede">
           Give me your website. I’ll show you what your customer sees — and reply with three practical fixes within 24
           hours. No pitch deck, no quote maze.

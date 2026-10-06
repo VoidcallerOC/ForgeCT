@@ -90,16 +90,20 @@ function Home() {
               <h2 id="audit-title">Before I build anything, I’ll show you what your customers see.</h2>
               <ol className="steps-inline">
                 <li>
-                  <b>Send your URL</b>
-                  <span>And a line on what feels stuck.</span>
+                  <b>FIND</b>
+                  <span>What already earns attention.</span>
                 </li>
                 <li>
-                  <b>Get the audit</b>
-                  <span>What works, what’s getting lost, what I’d change.</span>
+                  <b>MISS</b>
+                  <span>What a customer cannot find.</span>
                 </li>
                 <li>
-                  <b>Decide from there</b>
-                  <span>Keep the fixes, or talk about a build.</span>
+                  <b>FORGE</b>
+                  <span>Three practical fixes for your shop.</span>
+                </li>
+                <li>
+                  <b>NEXT</b>
+                  <span>What to build, if the fixes point to more.</span>
                 </li>
               </ol>
               <p className="fine audit-sample-link">
