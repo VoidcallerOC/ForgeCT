@@ -45,9 +45,9 @@ The conversion-focused changes shipped through PRs [#145](https://github.com/Voi
 - Existing form handling, security headers, accessibility basics, and browser coverage.
 - The existing charcoal/limestone visual identity and editorial serif/sans typography system.
 
-### Unknown
+### Resolved / still unknown
 
-- Whether the production deployment had been rebuilt from the repository; resolved by verifying the Vercel project, source commit, and production alias after merge.
+- Production source/deployment identity; resolved by verifying the Vercel project, source commit, and production alias after merge.
 - Business outcome metrics beyond documented project/build facts; none are available, so none were inferred or added.
 
 ## What changed
@@ -88,13 +88,13 @@ The conversion-focused changes shipped through PRs [#145](https://github.com/Voi
 
 ## Before → after
 
-| Before                                                         | After                                                                       |
-| -------------------------------------------------------------- | --------------------------------------------------------------------------- |
-| Hero led with generic “Custom websites. Built fast.”           | Hero names the businesses Forge serves and the physical storefront context. |
-| Real work appeared after speed, marquee, and story sections.   | Five real projects appear immediately after the hero.                       |
-| Package prices were mainly a later-page decision point.        | $750 / $1,500 / $2,500 are visible in the first viewport.                   |
-| Audit was a good standalone page but not a homepage signature. | Homepage now introduces the Audit as a Forge-specific inspection ticket.    |
-| Production and repository HTML were assumed to be the same.    | Drift is documented explicitly and production remains unclaimed/unverified. |
+| Before                                                         | After                                                                         |
+| -------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| Hero led with generic “Custom websites. Built fast.”           | Hero names the businesses Forge serves and the physical storefront context.   |
+| Real work appeared after speed, marquee, and story sections.   | Five real projects appear immediately after the hero.                         |
+| Package prices were mainly a later-page decision point.        | $750 / $1,500 / $2,500 are visible in the first viewport.                     |
+| Audit was a good standalone page but not a homepage signature. | Homepage now introduces the Audit as a Forge-specific inspection ticket.      |
+| Production and repository HTML had drifted.                    | Vercel source was confirmed; the merged main commit is now live and verified. |
 
 ## 10/10 scorecard
 
