@@ -85,12 +85,19 @@ function Pay() {
             <h2 id="builds">Website builds</h2>
             <p className="lede">
               Review the <Link className="link" to="/services">Basic, Standard, and Premium packages and their add-ons</Link>.
-              Build payments are arranged after the project scope is confirmed; e-commerce, custom functionality, and larger
-              systems may need a separate quote.
+              There is no public build-deposit checkout. After scope is confirmed, FORGE sends a Stripe invoice (or accepts
+              check / bank transfer). E-commerce, custom functionality, and larger systems may need a separate quote.
             </p>
             <p className="muted">
-              Ready to scope a build? <Link className="link" to="/contact">Tell FORGE CT about your project</Link>. You will
-              receive a payment request only after the work and scope are agreed.
+              Ready to scope a build?{" "}
+              <Link className="link" to="/contact">
+                Tell FORGE CT about your project
+              </Link>{" "}
+              or{" "}
+              <Link className="link" to="/book">
+                request a working session
+              </Link>
+              . You receive a payment request only after the work and scope are agreed — not from this page.
             </p>
           </div>
           <div className="faq">

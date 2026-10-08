@@ -21,7 +21,7 @@ const COPY: Record<FormVariant, Copy> = {
     submit: "Send your story",
     sending: "Sending your inquiry…",
     done: "Received. I’ll reply with three practical fixes within 24 hours.",
-    note: "Used only to reply to your inquiry. Not stored on this website.",
+    note: "Used to reply to your inquiry and keep the request in FORGE’s private lead queue.",
   },
   audit: {
     message: "What feels stuck? (optional)",
@@ -29,7 +29,7 @@ const COPY: Record<FormVariant, Copy> = {
     submit: "Get my Forge-CT Audit",
     sending: "Sending your inquiry…",
     done: "Received. I’ll reply with three practical fixes within 24 hours.",
-    note: "Used only to reply with your audit. Not stored on this website.",
+    note: "Used to reply with your audit and keep the request in FORGE’s private lead queue.",
   },
   booking: {
     message: "What should we cover? (optional)",
@@ -37,7 +37,7 @@ const COPY: Record<FormVariant, Copy> = {
     submit: "Request this time",
     sending: "Sending your appointment request…",
     done: "Request received. I’ll confirm the appointment by email.",
-    note: "Your request is used only to coordinate the appointment. The time is confirmed by email.",
+    note: "Used to coordinate the appointment and keep the request in FORGE’s private lead queue. The time is confirmed by email — not held until then.",
   },
 };
 
@@ -87,6 +87,7 @@ export function InquiryForm({
       siteUrl: text(d, "siteUrl"),
       message,
       website: text(d, "website"),
+      source: variant,
     };
 
     setSending(true);

@@ -48,6 +48,7 @@ test.describe("certified business-critical flows", () => {
         siteUrl: "",
         message: "A local service business looking for clearer information.",
         website: "",
+        source: "inquiry",
       },
     ]);
   });
@@ -63,7 +64,12 @@ test.describe("certified business-critical flows", () => {
     await form.getByLabel("Your website URL").fill("https://example.com");
     await form.getByRole("button", { name: /Get my Forge-CT Audit/ }).click();
     await expect(form.getByRole("status")).toHaveText(/three practical fixes within 24 hours/);
-    expect(bodies[0]).toMatchObject({ name: "Pat Owner", siteUrl: "https://example.com", message: "" });
+    expect(bodies[0]).toMatchObject({
+      name: "Pat Owner",
+      siteUrl: "https://example.com",
+      message: "",
+      source: "audit",
+    });
   });
 
   test("sample Audit is explicitly fictional and pairs three observations with practical changes", async ({ page }) => {
@@ -110,6 +116,7 @@ test.describe("certified business-critical flows", () => {
     expect(bodies[0].message).toBe(
       "Appointment request:\nPreferred date: 2026-10-20\nPreferred time: 10:30\nTime zone: Eastern Time\n\nEvents page",
     );
+    expect(bodies[0].source).toBe("booking");
   });
 
   test("API failure shows the server's message, never a false success", async ({ page }) => {

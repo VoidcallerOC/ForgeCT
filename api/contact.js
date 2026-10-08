@@ -1,6 +1,9 @@
 const MAX_POSTS = 5;
 const MAX_BODY_BYTES = 12 * 1024;
 import { clientIp, isRateLimited } from "./_ratelimit.js";
+import { createInquiryLead, markInquiryLeadDelivery } from "./_lead-store.js";
+
+const ALLOWED_SOURCES = new Set(["inquiry", "audit", "booking"]);
 
 function header(request, name) {
   const headers = request.headers || {};
@@ -122,6 +125,15 @@ export default async function handler(request, response) {
   const company = normalizeText(payload.company);
   const siteUrl = normalizeText(payload.siteUrl);
   const message = normalizeText(payload.message, { preserveNewlines: true });
+  const requestedSource = normalizeText(payload.source).toLowerCase();
+  let source = ALLOWED_SOURCES.has(requestedSource)
+    ? requestedSource
+    : "unknown";
+  if (source === "unknown") {
+    if (message.startsWith("Appointment request:")) source = "booking";
+    else if (siteUrl) source = "audit";
+    else source = "inquiry";
+  }
 
   if (name.length < 2 || name.length > 100) {
     return response
@@ -185,11 +197,43 @@ export default async function handler(request, response) {
     });
   }
 
+  const slaHours = source === "audit" ? 24 : null;
+  let leadId = null;
+  try {
+    leadId = await createInquiryLead({
+      source,
+      name,
+      email,
+      company,
+      siteUrl,
+      message,
+      slaHours,
+    });
+  } catch (error) {
+    // Soft-fail: durable queue must not block email delivery if the migration
+    // is not applied yet. Alerting should catch these errors.
+    console.error("contact lead persist failed", {
+      error: error instanceof Error ? error.message : "unknown",
+      source,
+      ip: clientIp(request),
+    });
+  }
+
   const to = process.env.CONTACT_TO_EMAIL || "create@forge-ct.com";
   const from =
     process.env.CONTACT_FROM_EMAIL || "FORGE CT <onboarding@resend.dev>";
 
+  const subjectPrefix =
+    source === "audit"
+      ? "Audit request"
+      : source === "booking"
+        ? "Booking request"
+        : "Shop inquiry";
+
   const text = [
+    `Source: ${source}`,
+    leadId ? `Lead id: ${leadId}` : "",
+    slaHours ? `Audit SLA: reply within ${slaHours} hours` : "",
     `Name: ${name}`,
     `Email: ${email}`,
     company ? `Company: ${company}` : "",
@@ -214,7 +258,7 @@ export default async function handler(request, response) {
         from,
         to: [to],
         reply_to: email,
-        subject: `Shop inquiry from ${name}`,
+        subject: `${subjectPrefix} from ${name}`,
         text,
       }),
     });
@@ -224,8 +268,20 @@ export default async function handler(request, response) {
   } catch (error) {
     console.error("contact delivery request failed", {
       error: error instanceof Error ? error.name : "unknown",
+      leadId: leadId || "none",
+      source,
       ip: clientIp(request),
     });
+    if (leadId) {
+      try {
+        await markInquiryLeadDelivery(leadId, { status: "notify_failed" });
+      } catch (markError) {
+        console.error("contact lead delivery mark failed", {
+          error: markError instanceof Error ? markError.message : "unknown",
+          leadId,
+        });
+      }
+    }
     return response.status(502).json({
       ok: false,
       error: "The message could not be delivered. Please email directly.",
@@ -235,18 +291,48 @@ export default async function handler(request, response) {
   if (!resendResponse.ok) {
     console.error("contact delivery failed", {
       status: resendResponse.status,
+      leadId: leadId || "none",
+      source,
       ip: clientIp(request),
     });
+    if (leadId) {
+      try {
+        await markInquiryLeadDelivery(leadId, { status: "notify_failed" });
+      } catch (markError) {
+        console.error("contact lead delivery mark failed", {
+          error: markError instanceof Error ? markError.message : "unknown",
+          leadId,
+        });
+      }
+    }
     return response.status(502).json({
       ok: false,
       error: "The message could not be delivered. Please email directly.",
     });
   }
 
+  const providerMessageId =
+    typeof resendBody.id === "string" ? resendBody.id : "unavailable";
+  if (leadId) {
+    try {
+      await markInquiryLeadDelivery(leadId, {
+        status: "notified",
+        providerMessageId:
+          providerMessageId === "unavailable" ? "" : providerMessageId,
+      });
+    } catch (markError) {
+      console.error("contact lead delivery mark failed", {
+        error: markError instanceof Error ? markError.message : "unknown",
+        leadId,
+      });
+    }
+  }
+
   console.info("contact delivery accepted", {
     provider: "resend",
-    providerMessageId:
-      typeof resendBody.id === "string" ? resendBody.id : "unavailable",
+    providerMessageId,
+    leadId: leadId || "none",
+    source,
     status: resendResponse.status,
     ip: clientIp(request),
   });
