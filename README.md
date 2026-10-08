@@ -115,7 +115,8 @@ Stripe account for checkout, PaymentIntent, subscription, and invoice events.
 The same Supabase project provides the distributed fixed-window limiter used by
 the public `/api/checkout` and `/api/contact` endpoints (and `/api/portal`). Run
 the current `sql/stripe-webhook-events.sql` migration before deploying those
-endpoints with `NODE_ENV=production`.
+endpoints with `NODE_ENV=production`. Also run `sql/inquiry-leads.sql` so
+`/api/contact` can persist durable lead rows (soft-fails until applied).
 
 Two operational details remain:
 
@@ -133,11 +134,14 @@ Two operational details remain:
 The contact endpoint accepts JSON only, rejects request bodies over 12 KiB, applies
 Unicode normalization and bounded email validation, and logs validation and delivery
 outcomes with the client IP but never the submitted message. Successful Resend
-acceptance logs include only the provider message ID when available; transport and
-provider failures return an explicit non-success response. This remains an email-only
-pipeline with no durable lead queue, so Vercel runtime-log monitoring is required to
-detect delivery failures. The existing honeypot and shared IP rate limiter remain the
-primary anti-abuse controls.
+acceptance logs include only the provider message ID (and lead id when persisted) when
+available; transport and provider failures return an explicit non-success response.
+Validated inquiries are also written to a private Supabase `inquiry_leads` table when
+`sql/inquiry-leads.sql` has been applied (statuses: `received` → `notified` /
+`notify_failed`; audit rows set a 24h `sla_due_at`). Lead persistence soft-fails if the
+migration is missing so email delivery still runs; treat `contact lead persist failed`
+runtime errors as a production alert. The existing honeypot and shared IP rate limiter
+remain the primary anti-abuse controls.
 
 Embedding Stripe.js or a pricing table instead of linking out would require
 adding `https://js.stripe.com` to `script-src`, adding a `frame-src`, and

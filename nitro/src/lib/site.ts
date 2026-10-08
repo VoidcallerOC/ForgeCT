@@ -22,6 +22,13 @@ export const BUSINESS = {
 
 export const MAILTO = `mailto:${BUSINESS.email}`;
 
+/**
+ * Optional public scheduling URL (Cal.com, Google Calendar appointment schedule, etc.).
+ * Leave empty until Nick publishes a real booking link. When empty, /book uses the
+ * request form and must not claim a slot is held.
+ */
+export const SCHEDULING_URL = "";
+
 export type PackageId = "basic" | "standard" | "premium";
 
 export type Package = {

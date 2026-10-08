@@ -35,9 +35,9 @@ export const META: Record<string, PageMeta> = {
     ogTitle: "The Forge-CT Audit — What your customers see before they walk in",
   },
   "/book": {
-    title: "Book a shop website session — FORGE CT",
+    title: "Request a shop website session — FORGE CT",
     description:
-      "Book a working session for your Hartford-area shop website. Get a clear plan for hours, events, products, and the customer path.",
+      "Request a working session for your Hartford-area shop website. Prefer a live calendar link when available; otherwise FORGE confirms by email.",
   },
   "/care": {
     title: "Business website care from $35/month — FORGE CT",
@@ -64,7 +64,7 @@ export const META: Record<string, PageMeta> = {
       "Custom website packages for Hartford-area shops and local businesses: Basic $750, Standard $1,500, Premium $2,500. Extra-fast delivery is available for defined package scopes.",
   },
   "/pay": {
-    title: "Pay FORGE CT — care plans and build deposits",
+    title: "Pay FORGE CT — Care plans and build invoices",
     description:
       "Start a FORGE CT Care or Care+ plan. Website package payments are arranged after project scope is confirmed.",
     ogDescription:

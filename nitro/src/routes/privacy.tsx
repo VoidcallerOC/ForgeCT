@@ -26,16 +26,17 @@ function Privacy() {
           This notice explains how FORGE CT handles information when you visit this website or choose to get in touch.
         </p>
         <p className="lede">
-          <strong>Effective date:</strong> 28 August 2026
+          <strong>Effective date:</strong> 8 October 2026
         </p>
       </PageHead>
       <section className="band">
         <div className="wrap prose">
           <h2>Information you choose to share</h2>
           <p>
-            The inquiry form submits your name, email address, company, and shop details to a FORGE CT server function so
-            the message can be delivered by email. The website does not keep a public database of inquiries. If you email
-            FORGE CT directly, the information in your message is used to respond and discuss potential work.
+            The inquiry form submits your name, email address, company, website URL (when provided), and shop details to a
+            FORGE CT server function so the message can be delivered by email and kept in a private lead record used to
+            reply, track follow-up, and honor audit timing. That record is not a public directory and is not sold. If you
+            email FORGE CT directly, the information in your message is used to respond and discuss potential work.
           </p>
           <h2>Information processed automatically</h2>
           <p>

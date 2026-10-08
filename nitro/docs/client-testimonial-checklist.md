@@ -1,6 +1,13 @@
 # FORGE CT client testimonial checklist
 
-**Current status:** No first-party Forge CT testimonial with approved public attribution was found in the repository or current site review. The quote component therefore stays unpublished until real client wording and permission are available.
+**Current status:** NOT STARTED / BLOCKED on owner-approved quotes. No first-party Forge CT testimonial with approved public attribution exists in the repository. `src/components/client-notes.tsx` stays empty and renders nothing until real client wording and permission are available.
+
+**Owner (Nick) — exact asks before publish:**
+
+1. Ask 2–3 completed-build clients for a short note (email reply is enough).
+2. Get explicit permission to publish quote + name + business name on forge-ct.com.
+3. Paste only approved wording into `CLIENT_NOTES` in `src/components/client-notes.tsx` (never invent or polish into a claim they did not make).
+4. Do not add star ratings, revenue, or conversion claims.
 
 ## Collect two or three strong notes
 

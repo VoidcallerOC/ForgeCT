@@ -34,6 +34,7 @@ function request(body, headers = { "content-type": "application/json" }) {
 test.afterEach(() => {
   delete process.env.NODE_ENV;
   delete process.env.RESEND_API_KEY;
+  delete process.env.LEAD_STORE;
   resetMemoryRateLimiter();
 });
 
@@ -69,6 +70,7 @@ test("rejects oversized requests", async () => {
 
 test("normalizes Unicode input and lowercases the reply address", async () => {
   process.env.NODE_ENV = "test";
+  process.env.LEAD_STORE = "memory";
   process.env.RESEND_API_KEY = "resend-test-key";
   const originalFetch = globalThis.fetch;
   let sent;
@@ -100,6 +102,7 @@ test("normalizes Unicode input and lowercases the reply address", async () => {
 });
 
 test("returns an explicit failure when Resend rejects delivery", async () => {
+  process.env.LEAD_STORE = "memory";
   process.env.RESEND_API_KEY = "resend-test-key";
   const originalFetch = globalThis.fetch;
   globalThis.fetch = async () => ({
@@ -132,6 +135,7 @@ test("returns an explicit failure when Resend rejects delivery", async () => {
 });
 
 test("returns an explicit failure when the Resend request throws", async () => {
+  process.env.LEAD_STORE = "memory";
   process.env.RESEND_API_KEY = "resend-test-key";
   const originalFetch = globalThis.fetch;
   globalThis.fetch = async () => {

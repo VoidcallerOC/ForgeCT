@@ -58,6 +58,15 @@ Record the listing URL, login owner, submitted NAP, verification state, and date
 - Final business hours or appointment-only wording
 - Preferred directory login owner
 
+## Automator vs owner split (P0/P1)
+
+| Item                                                | Who                      | Status            |
+| --------------------------------------------------- | ------------------------ | ----------------- |
+| On-page SEO, alt, sitemap, robots                   | Code / already shipped   | Done in site code |
+| Publish phone / street address in schema + UI       | Owner after NAP decision | BLOCKED           |
+| Claim GBP, directories, GSC verify + sitemap submit | Owner                    | NOT STARTED       |
+| Fabricate NAP or listing verification               | Nobody                   | Forbidden         |
+
 ## Deployment note
 
 The repository’s canonical URLs and sitemap use `https://www.forge-ct.com/`. Confirm that this domain is the production alias before requesting indexing. After deployment, verify `/robots.txt`, `/sitemap.xml`, the homepage, `/hartford-web-design`, and `/services` return HTTP 200 and expose the revised metadata.

@@ -76,7 +76,18 @@ records and cleanup plan.
 
 ## Alerting status
 
-No uptime/error alert provider or owner is established in the current evidence.
-This phase adds CI detection only; it does not silently create a new alerting
-integration. Establish an owner, provider, notification destination, retention,
-and escalation policy before adding automated alerts.
+**Partial (repo-native):** GitHub Actions runs the GET-only production smoke
+suite on every push to `main` and on a six-hour schedule
+(`.github/workflows/production-smoke-schedule.yml`). Workflow failures are the
+primary uptime/regression signal. Ensure Nick (or the ops owner) watches this
+repository / has Actions failure email enabled.
+
+**Still owner-gated:**
+
+- Vercel Observability / log alerts for function errors containing
+  `contact delivery failed`, `contact lead persist failed`, or
+  `distributed contact rate limiter failed` (no log drain is configured today).
+- Controlled Resend delivery checks (see below) — not part of automatic smoke.
+- Optional third-party uptime provider if GitHub notifications are insufficient.
+
+Do not add noisy synthetic form POSTs as health checks.

@@ -8,6 +8,7 @@ type ClientNote = {
 
 // Intentionally empty: the repository contains no FORGE CT client testimonials with publication permission.
 // Add only exact, approved client wording and attribution; never seed this list with sample or placeholder quotes.
+// Owner process: nitro/docs/client-testimonial-checklist.md
 const CLIENT_NOTES: readonly ClientNote[] = [];
 
 export function ClientNotes() {
