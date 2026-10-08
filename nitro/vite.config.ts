@@ -43,10 +43,12 @@ export default defineConfig(({ command, isPreview }) => ({
                     headers: { "Cache-Control": "public, max-age=31536000, immutable" },
                     continue: true,
                   },
-                  // Client proposal document shell (certified /proposals/:id rewrite).
+                  // Client proposal document shell. Match public_id only (no dots) so
+                  // /proposals/proposal.css|js stay as static files. Dest /proposals/
+                  // (clean URL) — /proposals/index.html 404s on this Nitro output.
                   {
-                    src: "/proposals/([^/]+)/?",
-                    dest: "/proposals/index.html",
+                    src: "/proposals/([A-Za-z0-9_-]{12,})/?",
+                    dest: "/proposals/",
                   },
                 ],
               },
