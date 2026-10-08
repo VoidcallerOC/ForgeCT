@@ -70,6 +70,25 @@ The inquiry form posts to `/api/contact`. Delivery uses Resend. Set these Vercel
 
 The visible mailto link remains a fallback. Do not point `CONTACT_TO_EMAIL` at an address until that mailbox actually exists and receives mail.
 
+## Internal proposals (MVP)
+
+Forge-internal proposal flow (not a public product): admin drafts at
+`/admin/proposals`, client documents at `/proposals/:id`, acceptance + Stripe
+deposit Checkout, webhook payment truth.
+
+| Piece         | Location                                                                 |
+| ------------- | ------------------------------------------------------------------------ |
+| SQL migration | `sql/proposals.sql` (run in Supabase before production use)              |
+| APIs          | `api/proposals.js`, `api/proposal-accept.js`, `api/proposal-checkout.js` |
+| Admin UI      | `/admin/proposals` (Bearer `PROPOSAL_ADMIN_TOKEN`)                       |
+| Client UI     | `/proposals/:id` (rewrite → `proposals/index.html`)                      |
+
+Set `PROPOSAL_ADMIN_TOKEN` (16+ characters) in Vercel. Package template amounts
+seed from published `/services` list prices and remain editable per proposal.
+Acceptance records confirmation text + metadata; it is **not** legal e-sign.
+Do not claim production COMPLETE until the SQL migration, admin token, deploy,
+and a verified create→send→accept→deposit path exist.
+
 ## Payments
 
 Payments are hosted by Stripe and reached by ordinary outbound links. Nothing on

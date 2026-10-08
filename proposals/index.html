@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>Proposal — FORGE CT</title>
+    <meta name="description" content="FORGE CT project proposal." />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/brand.css" />
+    <link rel="stylesheet" href="/proposals/proposal.css" />
+  </head>
+  <body class="proposal-page">
+    <a class="skip-link" href="#proposal-main">Skip to proposal</a>
+    <header class="site-header proposal-header">
+      <div class="shell proposal-header-inner">
+        <a class="brand" href="/">FORGE CT</a>
+        <p class="proposal-kicker">Project proposal</p>
+      </div>
+    </header>
+
+    <main id="proposal-main" class="proposal-main shell">
+      <p id="proposal-status" class="proposal-status" hidden></p>
+      <p id="proposal-loading" class="proposal-loading">Loading proposal…</p>
+      <p id="proposal-error" class="proposal-error" hidden></p>
+
+      <article id="proposal-doc" class="proposal-doc" hidden>
+        <header class="proposal-hero">
+          <p class="eyebrow">FORGE CT</p>
+          <h1 id="proposal-title">Proposal</h1>
+          <p id="proposal-client" class="proposal-lede"></p>
+          <p id="proposal-meta" class="proposal-meta"></p>
+        </header>
+
+        <section class="proposal-section" aria-labelledby="scope-heading">
+          <h2 id="scope-heading">Scope</h2>
+          <div id="proposal-scope" class="proposal-prose"></div>
+        </section>
+
+        <section class="proposal-section" aria-labelledby="timeline-heading">
+          <h2 id="timeline-heading">Timeline</h2>
+          <div id="proposal-timeline" class="proposal-prose"></div>
+        </section>
+
+        <section class="proposal-section" aria-labelledby="pricing-heading">
+          <h2 id="pricing-heading">Pricing</h2>
+          <table class="proposal-table">
+            <thead>
+              <tr>
+                <th scope="col">Item</th>
+                <th scope="col">Qty</th>
+                <th scope="col">Amount</th>
+              </tr>
+            </thead>
+            <tbody id="proposal-lines"></tbody>
+            <tfoot>
+              <tr>
+                <th scope="row" colspan="2">Subtotal</th>
+                <td id="proposal-subtotal"></td>
+              </tr>
+              <tr>
+                <th scope="row" colspan="2">Deposit due</th>
+                <td id="proposal-deposit"></td>
+              </tr>
+            </tfoot>
+          </table>
+        </section>
+
+        <section class="proposal-section" aria-labelledby="terms-heading">
+          <h2 id="terms-heading">Terms</h2>
+          <div id="proposal-terms" class="proposal-prose"></div>
+          <p class="form-note">
+            Accepting records your name, email, timestamp, and proposal version. This is an
+            operational confirmation — not a DocuSign or legal e-signature.
+          </p>
+        </section>
+
+        <section id="proposal-actions" class="proposal-actions" hidden>
+          <form id="accept-form" class="proposal-accept">
+            <h2>Accept this proposal</h2>
+            <label>
+              Your name
+              <input
+                id="accept-name"
+                name="name"
+                type="text"
+                autocomplete="name"
+                required
+                maxlength="120"
+              />
+            </label>
+            <label>
+              Email
+              <input
+                id="accept-email"
+                name="email"
+                type="email"
+                autocomplete="email"
+                required
+                maxlength="254"
+              />
+            </label>
+            <label class="proposal-confirm">
+              <input id="accept-confirm" type="checkbox" required />
+              <span
+                >I confirm I have reviewed this proposal and accept the stated scope, timeline, and
+                pricing for this version.</span
+              >
+            </label>
+            <input
+              class="hp"
+              type="text"
+              name="website"
+              tabindex="-1"
+              autocomplete="off"
+              aria-hidden="true"
+            />
+            <p id="accept-error" class="proposal-error" hidden></p>
+            <div class="proposal-cta-row">
+              <button type="submit" class="button" id="accept-submit">Accept proposal</button>
+              <a class="button button-ghost" href="/contact">Contact FORGE</a>
+            </div>
+          </form>
+        </section>
+
+        <section id="proposal-pay" class="proposal-actions" hidden>
+          <h2>Deposit</h2>
+          <p class="proposal-lede">
+            Acceptance is recorded. Pay the deposit securely through Stripe (card details never
+            touch this site).
+          </p>
+          <p id="pay-error" class="proposal-error" hidden></p>
+          <div class="proposal-cta-row">
+            <button type="button" class="button" id="pay-button">Pay deposit with Stripe</button>
+            <a class="button button-ghost" href="/contact">Questions? Contact</a>
+          </div>
+        </section>
+
+        <section id="proposal-done" class="proposal-actions" hidden>
+          <h2 id="done-title">Status</h2>
+          <p id="done-body" class="proposal-lede"></p>
+          <div class="proposal-cta-row">
+            <a class="button" href="/contact">Contact FORGE</a>
+          </div>
+        </section>
+      </article>
+    </main>
+
+    <footer class="site-footer proposal-footer">
+      <div class="shell">
+        <a class="brand brand--footer" href="/">FORGE CT</a>
+        <p>Farmington, Connecticut · <a href="mailto:create@forge-ct.com">create@forge-ct.com</a></p>
+      </div>
+    </footer>
+    <script src="/proposals/proposal.js" defer></script>
+  </body>
+</html>

@@ -1,0 +1,110 @@
+.admin-main {
+  padding-block: 2rem 4rem;
+}
+
+.admin-card {
+  padding: 1.25rem;
+  border: 1px solid var(--line-strong);
+  background: rgba(22, 24, 29, 0.92);
+}
+
+.admin-card h1,
+.admin-toolbar h1 {
+  margin: 0 0 0.75rem;
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: 2rem;
+}
+
+.admin-card label,
+.admin-form label {
+  display: grid;
+  gap: 0.35rem;
+  margin-bottom: 0.85rem;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.admin-card input,
+.admin-form input,
+.admin-form textarea,
+.admin-form select {
+  width: 100%;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid var(--wood);
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+}
+
+.admin-desk {
+  animation: proposal-in 420ms var(--ease) both;
+}
+
+.admin-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.admin-layout {
+  display: grid;
+  grid-template-columns: minmax(12rem, 18rem) 1fr;
+  gap: 1rem;
+}
+
+.admin-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--line-strong);
+  max-height: 70vh;
+  overflow: auto;
+}
+
+.admin-list button {
+  width: 100%;
+  text-align: left;
+  padding: 0.85rem 0.9rem;
+  border: 0;
+  border-bottom: 1px solid var(--light-line);
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+}
+
+.admin-list button:hover,
+.admin-list button[aria-current="true"] {
+  background: rgba(239, 231, 206, 0.08);
+}
+
+.admin-list strong {
+  display: block;
+}
+
+.admin-list span {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.admin-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem 1rem;
+}
+
+.admin-form h2 {
+  margin: 1.25rem 0 0.5rem;
+  font-family: var(--serif);
+  font-weight: 400;
+}
+
+@media (max-width: 860px) {
+  .admin-layout,
+  .admin-grid {
+    grid-template-columns: 1fr;
+  }
+}
