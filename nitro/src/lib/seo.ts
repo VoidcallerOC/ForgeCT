@@ -26,7 +26,7 @@ export const META: Record<string, PageMeta> = {
     ogTitle: "FORGE CT — Custom websites for the businesses people drive to.",
     ogDescription:
       "Clear, fast storefronts for local shops and businesses in Connecticut. Packages from $750; larger systems scoped separately.",
-    ogImageAlt: "FORGE CT custom websites and systems for local businesses.",
+    ogImageAlt: "FORGE CT — Custom websites for the businesses people drive to.",
   },
   "/audit": {
     title: "The Forge-CT Audit — See your shop like a customer",
@@ -129,13 +129,15 @@ export function pageHead(path: string, meta: PageMeta = META[path]) {
       { property: "og:description", content: ogDescription },
       { property: "og:url", content: url },
       { property: "og:image", content: image },
-      { property: "og:image:width", content: "2560" },
-      { property: "og:image:height", content: "1440" },
+      { property: "og:image:type", content: "image/jpeg" },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
       { property: "og:image:alt", content: meta.ogImageAlt ?? DEFAULT_OG_ALT },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: ogTitle },
       { name: "twitter:description", content: ogDescription },
       { name: "twitter:image", content: image },
+      { name: "twitter:image:alt", content: meta.ogImageAlt ?? DEFAULT_OG_ALT },
     ],
     links: [{ rel: "canonical", href: url }],
     scripts: (STRUCTURED_DATA[path] ?? []).map((data) => ({
