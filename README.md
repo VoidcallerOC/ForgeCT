@@ -16,7 +16,7 @@ The site is a dependency-light static implementation plus a small Vercel functio
 | Inquiry delivery           | `api/contact.js`                                                      |
 | Payment routing            | `pay/index.html`, `payments.js`                                       |
 | Privacy notice             | `privacy/index.html`                                                  |
-| Social-preview image       | `images/og-image.jpg`                                                 |
+| Social-preview image       | `images/og-image.jpg` (1200×630 FORGE CT brand card)                  |
 | Security and cache headers | `vercel.json`                                                         |
 | Quality checks             | `package.json`, `.htmlvalidate.json`, `scripts/check-local-links.mjs` |
 | Continuous integration     | `.github/workflows/quality.yml`                                       |
