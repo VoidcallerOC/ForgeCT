@@ -4,6 +4,7 @@ import {
   markWebhookEventProcessed,
   releaseWebhookEvent,
 } from "./_webhook-store.js";
+import { getProposal, transitionProposal } from "./_proposal-store.js";
 
 // Signature verification needs the exact bytes Stripe signed, so the platform
 // body parser must stay out of the way.
@@ -170,6 +171,74 @@ async function provisionCareAfterFinalPayment(client, invoice, settledAt) {
   return subscription;
 }
 
+/**
+ * Proposal deposit Checkout sessions carry metadata.source = forge_proposal_deposit.
+ * Webhook is the payment truth — never trust the success URL alone.
+ */
+export async function fulfillProposalDeposit(session, { failed = false } = {}) {
+  if (session?.metadata?.source !== "forge_proposal_deposit") return null;
+  const publicId = session.metadata.proposal_public_id;
+  if (!publicId) {
+    console.warn(
+      "proposal deposit session missing proposal_public_id",
+      session.id,
+    );
+    return null;
+  }
+
+  const proposal = await getProposal(publicId);
+  if (!proposal) {
+    console.warn("proposal deposit target not found", publicId, session.id);
+    return null;
+  }
+
+  if (failed) {
+    if (proposal.status === "PAYMENT_RECEIVED") return proposal;
+    if (
+      ["PAYMENT_PENDING", "ACCEPTED", "PAYMENT_FAILED"].includes(
+        proposal.status,
+      )
+    ) {
+      return transitionProposal(publicId, {
+        toStatus: "PAYMENT_FAILED",
+        eventType: "payment_failed",
+        actor: "stripe",
+        stripeCheckoutSessionId: session.id,
+        detail: { checkout_session_id: session.id },
+      });
+    }
+    return proposal;
+  }
+
+  if (proposal.status === "PAYMENT_RECEIVED") return proposal;
+  if (
+    !["PAYMENT_PENDING", "ACCEPTED", "PAYMENT_FAILED"].includes(proposal.status)
+  ) {
+    console.warn(
+      "proposal deposit ignored for status",
+      proposal.status,
+      publicId,
+    );
+    return proposal;
+  }
+
+  return transitionProposal(publicId, {
+    toStatus: "PAYMENT_RECEIVED",
+    eventType: "payment_received",
+    actor: "stripe",
+    stripeCheckoutSessionId: session.id,
+    stripePaymentIntentId:
+      typeof session.payment_intent === "string"
+        ? session.payment_intent
+        : session.payment_intent?.id || null,
+    detail: {
+      checkout_session_id: session.id,
+      amount_total: session.amount_total,
+      currency: session.currency,
+    },
+  });
+}
+
 async function notify(subject, lines) {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
@@ -222,7 +291,20 @@ export async function handleEvent(client, event) {
         return;
       }
       await rememberCarePlan(client, object, event.created);
+      const proposalPaid = await fulfillProposalDeposit(object);
       if (skipMail) return;
+      if (proposalPaid) {
+        await notify("FORGE — proposal deposit paid", [
+          `Proposal: ${object.metadata?.proposal_public_id || "—"}`,
+          `Version: ${object.metadata?.proposal_version || "—"}`,
+          `Amount: ${money(object.amount_total, object.currency)}`,
+          `Email: ${object.customer_details?.email || "unknown"}`,
+          `Name: ${object.customer_details?.name || "unknown"}`,
+          `Session: ${object.id}`,
+          `Next: project handoff / production kickoff`,
+        ]);
+        return;
+      }
       const plan = object.metadata?.plan_label || object.metadata?.plan || "—";
       await notify(`FORGE — paid: ${plan}`, [
         `Plan: ${plan}`,
@@ -257,11 +339,15 @@ export async function handleEvent(client, event) {
     }
 
     case "checkout.session.async_payment_failed":
+      await fulfillProposalDeposit(object, { failed: true });
       if (skipMail) return;
       await notify("FORGE — payment failed at checkout", [
         `Email: ${object.customer_details?.email || "unknown"}`,
         `Amount: ${money(object.amount_total, object.currency)}`,
         `Session: ${object.id}`,
+        object.metadata?.proposal_public_id
+          ? `Proposal: ${object.metadata.proposal_public_id}`
+          : "",
       ]);
       return;
 
