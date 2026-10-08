@@ -1,0 +1,206 @@
+:root {
+  --fog: #e6e6e6;
+  --slate: #8a9099;
+  --charcoal: #1a1c1f;
+  --void: #0a0a0a;
+  --paper: #0a0a0a;
+  --cream: #1a1c1f;
+  --surface-2: #121418;
+  --ink: #e6e6e6;
+  --brick: #8a9099;
+  --brick-deep: #c8ccd1;
+  --accent-hi: #e6e6e6;
+  --wood: #2a2d32;
+  --line: #1a1c1f;
+  --line-strong: #3a3d44;
+  --muted: #8a9099;
+  --light-line: rgba(230, 230, 230, 0.1);
+  --clay: #8a9099;
+  --sans: "DM Sans", "Helvetica Neue", Arial, sans-serif;
+  --serif: "Space Grotesk", "DM Sans", sans-serif;
+}
+
+html,
+body {
+  background: #0a0a0a !important;
+  color: #e6e6e6;
+}
+
+.site-header {
+  background: #0a0a0a !important;
+  border-bottom: 1px solid rgba(138, 144, 153, 0.2);
+}
+
+.brand,
+.brand.brand--footer {
+  display: block !important;
+  overflow: hidden;
+  width: 220px !important;
+  height: 32px !important;
+  padding: 0 !important;
+  font-size: 0 !important;
+  line-height: 0 !important;
+  color: transparent !important;
+  background: url("/brand/DTsjw.png") left center / contain no-repeat !important;
+  mix-blend-mode: screen;
+}
+
+.brand img,
+.brand.brand--footer img {
+  display: block !important;
+  width: 220px !important;
+  height: 32px !important;
+  object-fit: contain;
+  border: 0;
+}
+
+.brand span,
+.brand span::before {
+  display: none !important;
+  content: none !important;
+}
+
+h1,
+.hero-stats dd {
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  color: #e6e6e6;
+}
+
+h1 em,
+h2 em {
+  font-family: var(--serif);
+  font-style: normal;
+  font-weight: 600;
+}
+
+.eyebrow {
+  color: #8a9099 !important;
+  letter-spacing: 0.16em;
+}
+
+.work-grid--rich {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  max-width: 1080px;
+}
+
+.work-grid--rich > .work-card,
+.work-grid--rich > .work-card--feature {
+  grid-column: auto;
+}
+
+.work-card--feature {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.work-thumb,
+.work-card--feature .work-thumb {
+  aspect-ratio: 4 / 5;
+  min-height: 0;
+  border-right: 0;
+  border-bottom: 1px solid var(--wood);
+}
+
+.work-thumb img {
+  object-fit: cover;
+  object-position: top center;
+}
+
+.work-card--feature .work-body {
+  padding: 1.2rem 1.3rem 1.35rem;
+}
+
+.work-card--feature .work-body h3 {
+  font-size: 1.4rem;
+}
+
+.work-body {
+  padding: 1.15rem 1.25rem 1.3rem;
+}
+
+.compare-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 2.4rem 0 2rem;
+}
+
+.compare-col {
+  padding: 1.35rem 1.4rem 1.5rem;
+  border: 1px solid var(--wood);
+  background: #1a1c1f;
+}
+
+.compare-col--us {
+  border-color: #8a9099;
+  background: #121418;
+}
+
+.compare-kicker {
+  margin: 0 0 1rem;
+  color: #8a9099;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.compare-col ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.compare-col li {
+  padding: 0.7rem 0;
+  border-top: 1px solid rgba(230, 230, 230, 0.08);
+  color: #e6e6e6;
+  font-size: 0.98rem;
+  font-weight: 500;
+}
+
+.compare-col li:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.faq-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem 1.2rem;
+}
+
+.faq-grid details {
+  padding: 0.95rem 1.05rem;
+  border: 1px solid var(--wood);
+  background: #1a1c1f;
+}
+
+.faq-grid summary {
+  cursor: pointer;
+  font-weight: 700;
+  color: #e6e6e6;
+}
+
+.faq-grid details p {
+  margin: 0.7rem 0 0;
+  color: #8a9099;
+}
+
+@media (max-width: 720px) {
+  .work-grid--rich,
+  .compare-grid,
+  .faq-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 800px) {
+  .price-card {
+    min-height: 0;
+  }
+}

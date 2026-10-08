@@ -246,11 +246,21 @@ test.describe("layout and platform", () => {
   });
 
   test("API routes answer GET with 405 and Allow: POST", async ({ request }) => {
-    for (const path of ["/api/contact", "/api/portal", "/api/stripe-webhook"]) {
+    for (const path of [
+      "/api/contact",
+      "/api/portal",
+      "/api/stripe-webhook",
+      "/api/proposal-accept",
+      "/api/proposal-checkout",
+    ]) {
       const res = await request.get(path);
       expect(res.status(), path).toBe(405);
       expect(res.headers()["allow"], path).toContain("POST");
     }
+    // proposals supports GET (templates / public id) as well as mutations
+    const proposalsGet = await request.get("/api/proposals?action=templates");
+    expect(proposalsGet.status()).toBe(200);
+    expect((await proposalsGet.json()).ok).toBe(true);
   });
 
   test("security headers on pages and apex redirect to www", async ({ request }) => {

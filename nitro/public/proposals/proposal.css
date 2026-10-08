@@ -1,0 +1,229 @@
+.proposal-page {
+  min-height: 100vh;
+  background:
+    radial-gradient(
+      1200px 600px at 10% -10%,
+      rgba(239, 231, 206, 0.08),
+      transparent 55%
+    ),
+    radial-gradient(
+      900px 500px at 100% 0%,
+      rgba(158, 160, 168, 0.08),
+      transparent 50%
+    ),
+    var(--paper);
+}
+
+.proposal-header {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  backdrop-filter: blur(10px);
+}
+
+.proposal-header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: 0.85rem;
+}
+
+.proposal-kicker {
+  margin: 0;
+  color: var(--muted);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+}
+
+.proposal-main {
+  padding-block: 2rem 4rem;
+}
+
+.proposal-loading,
+.proposal-error,
+.proposal-status {
+  margin: 0 0 1.25rem;
+}
+
+.proposal-status {
+  display: inline-block;
+  padding: 0.35rem 0.7rem;
+  border: 1px solid var(--line-strong);
+  color: var(--brick);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+}
+
+.proposal-error {
+  color: #f0b4b4;
+}
+
+.proposal-doc {
+  max-width: 42rem;
+  animation: proposal-in 480ms var(--ease) both;
+}
+
+.proposal-hero {
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--light-line);
+}
+
+.proposal-hero h1 {
+  margin: 0.35rem 0 0.75rem;
+  font-size: clamp(2rem, 6vw, 3.4rem);
+  line-height: 1.05;
+  font-weight: 500;
+  letter-spacing: -0.04em;
+}
+
+.proposal-lede {
+  margin: 0;
+  color: var(--muted);
+  font-size: 1.05rem;
+}
+
+.proposal-meta {
+  margin: 0.85rem 0 0;
+  color: var(--slate, var(--muted));
+  font-size: 0.9rem;
+}
+
+.proposal-section {
+  margin-bottom: 2.25rem;
+  animation: proposal-in 640ms var(--ease) both;
+  animation-delay: 80ms;
+}
+
+.proposal-section h2 {
+  margin: 0 0 0.75rem;
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: 1.55rem;
+}
+
+.proposal-prose {
+  white-space: pre-wrap;
+  color: var(--ink);
+  line-height: 1.65;
+}
+
+.proposal-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.proposal-table th,
+.proposal-table td {
+  padding: 0.7rem 0.4rem;
+  border-bottom: 1px solid var(--light-line);
+  text-align: left;
+  vertical-align: top;
+}
+
+.proposal-table th[scope="col"]:last-child,
+.proposal-table td:last-child,
+.proposal-table tfoot td {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.proposal-actions {
+  margin-top: 2.5rem;
+  padding: 1.4rem;
+  border: 1px solid var(--line-strong);
+  background: linear-gradient(
+    180deg,
+    rgba(28, 30, 37, 0.9),
+    rgba(14, 15, 18, 0.95)
+  );
+  animation: proposal-in 700ms var(--ease) both;
+}
+
+.proposal-actions h2 {
+  margin-top: 0;
+  font-family: var(--serif);
+  font-weight: 400;
+}
+
+.proposal-accept {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.proposal-accept label {
+  display: grid;
+  gap: 0.35rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.proposal-accept input[type="text"],
+.proposal-accept input[type="email"] {
+  width: 100%;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid var(--wood);
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+}
+
+.proposal-confirm {
+  display: grid !important;
+  grid-template-columns: auto 1fr;
+  gap: 0.65rem;
+  align-items: start;
+  color: var(--ink) !important;
+}
+
+.proposal-cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.proposal-accept .hp {
+  position: absolute;
+  left: -9999px;
+  opacity: 0;
+  height: 0;
+  width: 0;
+}
+
+.proposal-footer {
+  border-top: 1px solid var(--light-line);
+  padding-block: 1.5rem 2.5rem;
+  color: var(--muted);
+}
+
+@keyframes proposal-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .proposal-main {
+    padding-block: 1.25rem 3rem;
+  }
+
+  .proposal-actions {
+    padding: 1.1rem;
+  }
+
+  .proposal-cta-row .button,
+  .proposal-cta-row .button-ghost {
+    width: 100%;
+    text-align: center;
+  }
+}
