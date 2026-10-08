@@ -43,6 +43,11 @@ export default defineConfig(({ command, isPreview }) => ({
                     headers: { "Cache-Control": "public, max-age=31536000, immutable" },
                     continue: true,
                   },
+                  // Client proposal document shell (certified /proposals/:id rewrite).
+                  {
+                    src: "/proposals/([^/]+)/?",
+                    dest: "/proposals/index.html",
+                  },
                 ],
               },
             },

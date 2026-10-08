@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>Proposal admin — FORGE CT</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/brand.css" />
+    <link rel="stylesheet" href="/proposals/proposal.css" />
+    <link rel="stylesheet" href="/admin/proposals/admin.css" />
+  </head>
+  <body class="proposal-page admin-page">
+    <header class="site-header proposal-header">
+      <div class="shell proposal-header-inner">
+        <a class="brand" href="/">FORGE CT</a>
+        <p class="proposal-kicker">Internal proposals</p>
+      </div>
+    </header>
+
+    <main class="shell admin-main">
+      <section id="gate" class="admin-card">
+        <h1>Proposal admin</h1>
+        <p class="proposal-lede">
+          Internal Forge tool. Paste the <code>PROPOSAL_ADMIN_TOKEN</code> from Vercel env. Token stays
+          in this browser session only.
+        </p>
+        <label>
+          Admin token
+          <input id="admin-token" type="password" autocomplete="current-password" />
+        </label>
+        <p id="gate-error" class="proposal-error" hidden></p>
+        <button type="button" class="button" id="unlock">Unlock</button>
+      </section>
+
+      <section id="desk" class="admin-desk" hidden>
+        <div class="admin-toolbar">
+          <h1>Proposals</h1>
+          <div class="proposal-cta-row">
+            <button type="button" class="button" id="new-proposal">New draft</button>
+            <button type="button" class="button button-ghost" id="refresh">Refresh</button>
+            <button type="button" class="button button-ghost" id="lock">Lock</button>
+          </div>
+        </div>
+        <p id="desk-error" class="proposal-error" hidden></p>
+        <div class="admin-layout">
+          <aside>
+            <ul id="proposal-list" class="admin-list"></ul>
+          </aside>
+          <section class="admin-card">
+            <form id="editor" class="admin-form">
+              <input type="hidden" id="public_id" />
+              <div class="admin-grid">
+                <label>
+                  Package template
+                  <select id="package_id"></select>
+                </label>
+                <label>
+                  Status
+                  <input id="status" type="text" readonly />
+                </label>
+              </div>
+              <h2>Client</h2>
+              <div class="admin-grid">
+                <label>Business <input id="business_name" type="text" required /></label>
+                <label>Contact <input id="contact_name" type="text" required /></label>
+                <label>Email <input id="contact_email" type="email" required /></label>
+                <label>Phone <input id="contact_phone" type="text" /></label>
+                <label>Website <input id="website" type="url" /></label>
+                <label
+                  >HubSpot ref <input id="hubspot_ref" type="text" placeholder="optional"
+                /></label>
+              </div>
+              <label>Address <input id="address" type="text" /></label>
+              <h2>Project</h2>
+              <label>Title <input id="project_title" type="text" required /></label>
+              <label>Scope <textarea id="scope_text" rows="5"></textarea></label>
+              <label>Timeline <textarea id="timeline_text" rows="3"></textarea></label>
+              <label>Terms <textarea id="terms_text" rows="5"></textarea></label>
+              <label>
+                Line items (JSON cents)
+                <textarea id="line_items" rows="6" spellcheck="false"></textarea>
+              </label>
+              <p class="form-note">
+                Amounts use integer cents. Totals are recomputed on the server — client math is not
+                authoritative.
+              </p>
+              <label>Notes (internal) <textarea id="notes" rows="2"></textarea></label>
+              <p id="money-preview" class="proposal-meta"></p>
+              <div class="proposal-cta-row">
+                <button type="submit" class="button">Save draft</button>
+                <button type="button" class="button" id="send">Send</button>
+                <button type="button" class="button button-ghost" id="preview">Open client view</button>
+                <button type="button" class="button button-ghost" id="duplicate">Duplicate</button>
+                <button type="button" class="button button-ghost" id="archive">Archive</button>
+                <button type="button" class="button button-ghost" id="reopen">Reopen</button>
+              </div>
+              <p id="link-out" class="proposal-meta" hidden></p>
+            </form>
+          </section>
+        </div>
+      </section>
+    </main>
+    <script src="/admin/proposals/admin.js" defer></script>
+  </body>
+</html>

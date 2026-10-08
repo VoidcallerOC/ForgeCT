@@ -23,6 +23,9 @@ import { Route as ThanksRouteImport } from './routes/thanks'
 import { Route as WhyRouteImport } from './routes/why'
 import { Route as ApiContactRouteImport } from './routes/api/contact'
 import { Route as ApiPortalRouteImport } from './routes/api/portal'
+import { Route as ApiProposalAcceptRouteImport } from './routes/api/proposal-accept'
+import { Route as ApiProposalCheckoutRouteImport } from './routes/api/proposal-checkout'
+import { Route as ApiProposalsRouteImport } from './routes/api/proposals'
 import { Route as ApiStripeWebhookRouteImport } from './routes/api/stripe-webhook'
 import { Route as WorkIndexRouteImport } from './routes/work/index'
 import { Route as WorkSlugRouteImport } from './routes/work/$slug'
@@ -97,6 +100,21 @@ const ApiPortalRoute = ApiPortalRouteImport.update({
   path: '/api/portal',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiProposalAcceptRoute = ApiProposalAcceptRouteImport.update({
+  id: '/api/proposal-accept',
+  path: '/api/proposal-accept',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiProposalCheckoutRoute = ApiProposalCheckoutRouteImport.update({
+  id: '/api/proposal-checkout',
+  path: '/api/proposal-checkout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiProposalsRoute = ApiProposalsRouteImport.update({
+  id: '/api/proposals',
+  path: '/api/proposals',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiStripeWebhookRoute = ApiStripeWebhookRouteImport.update({
   id: '/api/stripe-webhook',
   path: '/api/stripe-webhook',
@@ -128,6 +146,9 @@ export interface FileRoutesByFullPath {
   '/why': typeof WhyRoute
   '/api/contact': typeof ApiContactRoute
   '/api/portal': typeof ApiPortalRoute
+  '/api/proposal-accept': typeof ApiProposalAcceptRoute
+  '/api/proposal-checkout': typeof ApiProposalCheckoutRoute
+  '/api/proposals': typeof ApiProposalsRoute
   '/api/stripe-webhook': typeof ApiStripeWebhookRoute
   '/work/$slug': typeof WorkSlugRoute
   '/work/': typeof WorkIndexRoute
@@ -147,6 +168,9 @@ export interface FileRoutesByTo {
   '/why': typeof WhyRoute
   '/api/contact': typeof ApiContactRoute
   '/api/portal': typeof ApiPortalRoute
+  '/api/proposal-accept': typeof ApiProposalAcceptRoute
+  '/api/proposal-checkout': typeof ApiProposalCheckoutRoute
+  '/api/proposals': typeof ApiProposalsRoute
   '/api/stripe-webhook': typeof ApiStripeWebhookRoute
   '/work/$slug': typeof WorkSlugRoute
   '/work': typeof WorkIndexRoute
@@ -167,6 +191,9 @@ export interface FileRoutesById {
   '/why': typeof WhyRoute
   '/api/contact': typeof ApiContactRoute
   '/api/portal': typeof ApiPortalRoute
+  '/api/proposal-accept': typeof ApiProposalAcceptRoute
+  '/api/proposal-checkout': typeof ApiProposalCheckoutRoute
+  '/api/proposals': typeof ApiProposalsRoute
   '/api/stripe-webhook': typeof ApiStripeWebhookRoute
   '/work/$slug': typeof WorkSlugRoute
   '/work/': typeof WorkIndexRoute
@@ -188,6 +215,9 @@ export interface FileRouteTypes {
     | '/why'
     | '/api/contact'
     | '/api/portal'
+    | '/api/proposal-accept'
+    | '/api/proposal-checkout'
+    | '/api/proposals'
     | '/api/stripe-webhook'
     | '/work/$slug'
     | '/work/'
@@ -207,6 +237,9 @@ export interface FileRouteTypes {
     | '/why'
     | '/api/contact'
     | '/api/portal'
+    | '/api/proposal-accept'
+    | '/api/proposal-checkout'
+    | '/api/proposals'
     | '/api/stripe-webhook'
     | '/work/$slug'
     | '/work'
@@ -226,6 +259,9 @@ export interface FileRouteTypes {
     | '/why'
     | '/api/contact'
     | '/api/portal'
+    | '/api/proposal-accept'
+    | '/api/proposal-checkout'
+    | '/api/proposals'
     | '/api/stripe-webhook'
     | '/work/$slug'
     | '/work/'
@@ -246,6 +282,9 @@ export interface RootRouteChildren {
   WhyRoute: typeof WhyRoute
   ApiContactRoute: typeof ApiContactRoute
   ApiPortalRoute: typeof ApiPortalRoute
+  ApiProposalAcceptRoute: typeof ApiProposalAcceptRoute
+  ApiProposalCheckoutRoute: typeof ApiProposalCheckoutRoute
+  ApiProposalsRoute: typeof ApiProposalsRoute
   ApiStripeWebhookRoute: typeof ApiStripeWebhookRoute
   WorkSlugRoute: typeof WorkSlugRoute
   WorkIndexRoute: typeof WorkIndexRoute
@@ -351,6 +390,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPortalRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/proposal-accept': {
+      id: '/api/proposal-accept'
+      path: '/api/proposal-accept'
+      fullPath: '/api/proposal-accept'
+      preLoaderRoute: typeof ApiProposalAcceptRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/proposal-checkout': {
+      id: '/api/proposal-checkout'
+      path: '/api/proposal-checkout'
+      fullPath: '/api/proposal-checkout'
+      preLoaderRoute: typeof ApiProposalCheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/proposals': {
+      id: '/api/proposals'
+      path: '/api/proposals'
+      fullPath: '/api/proposals'
+      preLoaderRoute: typeof ApiProposalsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/stripe-webhook': {
       id: '/api/stripe-webhook'
       path: '/api/stripe-webhook'
@@ -390,6 +450,9 @@ const rootRouteChildren: RootRouteChildren = {
   WhyRoute: WhyRoute,
   ApiContactRoute: ApiContactRoute,
   ApiPortalRoute: ApiPortalRoute,
+  ApiProposalAcceptRoute: ApiProposalAcceptRoute,
+  ApiProposalCheckoutRoute: ApiProposalCheckoutRoute,
+  ApiProposalsRoute: ApiProposalsRoute,
   ApiStripeWebhookRoute: ApiStripeWebhookRoute,
   WorkSlugRoute: WorkSlugRoute,
   WorkIndexRoute: WorkIndexRoute,
