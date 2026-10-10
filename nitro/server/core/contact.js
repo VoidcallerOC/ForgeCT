@@ -25,7 +25,9 @@ function normalizeText(value, { preserveNewlines = false } = {}) {
 
 function normalizeSiteUrl(value) {
   const text = normalizeText(value);
-  if (!text || /^https?:\/\//i.test(text)) return text;
+  // Only bare hosts get https://; any other scheme ("ftp:", "javascript:") is
+  // left as typed so validation rejects it. "host:8080" is a port, not a scheme.
+  if (!text || /^[a-z][a-z0-9+.-]*:(?!\d)/i.test(text)) return text;
   return `https://${text}`;
 }
 
