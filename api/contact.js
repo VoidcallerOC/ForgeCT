@@ -23,6 +23,12 @@ function normalizeText(value, { preserveNewlines = false } = {}) {
     : text.replace(/\s+/g, " ").trim();
 }
 
+function normalizeSiteUrl(value) {
+  const text = normalizeText(value);
+  if (!text || /^https?:\/\//i.test(text)) return text;
+  return `https://${text}`;
+}
+
 function validEmail(email) {
   if (email.length > 254 || email.includes("..")) return false;
   const [local, domain] = email.split("@");
@@ -123,7 +129,7 @@ export default async function handler(request, response) {
   const name = normalizeText(payload.name);
   const email = normalizeText(payload.email).toLowerCase();
   const company = normalizeText(payload.company);
-  const siteUrl = normalizeText(payload.siteUrl);
+  const siteUrl = normalizeSiteUrl(payload.siteUrl);
   const message = normalizeText(payload.message, { preserveNewlines: true });
   const requestedSource = normalizeText(payload.source).toLowerCase();
   let source = ALLOWED_SOURCES.has(requestedSource)
@@ -171,7 +177,7 @@ export default async function handler(request, response) {
         rejectValidation(
           request,
           "website_url",
-          "Please add a valid website URL, including https://.",
+          "Please add a valid website URL.",
         ),
       );
   }

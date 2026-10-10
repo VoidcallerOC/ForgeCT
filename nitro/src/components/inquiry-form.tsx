@@ -137,9 +137,13 @@ export function InquiryForm({
           <input
             id={f("siteUrl")}
             name="siteUrl"
-            type="url"
+            type="text"
             inputMode="url"
-            placeholder="https://"
+            autoComplete="url"
+            autoCapitalize="none"
+            autoCorrect="off"
+            spellCheck={false}
+            placeholder="yourshop.com"
             required
             maxLength={500}
           />
