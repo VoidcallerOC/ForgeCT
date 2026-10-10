@@ -149,6 +149,24 @@ test("rejects a website URL containing spaces", async () => {
   assert.equal(response.body.ok, false);
 });
 
+test("rejects website URLs with a non-http scheme", async () => {
+  process.env.NODE_ENV = "test";
+  for (const siteUrl of ["ftp://yourshop.com", "javascript:alert(1)"]) {
+    resetMemoryRateLimiter();
+    const response = responseMock();
+    await handler(
+      request({
+        name: "Pat Owner",
+        email: "pat@example.com",
+        siteUrl,
+        source: "audit",
+      }),
+      response,
+    );
+    assert.equal(response.statusCode, 400, siteUrl);
+  }
+});
+
 test("returns an explicit failure when Resend rejects delivery", async () => {
   process.env.LEAD_STORE = "memory";
   process.env.RESEND_API_KEY = "resend-test-key";
