@@ -101,6 +101,54 @@ test("normalizes Unicode input and lowercases the reply address", async () => {
   assert.match(sent.text, /First line\nsecond line/);
 });
 
+test("accepts a website URL without a scheme and stores it as https", async () => {
+  process.env.NODE_ENV = "test";
+  process.env.LEAD_STORE = "memory";
+  process.env.RESEND_API_KEY = "resend-test-key";
+  const originalFetch = globalThis.fetch;
+  let sent;
+  globalThis.fetch = async (_url, options) => {
+    sent = JSON.parse(options.body);
+    return { ok: true };
+  };
+  const response = responseMock();
+
+  try {
+    await handler(
+      request({
+        name: "Pat Owner",
+        email: "pat@example.com",
+        siteUrl: " yourshop.com ",
+        source: "audit",
+      }),
+      response,
+    );
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+
+  assert.equal(response.statusCode, 200);
+  assert.match(sent.text, /Website: https:\/\/yourshop\.com/);
+});
+
+test("rejects a website URL containing spaces", async () => {
+  process.env.NODE_ENV = "test";
+  const response = responseMock();
+
+  await handler(
+    request({
+      name: "Pat Owner",
+      email: "pat@example.com",
+      siteUrl: "my shop",
+      source: "audit",
+    }),
+    response,
+  );
+
+  assert.equal(response.statusCode, 400);
+  assert.equal(response.body.ok, false);
+});
+
 test("returns an explicit failure when Resend rejects delivery", async () => {
   process.env.LEAD_STORE = "memory";
   process.env.RESEND_API_KEY = "resend-test-key";

@@ -53,7 +53,7 @@ test.describe("certified business-critical flows", () => {
     ]);
   });
 
-  test("audit form requires a URL and sends it as siteUrl", async ({ page }) => {
+  test("audit form requires a URL and accepts one typed without https://", async ({ page }) => {
     const bodies = await captureContact(page);
     await page.goto("/audit");
     const form = page.locator("#audit-form form");
@@ -61,12 +61,12 @@ test.describe("certified business-critical flows", () => {
     await form.getByLabel("Email").fill("pat@example.com");
     await form.getByRole("button", { name: /Get my Forge-CT Audit/ }).click();
     expect(bodies).toHaveLength(0);
-    await form.getByLabel("Your website URL").fill("https://example.com");
+    await form.getByLabel("Your website URL").fill("example.com");
     await form.getByRole("button", { name: /Get my Forge-CT Audit/ }).click();
     await expect(form.getByRole("status")).toHaveText(/three practical fixes within 24 hours/);
     expect(bodies[0]).toMatchObject({
       name: "Pat Owner",
-      siteUrl: "https://example.com",
+      siteUrl: "example.com",
       message: "",
       source: "audit",
     });
