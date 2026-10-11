@@ -1061,6 +1061,22 @@ export const STRUCTURED_DATA: Record<string, unknown[]> = {
       }
     }
   ],
+  "/work/ninos-collectibles": [
+    {
+      "@context": "https://schema.org",
+      "@type": "CreativeWork",
+      "@id": "https://www.forge-ct.com/work/ninos-collectibles#case-study",
+      "url": "https://www.forge-ct.com/work/ninos-collectibles",
+      "name": "Nino’s Collectibles",
+      "description": "Nino’s Collectibles: A phone-first site built from Nino’s own Instagram posts, with a show list read from his OnTreasure profile and a card scanner for people selling to him. See the Forge CT case study and live site.",
+      "image": "https://www.forge-ct.com/images/work/ninoscollectibles.jpg",
+      "creator": {
+        "@type": "Organization",
+        "name": "FORGE CT",
+        "url": "https://www.forge-ct.com/"
+      }
+    }
+  ],
   "/work/thousand-sunny": [
     {
       "@context": "https://schema.org",

@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Arrow, PageHead } from "@/components/chrome";
 import { NextSteps } from "@/components/next-steps";
-import { LabNote, Ledger, ProofDeck } from "@/components/work";
+import { InProgressNote, LabNote, Ledger, ProofDeck } from "@/components/work";
 import { pageHead } from "@/lib/seo";
 import { PROJECTS } from "@/lib/work";
 
@@ -35,6 +35,7 @@ function WorkIndex() {
           <ProofDeck />
           <h3 className="index-label">Index</h3>
           <Ledger headingId="ledger-title" />
+          <InProgressNote />
           <LabNote />
         </div>
       </section>

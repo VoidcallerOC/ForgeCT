@@ -75,7 +75,9 @@ function headOf(html) {
 
 const sitemap = await readFile(path.join(here, "../public/sitemap.xml"), "utf8");
 const sitemapRoutes = [...sitemap.matchAll(/<loc>https:\/\/www\.forge-ct\.com([^<]*)<\/loc>/g)].map((m) => m[1] || "/");
-const routes = [...new Set([...sitemapRoutes, "/pay", "/thanks", "/privacy"])];
+/** Prerendered but noindex and kept out of the sitemap until the client approves (in-progress case studies). */
+const UNLISTED = ["/work/ninos-collectibles"];
+const routes = [...new Set([...sitemapRoutes, "/pay", "/thanks", "/privacy", ...UNLISTED])];
 
 const builtHtml = {};
 for (const route of routes) {

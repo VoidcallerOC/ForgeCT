@@ -33,6 +33,12 @@ export type Project = {
   designIntent?: string;
   customerPath?: string[];
   tags: string[];
+  /** In-progress engagements only: stage label, robots override, dated status lines and a second screenshot. */
+  stage?: string;
+  robots?: string;
+  statusCheckedOn?: string;
+  status?: string[];
+  figure?: { image: string; imageHeight: number; alt: string; caption: string };
 };
 
 export const PROJECTS: Project[] = [
@@ -154,5 +160,54 @@ export const LAB = {
   tags: ["Interactive", "Custom player", "Worldbuilding"],
 } as const;
 
-export const projectBySlug = (slug: string) => PROJECTS.find((p) => p.slug === slug);
+/**
+ * Engagements in progress: real work for a real business that is not an approved live client launch.
+ * Kept out of PROJECTS so the five-client taxonomy, counts, filters and homepage rail stay as certified.
+ * Each line below was checked against the client repo and the live site on statusCheckedOn; re-check before
+ * changing it. The case study stays noindex until the client approves the site (it is noindex itself).
+ */
+export const IN_PROGRESS: Project[] = [
+  {
+    slug: "ninos-collectibles",
+    name: "Nino’s Collectibles",
+    short: "Nino’s Collectibles",
+    filter: "card-tabletop",
+    stage: "In progress",
+    category: "Trading-card dealer",
+    place: "Card shows and Instagram",
+    image: "/images/work/ninoscollectibles.jpg",
+    imageHeight: 1428,
+    site: "https://ninoscollectibles.com/",
+    siteLabel: "ninoscollectibles.com",
+    robots: "noindex,follow",
+    need: "Nino buys and sells Pokémon and One Piece cards at card shows, on Instagram and in Whatnot live shows. Buyers need to see what he deals in and where he is vending next; sellers need a first look at what a card might fetch before they meet him.",
+    built:
+      "A phone-first site built from Nino’s own Instagram posts, with a show list read from his OnTreasure profile and a card scanner for people selling to him.",
+    story:
+      "A site built from Nino’s own Instagram posts, a show list read from OnTreasure, and a card scanner for sellers. Live as a concept preview, kept out of search until Nino approves it.",
+    designIntent:
+      "Keep every claim traceable. Photos and captions come from Nino’s public posts with their dates, and past pulls are labelled as not a stock list. Show dates are read from OnTreasure, never typed in. The scanner never fills in a price, a condition or a grade: it shows an estimate only from a dated market price, the customer picks the condition, and the final offer is made in person.",
+    customerPath: [
+      "See recent pulls and deals from Nino’s Instagram, labelled as past posts.",
+      "Follow a link to where Nino is vending next.",
+      "Message Nino on Instagram to buy, sell or meet at a show.",
+    ],
+    statusCheckedOn: "11 October 2026",
+    status: [
+      "Live at ninoscollectibles.com. The site’s own footer labels it a concept preview, and it stays out of search engines until Nino approves it.",
+      "Card scanner: the phone reads the collector number with on-device OCR, searches the catalog, and asks the customer to confirm the printing and condition. It passes its end-to-end test against a test catalog. Live pricing is not switched on yet, so on the live site the scanner cannot return a match or an estimate.",
+      "Show list: built to read Nino’s OnTreasure vendor profile. On the check date it reported the list unavailable and linked to his profile instead.",
+      "Owner tools for inventory, photo drafts, events and Square sync are built and tested against a mock of Square. They are not yet connected to Nino’s Square account.",
+    ],
+    figure: {
+      image: "/images/work/ninoscollectibles-scan.jpg",
+      imageHeight: 1428,
+      alt: "Nino’s Collectibles card scanner page shown on a mobile phone",
+      caption: "The public scanner page. Card search and estimates switch on once live pricing is configured.",
+    },
+    tags: ["Instagram-sourced feed", "OnTreasure shows", "Card scanner (OCR)", "Owner tools"],
+  },
+];
+
+export const projectBySlug = (slug: string) => [...PROJECTS, ...IN_PROGRESS].find((p) => p.slug === slug);
 export const filterCount = (f: Filter) => PROJECTS.filter((p) => p.filter === f).length;
