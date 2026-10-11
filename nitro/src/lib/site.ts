@@ -1,7 +1,7 @@
 /**
  * FORGE CT business facts. Every value here is copied from the certified production site
  * (www.forge-ct.com, main @ f7ec08a). Do not add a fact that is not published there:
- * no years in business, no client counts beyond the approved five, no outcomes or metrics.
+ * no years in business, no client counts beyond the approved six, no outcomes or metrics.
  */
 export const SITE_URL = "https://www.forge-ct.com";
 

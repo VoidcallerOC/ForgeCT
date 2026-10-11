@@ -166,7 +166,7 @@ function Home() {
           <div className="split">
             <h2 id="work-title">Real businesses. Real reasons to build.</h2>
             <p className="lede">
-              Five live client sites. The screenshot is the proof. The line under it is the documented need and the build —
+              Six live client sites. The screenshot is the proof. The line under it is the documented need and the build —
               not a result we did not measure.
             </p>
           </div>

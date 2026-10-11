@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Arrow, PageHead } from "@/components/chrome";
 import { NextSteps } from "@/components/next-steps";
-import { InProgressNote, LabNote, Ledger, ProofDeck } from "@/components/work";
+import { LabNote, Ledger, ProofDeck } from "@/components/work";
 import { pageHead } from "@/lib/seo";
 import { PROJECTS } from "@/lib/work";
 
@@ -15,7 +15,7 @@ function WorkIndex() {
     <main id="main">
       <PageHead plate={["Forge CT portfolio", "Live client work", "Connecticut"]} title="Real businesses. Real reasons to build.">
         <p className="lede">
-          These are the {PROJECTS.length === 5 ? "five" : PROJECTS.length} approved Forge CT live client projects for shops and
+          These are the {PROJECTS.length === 6 ? "six" : PROJECTS.length} approved Forge CT live client projects for shops and
           local businesses. Each case study records the documented need and build, without claims that are not
           established.
         </p>
@@ -35,7 +35,6 @@ function WorkIndex() {
           <ProofDeck />
           <h3 className="index-label">Index</h3>
           <Ledger headingId="ledger-title" />
-          <InProgressNote />
           <LabNote />
         </div>
       </section>

@@ -25,8 +25,10 @@ const NEW_DESCRIPTIONS = new Set(["/audit", "/contact"]);
 /**
  * Pages whose description and JSON-LD intentionally differ from the certified page. Harris in Wonderland is
  * live (owner confirmed, 2026-10-01), so its case study now says "and live site" like the other four clients.
+ * /work lists a sixth client, Nino’s Collectibles (approved by Nino, reported by Nick 2026-10-11), so its
+ * description and JSON-LD now say six where the certified page says five.
  */
-const CHANGED_SEO = new Set(["/work/harris-in-wonderland"]);
+const CHANGED_SEO = new Set(["/work/harris-in-wonderland", "/work"]);
 /** Pages where the certified robots tag was absent (= index,follow); this build states it. */
 const ROBOTS_DEFAULT = "index,follow";
 /** Certified smoke markers (scripts/smoke-production.mjs). */

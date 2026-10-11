@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Arrow } from "@/components/chrome";
-import { FILTERS, IN_PROGRESS, LAB, PROJECTS, filterCount, type Filter, type Project } from "@/lib/work";
+import { FILTERS, LAB, PROJECTS, filterCount, type Filter, type Project } from "@/lib/work";
 
 export function PhoneFrame({ project, eager = false }: { project: Project; eager?: boolean }) {
   return (
@@ -25,6 +25,7 @@ const EMPHASIS: Record<string, string> = {
   "m-and-j-video-games": "Walk-in",
   "hard-hittin": "Launch",
   "infinite-heroes": "Main Street",
+  "ninos-collectibles": "Dealer",
 };
 
 /**
@@ -81,7 +82,7 @@ export function ProofDeck() {
   );
 }
 
-/** The five live client sites, as they look on the phone a customer is holding. */
+/** The live client sites, as they look on the phone a customer is holding. */
 export function PhoneRail() {
   return (
     <div className="rail-wrap">
@@ -219,42 +220,3 @@ export function LabNote() {
   );
 }
 
-/** Engagements in progress, kept apart from the approved live client work and never counted with it. */
-export function InProgressNote() {
-  if (IN_PROGRESS.length === 0) return null;
-  return (
-    <section className="wip" aria-labelledby="wip-title">
-      <h3 id="wip-title" className="index-label">
-        In progress
-      </h3>
-      {IN_PROGRESS.map((p) => (
-        <article className="wip-item" key={p.slug}>
-          <Link to="/work/$slug" params={{ slug: p.slug }} data-track={`wip_${p.slug}`}>
-            <img src={p.image} alt={`${p.name} website`} width={120} height={238} loading="lazy" decoding="async" />
-          </Link>
-          <div className="stack">
-            <p className="mono muted">
-              {p.stage} · {p.category} · not counted as a live client launch
-            </p>
-            <h4>
-              <Link to="/work/$slug" params={{ slug: p.slug }}>
-                {p.name}
-              </Link>
-            </h4>
-            <p className="muted">{p.story}</p>
-            <div className="actions">
-              <Link className="btn btn--line" to="/work/$slug" params={{ slug: p.slug }}>
-                Case study <Arrow />
-              </Link>
-              {p.site ? (
-                <a className="link" href={p.site} target="_blank" rel="noopener noreferrer" data-track={`wip_live_${p.slug}`}>
-                  Visit {p.siteLabel} <Arrow dir="out" />
-                </a>
-              ) : null}
-            </div>
-          </div>
-        </article>
-      ))}
-    </section>
-  );
-}
