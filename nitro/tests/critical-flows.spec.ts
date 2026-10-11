@@ -180,7 +180,7 @@ test.describe("approved portfolio taxonomy", () => {
     await expect(page.locator("table.ledger")).not.toContainText("Nino");
   });
 
-  test("in-progress engagements sit apart from live clients and are not indexed", async ({ page }) => {
+  test("in-progress engagements sit apart from live clients", async ({ page }) => {
     await page.goto("/work");
     const wip = page.locator(".wip");
     await expect(wip).toContainText("Nino’s Collectibles");
@@ -188,7 +188,7 @@ test.describe("approved portfolio taxonomy", () => {
     await wip.getByRole("link", { name: "Case study" }).click();
     await expect(page).toHaveURL(/\/work\/ninos-collectibles$/);
     await expect(page.locator("h1")).toHaveText("Nino’s Collectibles");
-    await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", "noindex,follow");
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", "index,follow");
     await expect(page.getByRole("link", { name: /Visit ninoscollectibles\.com/ })).toHaveAttribute(
       "href",
       "https://ninoscollectibles.com/",

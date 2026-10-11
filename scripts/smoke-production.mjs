@@ -25,6 +25,7 @@ export const PORTFOLIO_ROUTES = [
   "/work/harris-in-wonderland",
   "/work/m-and-j-video-games",
   "/work/infinite-heroes",
+  "/work/ninos-collectibles",
 ];
 
 export const APPROVED_CLIENT_URLS = [

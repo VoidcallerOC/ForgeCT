@@ -164,7 +164,7 @@ export const LAB = {
  * Engagements in progress: real work for a real business that is not an approved live client launch.
  * Kept out of PROJECTS so the five-client taxonomy, counts, filters and homepage rail stay as certified.
  * Each line below was checked against the client repo and the live site on statusCheckedOn; re-check before
- * changing it. The case study stays noindex until the client approves the site (it is noindex itself).
+ * changing it. Nino approved being shown on forge-ct.com (reported by Nick, 2026-10-11).
  */
 export const IN_PROGRESS: Project[] = [
   {
@@ -179,12 +179,11 @@ export const IN_PROGRESS: Project[] = [
     imageHeight: 1428,
     site: "https://ninoscollectibles.com/",
     siteLabel: "ninoscollectibles.com",
-    robots: "noindex,follow",
     need: "Nino buys and sells Pokémon and One Piece cards at card shows, on Instagram and in Whatnot live shows. Buyers need to see what he deals in and where he is vending next; sellers need a first look at what a card might fetch before they meet him.",
     built:
       "A phone-first site built from Nino’s own Instagram posts, with a show list read from his OnTreasure profile and a card scanner for people selling to him.",
     story:
-      "A site built from Nino’s own Instagram posts, a show list read from OnTreasure, and a card scanner for sellers. Live as a concept preview, kept out of search until Nino approves it.",
+      "A site built from Nino’s own Instagram posts, a show list read from OnTreasure, and a card scanner for sellers. Live as a concept preview.",
     designIntent:
       "Keep every claim traceable. Photos and captions come from Nino’s public posts with their dates, and past pulls are labelled as not a stock list. Show dates are read from OnTreasure, never typed in. The scanner never fills in a price, a condition or a grade: it shows an estimate only from a dated market price, the customer picks the condition, and the final offer is made in person.",
     customerPath: [
@@ -194,7 +193,7 @@ export const IN_PROGRESS: Project[] = [
     ],
     statusCheckedOn: "11 October 2026",
     status: [
-      "Live at ninoscollectibles.com. The site’s own footer labels it a concept preview, and it stays out of search engines until Nino approves it.",
+      "Live at ninoscollectibles.com. The site’s own footer still labels it a concept preview, and it is not yet open to search engines.",
       "Card scanner: the phone reads the collector number with on-device OCR, searches the catalog, and asks the customer to confirm the printing and condition. It passes its end-to-end test against a test catalog. Live pricing is not switched on yet, so on the live site the scanner cannot return a match or an estimate.",
       "Show list: built to read Nino’s OnTreasure vendor profile. On the check date it reported the list unavailable and linked to his profile instead.",
       "Owner tools for inventory, photo drafts, events and Square sync are built and tested against a mock of Square. They are not yet connected to Nino’s Square account.",
