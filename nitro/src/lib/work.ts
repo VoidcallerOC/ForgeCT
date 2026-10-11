@@ -1,7 +1,9 @@
 /**
  * Approved portfolio taxonomy, from the certified site (work/index.html, generate-seo-pages.mjs,
  * homepage filters):
- *   - Five live client projects. Filters: "Card and tabletop" (4) and "Retail and local" (1).
+ *   - Six live client projects. Filters: "Card and tabletop" (5) and "Retail and local" (1). Nino’s Collectibles
+ *     was added 2026-10-11 with Nino’s approval (reported by Nick); its case study carries dated status lines
+ *     because parts of that site (live pricing, Square, show list) are not yet working in production.
  *   - One FORGE lab experiment (Voidcaller), always shown apart from client work and never counted as a client.
  * Case-study copy is limited to the documented need, build, tags and location. No outcomes or metrics.
  */
@@ -33,8 +35,7 @@ export type Project = {
   designIntent?: string;
   customerPath?: string[];
   tags: string[];
-  /** In-progress engagements only: stage label, robots override, dated status lines and a second screenshot. */
-  stage?: string;
+  /** Optional: robots override, dated status lines and a second screenshot. */
   robots?: string;
   statusCheckedOn?: string;
   status?: string[];
@@ -148,42 +149,22 @@ export const PROJECTS: Project[] = [
       "Watertown comic shop on Main Street. New comics on Wednesday, collectibles on the floor whenever the door is open — a page built so a walk-in can find the shop.",
     tags: ["Comics", "Collectibles", "Main Street"],
   },
-];
-
-export const LAB = {
-  name: "Voidcaller — On-chain metalcore",
-  kind: "FORGE experiment · Music and interactive",
-  image: "/images/work/voidcaller.jpg",
-  site: "https://voidcaller.enterthegrotto.xyz/",
-  story:
-    "A world that matches the record: player, relics, and lore. Built to prove that a project can go further when the experience itself is part of the brief.",
-  tags: ["Interactive", "Custom player", "Worldbuilding"],
-} as const;
-
-/**
- * Engagements in progress: real work for a real business that is not an approved live client launch.
- * Kept out of PROJECTS so the five-client taxonomy, counts, filters and homepage rail stay as certified.
- * Each line below was checked against the client repo and the live site on statusCheckedOn; re-check before
- * changing it. Nino approved being shown on forge-ct.com (reported by Nick, 2026-10-11).
- */
-export const IN_PROGRESS: Project[] = [
   {
     slug: "ninos-collectibles",
     name: "Nino’s Collectibles",
     short: "Nino’s Collectibles",
     filter: "card-tabletop",
-    stage: "In progress",
     category: "Trading-card dealer",
-    place: "Card shows and Instagram",
+    place: "Card shows",
     image: "/images/work/ninoscollectibles.jpg",
-    imageHeight: 1428,
+    imageHeight: 1429,
     site: "https://ninoscollectibles.com/",
     siteLabel: "ninoscollectibles.com",
     need: "Nino buys and sells Pokémon and One Piece cards at card shows, on Instagram and in Whatnot live shows. Buyers need to see what he deals in and where he is vending next; sellers need a first look at what a card might fetch before they meet him.",
     built:
       "A phone-first site built from Nino’s own Instagram posts, with a show list read from his OnTreasure profile and a card scanner for people selling to him.",
     story:
-      "A site built from Nino’s own Instagram posts, a show list read from OnTreasure, and a card scanner for sellers. Live as a concept preview.",
+      "Nino’s own Instagram posts, a show list read from his OnTreasure profile, and a card scanner for people selling to him — built for buyers and sellers who meet him at card shows.",
     designIntent:
       "Keep every claim traceable. Photos and captions come from Nino’s public posts with their dates, and past pulls are labelled as not a stock list. Show dates are read from OnTreasure, never typed in. The scanner never fills in a price, a condition or a grade: it shows an estimate only from a dated market price, the customer picks the condition, and the final offer is made in person.",
     customerPath: [
@@ -208,5 +189,15 @@ export const IN_PROGRESS: Project[] = [
   },
 ];
 
-export const projectBySlug = (slug: string) => [...PROJECTS, ...IN_PROGRESS].find((p) => p.slug === slug);
+export const LAB = {
+  name: "Voidcaller — On-chain metalcore",
+  kind: "FORGE experiment · Music and interactive",
+  image: "/images/work/voidcaller.jpg",
+  site: "https://voidcaller.enterthegrotto.xyz/",
+  story:
+    "A world that matches the record: player, relics, and lore. Built to prove that a project can go further when the experience itself is part of the brief.",
+  tags: ["Interactive", "Custom player", "Worldbuilding"],
+} as const;
+
+export const projectBySlug = (slug: string) => PROJECTS.find((p) => p.slug === slug);
 export const filterCount = (f: Filter) => PROJECTS.filter((p) => p.filter === f).length;

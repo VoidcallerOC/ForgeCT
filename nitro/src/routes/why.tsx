@@ -26,7 +26,7 @@ const FAQ: { q: string; a: React.ReactNode }[] = [
         Yes. These three featured live client shops are open right now:{" "}
         <a className="link" href="https://www.thousandsunnytcg.com/" target="_blank" rel="noopener noreferrer">Thousand Sunny</a>,{" "}
         <a className="link" href="https://mjvideogames.com/" target="_blank" rel="noopener noreferrer">M and J</a>, and{" "}
-        <a className="link" href="https://hardhittincardshop.com/" target="_blank" rel="noopener noreferrer">Hard Hittin</a>. See all five
+        <a className="link" href="https://hardhittincardshop.com/" target="_blank" rel="noopener noreferrer">Hard Hittin</a>. See all six
         approved live client projects in the <Link className="link" to="/work">Forge portfolio</Link>.
       </>
     ),

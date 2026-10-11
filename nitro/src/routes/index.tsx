@@ -3,7 +3,7 @@ import { Arrow, Plate } from "@/components/chrome";
 import { ClientNotes } from "@/components/client-notes";
 import { NextSteps } from "@/components/next-steps";
 import { PackageChooser, RateSheet, SheetNotes } from "@/components/rate-sheet";
-import { InProgressNote, LabNote, Ledger, PhoneRail, ProofDeck } from "@/components/work";
+import { LabNote, Ledger, PhoneRail, ProofDeck } from "@/components/work";
 import { pageHead } from "@/lib/seo";
 import { BUSINESS, CARE, PACKAGES, usd } from "@/lib/site";
 import { PROJECTS } from "@/lib/work";
@@ -166,14 +166,13 @@ function Home() {
           <div className="split">
             <h2 id="work-title">Real businesses. Real reasons to build.</h2>
             <p className="lede">
-              Five live client sites. The screenshot is the proof. The line under it is the documented need and the build —
+              Six live client sites. The screenshot is the proof. The line under it is the documented need and the build —
               not a result we did not measure.
             </p>
           </div>
           <ProofDeck />
           <h3 className="index-label">Index</h3>
           <Ledger headingId="work-title" />
-          <InProgressNote />
           <LabNote />
         </div>
       </section>

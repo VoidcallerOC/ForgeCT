@@ -23,13 +23,11 @@ export const Route = createFileRoute("/work/$slug")({
 function CaseStudy() {
   const { slug } = Route.useLoaderData();
   const project = projectBySlug(slug)!;
-  // In-progress engagements are not in the approved rotation; they lead back into it at the start.
   const index = PROJECTS.indexOf(project);
   const next = PROJECTS[(index + 1) % PROJECTS.length];
-  const plate = ["Forge CT case study", ...(project.stage ? [project.stage] : []), project.category, project.place];
   return (
     <main id="main">
-      <PageHead plate={plate} title={project.name}>
+      <PageHead plate={["Forge CT case study", project.category, project.place]} title={project.name}>
         <p className="lede">{project.built}</p>
       </PageHead>
       <section className="band">

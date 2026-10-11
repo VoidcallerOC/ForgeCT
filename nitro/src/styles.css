@@ -585,8 +585,9 @@ p {
   }
 }
 @media (min-width: 900px) {
-  /* All five phones the same size and level; captions top-aligned under them. */
+  /* All phones the same size and level, sharing the row so none falls off the edge; captions top-aligned under them. */
   .rail {
+    grid-auto-columns: minmax(0, 1fr);
     overflow: visible;
     align-items: start;
   }
@@ -897,35 +898,6 @@ p {
   width: 120px;
   border: 5px solid var(--steel-2);
   border-radius: 18px;
-}
-.wip-item {
-  display: grid;
-  gap: 1.5rem;
-  margin-top: 1rem;
-  padding: clamp(20px, 3vw, 32px);
-  border: 1.5px dashed var(--rule-strong);
-}
-@media (min-width: 760px) {
-  .wip-item {
-    grid-template-columns: 120px 1fr;
-    align-items: start;
-  }
-}
-.wip-item img {
-  width: 120px;
-  border: 5px solid var(--steel-2);
-  border-radius: 18px;
-}
-.wip-item h4 {
-  margin: 0;
-  font-family: var(--display);
-  font-size: 1.2rem;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  line-height: 1.2;
-}
-.wip-item .actions {
-  align-items: center;
 }
 
 /* ---------- rate sheet ---------- */

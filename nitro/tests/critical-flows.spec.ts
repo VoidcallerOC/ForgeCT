@@ -165,36 +165,27 @@ test.describe("certified business-critical flows", () => {
 });
 
 test.describe("approved portfolio taxonomy", () => {
-  test("ledger lists the five live clients, filters 4 + 1, and keeps the lab apart", async ({ page }) => {
+  test("ledger lists the six live clients, filters 5 + 1, and keeps the lab apart", async ({ page }) => {
     await page.goto("/work");
     const rows = page.locator("table.ledger tbody tr");
-    await expect(rows).toHaveCount(5);
+    await expect(rows).toHaveCount(6);
     await expect(page.getByRole("button", { name: /^All/ })).toHaveAttribute("aria-pressed", "true");
     await page.getByRole("button", { name: /Card and tabletop/ }).click();
-    await expect(page.locator("table.ledger tbody tr:visible")).toHaveCount(4);
+    await expect(page.locator("table.ledger tbody tr:visible")).toHaveCount(5);
     await page.getByRole("button", { name: /Retail and local/ }).click();
     await expect(page.locator("table.ledger tbody tr:visible")).toHaveCount(1);
     await expect(page.locator("table.ledger tbody tr:visible")).toContainText("Harris in Wonderland");
     await expect(page.locator("table.ledger")).not.toContainText("Voidcaller");
     await expect(page.locator(".lab")).toContainText("not client work");
-    await expect(page.locator("table.ledger")).not.toContainText("Nino");
   });
 
-  test("the homepage shows the in-progress engagement apart from the live clients", async ({ page }) => {
+  test("Nino’s Collectibles appears like the other clients: rail, proof deck, ledger and case study", async ({ page }) => {
     await page.goto("/");
-    const wip = page.locator("#work .wip");
-    await expect(wip).toContainText("Nino’s Collectibles");
-    await expect(wip).toContainText("not counted as a live client launch");
-    await expect(page.locator("#work table.ledger tbody tr")).toHaveCount(5);
-    await expect(page.locator("#work table.ledger")).not.toContainText("Nino");
-  });
-
-  test("in-progress engagements sit apart from live clients", async ({ page }) => {
+    await expect(page.locator(".rail")).toContainText("Nino’s Collectibles");
+    await expect(page.locator("#work .proof-deck")).toContainText("Nino’s Collectibles");
+    await expect(page.locator("#work table.ledger tbody tr")).toHaveCount(6);
     await page.goto("/work");
-    const wip = page.locator(".wip");
-    await expect(wip).toContainText("Nino’s Collectibles");
-    await expect(wip).toContainText("not counted as a live client launch");
-    await wip.getByRole("link", { name: "Case study" }).click();
+    await page.locator("table.ledger").getByRole("link", { name: "Nino’s Collectibles" }).click();
     await expect(page).toHaveURL(/\/work\/ninos-collectibles$/);
     await expect(page.locator("h1")).toHaveText("Nino’s Collectibles");
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", "index,follow");
@@ -202,7 +193,6 @@ test.describe("approved portfolio taxonomy", () => {
       "href",
       "https://ninoscollectibles.com/",
     );
-    await expect(page.locator(".facts")).toContainText("Where it stands");
     await expect(page.locator(".facts")).toContainText("Checked 11 October 2026");
     await page.reload();
     await expect(page.locator("h1")).toHaveText("Nino’s Collectibles");
@@ -216,7 +206,6 @@ test.describe("approved portfolio taxonomy", () => {
       "https://infiniteheroes.net/",
       "https://harrisinwonderland.com/",
       "https://voidcaller.enterthegrotto.xyz/",
-      // In-progress engagement, linked from its own case study and the In progress block, never as a live client.
       "https://ninoscollectibles.com/",
     ]);
     for (const path of ROUTES) {

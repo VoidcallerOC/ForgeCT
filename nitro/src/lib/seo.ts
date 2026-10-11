@@ -99,7 +99,7 @@ export const META: Record<string, PageMeta> = {
   "/work": {
     title: "Work — Forge CT live client projects",
     description:
-      "All five approved Forge CT live client projects for card, tabletop, retail, and neighborhood businesses in Connecticut.",
+      "All six approved Forge CT live client projects for card, tabletop, retail, and neighborhood businesses in Connecticut.",
     ogImageAlt: CT_OG_ALT,
   },
 };

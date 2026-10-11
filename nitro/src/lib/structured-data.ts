@@ -964,7 +964,7 @@ export const STRUCTURED_DATA: Record<string, unknown[]> = {
       "@id": "https://www.forge-ct.com/work#webpage",
       "url": "https://www.forge-ct.com/work",
       "name": "Forge CT live client projects",
-      "description": "All five approved Forge CT live client projects for local shops and businesses.",
+      "description": "All six approved Forge CT live client projects for local shops and businesses.",
       "isPartOf": {
         "@id": "https://www.forge-ct.com/#business"
       },
@@ -993,6 +993,11 @@ export const STRUCTURED_DATA: Record<string, unknown[]> = {
           "@type": "CreativeWork",
           "name": "Infinite Heroes",
           "url": "https://www.forge-ct.com/work/infinite-heroes"
+        },
+        {
+          "@type": "CreativeWork",
+          "name": "Nino’s Collectibles",
+          "url": "https://www.forge-ct.com/work/ninos-collectibles"
         }
       ]
     }
