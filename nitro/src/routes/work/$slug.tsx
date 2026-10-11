@@ -13,7 +13,9 @@ export const Route = createFileRoute("/work/$slug")({
   },
   head: ({ params }) => {
     const project = projectBySlug(params.slug);
-    return project ? pageHead(`/work/${project.slug}`, caseStudyMeta(project)) : {};
+    if (!project) return {};
+    const meta = caseStudyMeta(project);
+    return pageHead(`/work/${project.slug}`, project.robots ? { ...meta, robots: project.robots } : meta);
   },
   component: CaseStudy,
 });
@@ -21,11 +23,13 @@ export const Route = createFileRoute("/work/$slug")({
 function CaseStudy() {
   const { slug } = Route.useLoaderData();
   const project = projectBySlug(slug)!;
+  // In-progress engagements are not in the approved rotation; they lead back into it at the start.
   const index = PROJECTS.indexOf(project);
   const next = PROJECTS[(index + 1) % PROJECTS.length];
+  const plate = ["Forge CT case study", ...(project.stage ? [project.stage] : []), project.category, project.place];
   return (
     <main id="main">
-      <PageHead plate={["Forge CT case study", project.category, project.place]} title={project.name}>
+      <PageHead plate={plate} title={project.name}>
         <p className="lede">{project.built}</p>
       </PageHead>
       <section className="band">
@@ -57,6 +61,17 @@ function CaseStudy() {
                   </dd>
                 </div>
               ) : null}
+              {project.status ? (
+                <div>
+                  <dt>Where it stands</dt>
+                  <dd>
+                    <ul className="case-path">
+                      {project.status.map((line) => <li key={line}>{line}</li>)}
+                    </ul>
+                    <p className="mono muted case-checked">Checked {project.statusCheckedOn}</p>
+                  </dd>
+                </div>
+              ) : null}
               <div>
                 <dt>Where</dt>
                 <dd>
@@ -81,6 +96,21 @@ function CaseStudy() {
                 </dd>
               </div>
             </dl>
+            {project.figure ? (
+              <figure className="case-figure">
+                <div className="phone-frame">
+                  <img
+                    src={project.figure.image}
+                    alt={project.figure.alt}
+                    width={720}
+                    height={project.figure.imageHeight}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+                <figcaption className="muted">{project.figure.caption}</figcaption>
+              </figure>
+            ) : null}
             <div className="actions">
               {project.site ? (
                 <a className="btn" href={project.site} target="_blank" rel="noopener noreferrer" data-track={`case_live_${project.slug}`}>

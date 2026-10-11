@@ -8,6 +8,7 @@ const ROUTES = [
   "/work/harris-in-wonderland",
   "/work/m-and-j-video-games",
   "/work/infinite-heroes",
+  "/work/ninos-collectibles",
   "/services",
   "/care",
   "/audit",
@@ -176,6 +177,26 @@ test.describe("approved portfolio taxonomy", () => {
     await expect(page.locator("table.ledger tbody tr:visible")).toContainText("Harris in Wonderland");
     await expect(page.locator("table.ledger")).not.toContainText("Voidcaller");
     await expect(page.locator(".lab")).toContainText("not client work");
+    await expect(page.locator("table.ledger")).not.toContainText("Nino");
+  });
+
+  test("in-progress engagements sit apart from live clients and are not indexed", async ({ page }) => {
+    await page.goto("/work");
+    const wip = page.locator(".wip");
+    await expect(wip).toContainText("Nino’s Collectibles");
+    await expect(wip).toContainText("not counted as a live client launch");
+    await wip.getByRole("link", { name: "Case study" }).click();
+    await expect(page).toHaveURL(/\/work\/ninos-collectibles$/);
+    await expect(page.locator("h1")).toHaveText("Nino’s Collectibles");
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", "noindex,follow");
+    await expect(page.getByRole("link", { name: /Visit ninoscollectibles\.com/ })).toHaveAttribute(
+      "href",
+      "https://ninoscollectibles.com/",
+    );
+    await expect(page.locator(".facts")).toContainText("Where it stands");
+    await expect(page.locator(".facts")).toContainText("Checked 11 October 2026");
+    await page.reload();
+    await expect(page.locator("h1")).toHaveText("Nino’s Collectibles");
   });
 
   test("only approved live client URLs are linked as live sites", async ({ page }) => {
@@ -186,6 +207,8 @@ test.describe("approved portfolio taxonomy", () => {
       "https://infiniteheroes.net/",
       "https://harrisinwonderland.com/",
       "https://voidcaller.enterthegrotto.xyz/",
+      // In-progress engagement, linked from its own case study and the In progress block, never as a live client.
+      "https://ninoscollectibles.com/",
     ]);
     for (const path of ROUTES) {
       await page.goto(path);
