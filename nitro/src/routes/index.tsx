@@ -3,7 +3,7 @@ import { Arrow, Plate } from "@/components/chrome";
 import { ClientNotes } from "@/components/client-notes";
 import { NextSteps } from "@/components/next-steps";
 import { PackageChooser, RateSheet, SheetNotes } from "@/components/rate-sheet";
-import { LabNote, Ledger, PhoneRail, ProofDeck } from "@/components/work";
+import { InProgressNote, LabNote, Ledger, PhoneRail, ProofDeck } from "@/components/work";
 import { pageHead } from "@/lib/seo";
 import { BUSINESS, CARE, PACKAGES, usd } from "@/lib/site";
 import { PROJECTS } from "@/lib/work";
@@ -173,6 +173,7 @@ function Home() {
           <ProofDeck />
           <h3 className="index-label">Index</h3>
           <Ledger headingId="work-title" />
+          <InProgressNote />
           <LabNote />
         </div>
       </section>

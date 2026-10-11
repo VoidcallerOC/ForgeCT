@@ -180,6 +180,15 @@ test.describe("approved portfolio taxonomy", () => {
     await expect(page.locator("table.ledger")).not.toContainText("Nino");
   });
 
+  test("the homepage shows the in-progress engagement apart from the live clients", async ({ page }) => {
+    await page.goto("/");
+    const wip = page.locator("#work .wip");
+    await expect(wip).toContainText("Nino’s Collectibles");
+    await expect(wip).toContainText("not counted as a live client launch");
+    await expect(page.locator("#work table.ledger tbody tr")).toHaveCount(5);
+    await expect(page.locator("#work table.ledger")).not.toContainText("Nino");
+  });
+
   test("in-progress engagements sit apart from live clients", async ({ page }) => {
     await page.goto("/work");
     const wip = page.locator(".wip");
