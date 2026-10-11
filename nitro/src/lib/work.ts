@@ -44,6 +44,44 @@ export type Project = {
 
 export const PROJECTS: Project[] = [
   {
+    slug: "ninos-collectibles",
+    name: "Nino’s Collectibles",
+    short: "Nino’s Collectibles",
+    filter: "card-tabletop",
+    category: "Trading-card dealer",
+    place: "Card shows",
+    image: "/images/work/ninoscollectibles.jpg",
+    imageHeight: 1429,
+    site: "https://ninoscollectibles.com/",
+    siteLabel: "ninoscollectibles.com",
+    need: "Nino buys and sells Pokémon and One Piece cards at card shows, on Instagram and in Whatnot live shows. Buyers need to see what he deals in and where he is vending next; sellers need a first look at what a card might fetch before they meet him.",
+    built:
+      "A phone-first site built from Nino’s own Instagram posts, with a show list read from his OnTreasure profile and a card scanner for people selling to him.",
+    story:
+      "Nino’s own Instagram posts, a show list read from his OnTreasure profile, and a card scanner for people selling to him — built for buyers and sellers who meet him at card shows.",
+    designIntent:
+      "Keep every claim traceable. Photos and captions come from Nino’s public posts with their dates, and past pulls are labelled as not a stock list. Show dates are read from OnTreasure, never typed in. The scanner never fills in a price, a condition or a grade: it shows an estimate only from a dated market price, the customer picks the condition, and the final offer is made in person.",
+    customerPath: [
+      "See recent pulls and deals from Nino’s Instagram, labelled as past posts.",
+      "Follow a link to where Nino is vending next.",
+      "Message Nino on Instagram to buy, sell or meet at a show.",
+    ],
+    statusCheckedOn: "11 October 2026",
+    status: [
+      "Live at ninoscollectibles.com. The site’s own footer still labels it a concept preview, and it is not yet open to search engines.",
+      "Card scanner: the phone reads the collector number with on-device OCR, searches the catalog, and asks the customer to confirm the printing and condition. It passes its end-to-end test against a test catalog. Live pricing is not switched on yet, so on the live site the scanner cannot return a match or an estimate.",
+      "Show list: built to read Nino’s OnTreasure vendor profile. On the check date it reported the list unavailable and linked to his profile instead.",
+      "Owner tools for inventory, photo drafts, events and Square sync are built and tested against a mock of Square. They are not yet connected to Nino’s Square account.",
+    ],
+    figure: {
+      image: "/images/work/ninoscollectibles-scan.jpg",
+      imageHeight: 1428,
+      alt: "Nino’s Collectibles card scanner page shown on a mobile phone",
+      caption: "The public scanner page. Card search and estimates switch on once live pricing is configured.",
+    },
+    tags: ["Instagram-sourced feed", "OnTreasure shows", "Card scanner (OCR)", "Owner tools"],
+  },
+  {
     slug: "harris-in-wonderland",
     name: "Harris in Wonderland",
     short: "Harris in Wonderland",
@@ -148,44 +186,6 @@ export const PROJECTS: Project[] = [
     story:
       "Watertown comic shop on Main Street. New comics on Wednesday, collectibles on the floor whenever the door is open — a page built so a walk-in can find the shop.",
     tags: ["Comics", "Collectibles", "Main Street"],
-  },
-  {
-    slug: "ninos-collectibles",
-    name: "Nino’s Collectibles",
-    short: "Nino’s Collectibles",
-    filter: "card-tabletop",
-    category: "Trading-card dealer",
-    place: "Card shows",
-    image: "/images/work/ninoscollectibles.jpg",
-    imageHeight: 1429,
-    site: "https://ninoscollectibles.com/",
-    siteLabel: "ninoscollectibles.com",
-    need: "Nino buys and sells Pokémon and One Piece cards at card shows, on Instagram and in Whatnot live shows. Buyers need to see what he deals in and where he is vending next; sellers need a first look at what a card might fetch before they meet him.",
-    built:
-      "A phone-first site built from Nino’s own Instagram posts, with a show list read from his OnTreasure profile and a card scanner for people selling to him.",
-    story:
-      "Nino’s own Instagram posts, a show list read from his OnTreasure profile, and a card scanner for people selling to him — built for buyers and sellers who meet him at card shows.",
-    designIntent:
-      "Keep every claim traceable. Photos and captions come from Nino’s public posts with their dates, and past pulls are labelled as not a stock list. Show dates are read from OnTreasure, never typed in. The scanner never fills in a price, a condition or a grade: it shows an estimate only from a dated market price, the customer picks the condition, and the final offer is made in person.",
-    customerPath: [
-      "See recent pulls and deals from Nino’s Instagram, labelled as past posts.",
-      "Follow a link to where Nino is vending next.",
-      "Message Nino on Instagram to buy, sell or meet at a show.",
-    ],
-    statusCheckedOn: "11 October 2026",
-    status: [
-      "Live at ninoscollectibles.com. The site’s own footer still labels it a concept preview, and it is not yet open to search engines.",
-      "Card scanner: the phone reads the collector number with on-device OCR, searches the catalog, and asks the customer to confirm the printing and condition. It passes its end-to-end test against a test catalog. Live pricing is not switched on yet, so on the live site the scanner cannot return a match or an estimate.",
-      "Show list: built to read Nino’s OnTreasure vendor profile. On the check date it reported the list unavailable and linked to his profile instead.",
-      "Owner tools for inventory, photo drafts, events and Square sync are built and tested against a mock of Square. They are not yet connected to Nino’s Square account.",
-    ],
-    figure: {
-      image: "/images/work/ninoscollectibles-scan.jpg",
-      imageHeight: 1428,
-      alt: "Nino’s Collectibles card scanner page shown on a mobile phone",
-      caption: "The public scanner page. Card search and estimates switch on once live pricing is configured.",
-    },
-    tags: ["Instagram-sourced feed", "OnTreasure shows", "Card scanner (OCR)", "Owner tools"],
   },
 ];
 

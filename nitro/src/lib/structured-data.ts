@@ -971,6 +971,11 @@ export const STRUCTURED_DATA: Record<string, unknown[]> = {
       "mainEntity": [
         {
           "@type": "CreativeWork",
+          "name": "Nino’s Collectibles",
+          "url": "https://www.forge-ct.com/work/ninos-collectibles"
+        },
+        {
+          "@type": "CreativeWork",
           "name": "Harris in Wonderland",
           "url": "https://www.forge-ct.com/work/harris-in-wonderland"
         },
@@ -993,11 +998,6 @@ export const STRUCTURED_DATA: Record<string, unknown[]> = {
           "@type": "CreativeWork",
           "name": "Infinite Heroes",
           "url": "https://www.forge-ct.com/work/infinite-heroes"
-        },
-        {
-          "@type": "CreativeWork",
-          "name": "Nino’s Collectibles",
-          "url": "https://www.forge-ct.com/work/ninos-collectibles"
         }
       ]
     }

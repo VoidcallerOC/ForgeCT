@@ -181,7 +181,9 @@ test.describe("approved portfolio taxonomy", () => {
 
   test("Nino’s Collectibles appears like the other clients: rail, proof deck, ledger and case study", async ({ page }) => {
     await page.goto("/");
-    await expect(page.locator(".rail")).toContainText("Nino’s Collectibles");
+    // Listed first so it is visible without swiping the rail or scrolling past the other cases.
+    await expect(page.locator(".rail > li").first()).toContainText("Nino’s Collectibles");
+    await expect(page.locator("#work .proof").first()).toContainText("Nino’s Collectibles");
     await expect(page.locator("#work .proof-deck")).toContainText("Nino’s Collectibles");
     await expect(page.locator("#work table.ledger tbody tr")).toHaveCount(6);
     await page.goto("/work");
