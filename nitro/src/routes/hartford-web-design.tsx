@@ -37,6 +37,20 @@ const FAQ = [
   },
 ];
 
+/** Keeps the published answer text and links the state name to the Connecticut page. */
+function ConnecticutAnswer({ text }: { text: string }) {
+  const [before, after] = text.split("Connecticut");
+  return (
+    <>
+      {before}
+      <Link className="link" to="/connecticut-web-design">
+        Connecticut
+      </Link>
+      {after}
+    </>
+  );
+}
+
 function Hartford() {
   return (
     <main id="main">
@@ -124,7 +138,7 @@ function Hartford() {
             {FAQ.map((f) => (
               <details key={f.q}>
                 <summary>{f.q}</summary>
-                <div>{f.a}</div>
+                <div>{f.q === "Do you work with shops outside Hartford?" ? <ConnecticutAnswer text={f.a} /> : f.a}</div>
               </details>
             ))}
           </div>

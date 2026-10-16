@@ -31,7 +31,14 @@ function WorkIndex() {
       <section className="band" aria-labelledby="ledger-title">
         <div className="wrap">
           <h2 id="ledger-title">Built for the way people find a place.</h2>
-          <p className="lede">Open a case. The screenshot is the existing site. The lines are the documented need and build.</p>
+          <p className="lede">
+            Open a case. The screenshot is the existing site. The lines are the documented need and build. The offer for
+            shops across the state is{" "}
+            <Link className="link" to="/connecticut-web-design">
+              Connecticut web design
+            </Link>
+            .
+          </p>
           <ProofDeck />
           <h3 className="index-label">Index</h3>
           <Ledger headingId="ledger-title" />
