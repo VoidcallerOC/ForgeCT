@@ -356,6 +356,44 @@ export const STRUCTURED_DATA: Record<string, unknown[]> = {
           }
         }
       ]
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What does FORGE CT build for Connecticut businesses?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Custom websites for shops and local businesses, built around the visit: hours, location, what you carry, and a clear next step on a phone. E-commerce is a paid add-on when the shop sells that way. Larger systems are scoped separately."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Where in Connecticut is the work?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "FORGE CT is based in Farmington. Live client sites include Thousand Sunny Cards and Collectibles in West Hartford, M and J Video Games in Southington, Harris in Wonderland in Canton, Infinite Heroes in Watertown, and Hard Hittin Card Shop in Connecticut."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How much does a FORGE CT website cost?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Basic is $750 for up to 3 pages, Standard is $1,500 for up to 5 pages, and Premium is $2,500 for up to 8 pages. Hosting setup is included. E-commerce is a paid add-on. Care is $35 a month."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the first step?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Send your website through the Forge-CT Audit. FORGE CT replies with three practical fixes within 24 hours. If you already know the scope, book a working session."
+          }
+        }
+      ]
     }
   ],
   "/hartford-web-design": [

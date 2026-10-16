@@ -50,7 +50,7 @@ export const META: Record<string, PageMeta> = {
   "/connecticut-web-design": {
     title: "Connecticut Web Design for Local Businesses | FORGE CT",
     description:
-      "FORGE CT builds custom websites, ecommerce experiences, and useful web systems for local businesses across Connecticut.",
+      "Farmington studio building websites for Connecticut shops. Live work in West Hartford, Southington, Canton, and Watertown. Packages from $750.",
     ogImageAlt: CT_OG_ALT,
   },
   "/contact": {

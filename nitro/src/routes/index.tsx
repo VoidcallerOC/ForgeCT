@@ -167,7 +167,11 @@ function Home() {
             <h2 id="work-title">Real businesses. Real reasons to build.</h2>
             <p className="lede">
               Six live client sites. The screenshot is the proof. The line under it is the documented need and the build —
-              not a result we did not measure.
+              not a result we did not measure. The statewide offer, with the towns and published packages, is on{" "}
+              <Link className="link" to="/connecticut-web-design">
+                Connecticut web design
+              </Link>
+              .
             </p>
           </div>
           <ProofDeck />
