@@ -3,7 +3,7 @@
  *
  * 1. Every sitemap URL (and /pay, /thanks, /privacy) is prerendered to static HTML.
  * 2. Each page carries title, description, canonical, robots, Open Graph and Twitter tags.
- * 3. SEO parity with the certified HTML in the repo root (while it exists): title, description,
+ * 3. SEO parity with the archived certified HTML (archive/certified-static-site, while it exists): title, description,
  *    canonical, robots, og:title / og:description, and JSON-LD must match. Documented exceptions only.
  * 4. The production smoke markers (scripts/smoke-production.mjs CORE_ROUTES) appear on each page.
  * 5. config.json carries the security headers and the apex → www redirect.
@@ -16,7 +16,7 @@ import process from "node:process";
 const here = path.dirname(new URL(import.meta.url).pathname);
 const out = path.join(here, "../.vercel/output");
 const staticDir = path.join(out, "static");
-const certifiedRoot = path.join(here, "../..");
+const certifiedRoot = path.join(here, "../../archive/certified-static-site");
 const failures = [];
 const fail = (msg) => failures.push(msg);
 

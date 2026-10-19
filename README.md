@@ -4,59 +4,55 @@ A fast, accessible marketing site for **FORGE CT**, an independent web design an
 
 The production site is [www.forge-ct.com](https://www.forge-ct.com/). The apex domain redirects permanently to the `www` hostname, which is the canonical host used by page metadata, the sitemap, crawler controls, and Stripe return URLs.
 
-> **Which code is live.** Production is served from the **`nitro/` app** (TanStack Start, React 19, Nitro, Vercel project `forgect`, Root Directory `nitro`, framework `nitro`). Verified 2026-10-19: the production deployment for `main@09e3c88` serves React-rendered HTML with hashed `/assets/*` files and the on-site audit form, and the Vercel project reports `framework: nitro`. The static HTML in this repository root is the earlier certified site. It is **no longer served**; it is kept only as the SEO-parity baseline that `nitro/scripts/check-build-output.mjs` and `nitro/scripts/check-api-parity.mjs` compare against. Edit pages in `nitro/src`, not in the root HTML.
+> **Which code is live.** Production is served from the **`nitro/` app** (TanStack Start, React 19, Nitro, Vercel project `forgect`, Root Directory `nitro`, framework `nitro`). Verified 2026-10-19 against the production build log for `main@b1d5733`: Vercel runs `npm run build` → `vite build` inside `nitro/`. Edit pages in `nitro/src`.
 
-## What is included
+## What is in this repository root
 
-The repository root is the earlier dependency-light static implementation plus the Vercel functions for inquiries and payments. `api/` is still the certified API source: `nitro/server/core` must stay byte-identical to it (CI enforces this), so any API change is made in both places until the root is retired.
+| Area                                                            | Location                                                                       | Status                                                                                                                                                                                                                           |
+| --------------------------------------------------------------- | ------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Production site                                                 | `nitro/`                                                                       | Live. See `nitro/README.md`.                                                                                                                                                                                                     |
+| Certified API (inquiries, Stripe portal and webhook, proposals) | `api/`                                                                         | Source of truth; `nitro/server/core` must stay byte-identical (CI-enforced by `nitro/scripts/check-api-parity.mjs`). Retiring this duplication is an open decision, see `docs/audits/ROOT-STATIC-SITE-RETIREMENT-2026-10-19.md`. |
+| Production smoke checks                                         | `scripts/smoke-production.mjs`, `docs/PRODUCTION-SMOKE.md`                     | Run by CI on every push to `main` and every six hours.                                                                                                                                                                           |
+| Stripe operations                                               | `scripts/stripe-bootstrap.mjs`, `scripts/stripe-invoice.mjs`, `docs/STRIPE.md` | Operational scripts.                                                                                                                                                                                                             |
+| Database migrations                                             | `sql/`                                                                         | Run in Supabase before production use.                                                                                                                                                                                           |
+| The earlier static site                                         | `archive/certified-static-site/`                                               | **Not served.** Frozen on 2026-10-19 as the SEO-parity baseline that `nitro/scripts/check-build-output.mjs` reads and as rollback material. Do not edit; do not deploy.                                                          |
 
-| Area                       | Location                                                              |
-| -------------------------- | --------------------------------------------------------------------- |
-| Main page                  | `index.html`                                                          |
-| Shared styles              | `styles.css`                                                          |
-| Inquiry form behavior      | `app.js`                                                              |
-| Inquiry delivery           | `api/contact.js`                                                      |
-| Payment routing            | `pay/index.html`, `payments.js`                                       |
-| Privacy notice             | `privacy/index.html`                                                  |
-| Social-preview image       | `images/og-image.jpg` (1200×630 FORGE CT brand card)                  |
-| Security and cache headers | `vercel.json`                                                         |
-| Quality checks             | `package.json`, `.htmlvalidate.json`, `scripts/check-local-links.mjs` |
-| Continuous integration     | `.github/workflows/quality.yml`                                       |
-| Production smoke checks    | `scripts/smoke-production.mjs`, `docs/PRODUCTION-SMOKE.md`            |
+The sections below describe the API, payments and operations. Anything they say about `index.html`, `app.js`, `styles.css` or `vercel.json` refers to the archived static site; the live equivalents are `nitro/src`, `nitro/security-headers.ts` and `nitro/vite.config.ts`.
 
 ## Local development
 
-Use Node.js 22 or later.
+Use Node.js 22 or later. The site is developed in `nitro/`:
+
+```bash
+cd nitro
+npm ci
+npm run dev        # http://localhost:8080
+npm run check      # typecheck, lint, API parity, unit tests, build, output check
+npm run test:e2e   # browser checks against the built output
+```
+
+The repository root keeps the API tests and the production smoke runner:
 
 ```bash
 npm ci
-npm test
-python3 -m http.server 8000
+npm test                         # Prettier check + API syntax and unit tests
+npm run test:smoke:production    # GET-only checks against production
 ```
-
-Open `http://localhost:8000` in a browser while the local server is running. The site has no build step; Vercel serves the tracked static files directly.
 
 ## Quality checks
 
-`npm test` runs the release checks for formatting, HTML, links, and application
-logic. CI also runs `npm run test:browser` against a local static server using
-Chromium. Those browser checks intentionally cover only the business-critical
-contact submission, package pricing and mobile behavior, Care/Care+ links, and the
-receipt-bound customer portal path; they do not attempt visual regression testing.
-On pushes to `main`, CI additionally runs `npm run test:smoke:production`, a
-GET-only smoke suite against the canonical production origin and approved public
-client URLs. It never submits a form or creates a payment.
+`npm test` at the root runs Prettier and the certified API unit tests. `cd nitro && npm run check` and `npm run test:e2e` validate the production app. On pushes to `main`, CI additionally runs `npm run test:smoke:production`, a GET-only smoke suite against the canonical production origin and approved public client URLs. It never submits a form or creates a payment.
 
 | Command                         | Purpose                                                                                     |
 | ------------------------------- | ------------------------------------------------------------------------------------------- |
-| `npm run format:check`          | Ensures source files follow the shared Prettier configuration.                              |
-| `npm run lint:html`             | Detects invalid or inconsistent HTML.                                                       |
-| `npm run test:links`            | Detects broken local routes and static assets referenced by HTML.                           |
-| `npm run test:browser`          | Exercises the contact and payment-critical flows in Chromium.                               |
+| `npm run format:check`          | Ensures source files follow the shared Prettier configuration (the archive is ignored).     |
+| `npm run test:js`               | Syntax-checks and unit-tests the certified API and the smoke runner.                        |
 | `npm run test:smoke:unit`       | Tests the production smoke runner against a local controlled server.                        |
 | `npm run test:smoke:production` | Checks production routes, APIs, headers, redirects, and approved public URLs with GET only. |
+| `cd nitro && npm run check`     | Typecheck, lint, API parity, unit tests, build, SEO/headers/redirect output check.          |
+| `cd nitro && npm run test:e2e`  | Browser checks: forms, payments links, navigation, layout, security headers.                |
 
-GitHub Actions runs these checks on pull requests and pushes to `main`. Branch protection is active: changes to `main` require a pull request and the passing `Validate site` check before merging.
+GitHub Actions runs these checks on pull requests and pushes to `main`. Branch protection is active: changes to `main` require a pull request and the passing `Validate site` and `Validate Nitro rebuild` checks before merging.
 
 Production smoke scope, safe integration-test procedures for Resend/Stripe/Supabase,
 and the current alerting limitation are documented in

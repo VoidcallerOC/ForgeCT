@@ -2,7 +2,7 @@
 
 A ground-up rebuild of [www.forge-ct.com](https://www.forge-ct.com/) on the Forge Nitro stack: TanStack Start, React 19, Tailwind 4 and Nitro v3, built for Vercel.
 
-**This is production.** Vercel project `forgect` builds this folder (Root Directory `nitro`, framework `nitro`) and serves www.forge-ct.com from it; verified 2026-10-19 against the production deployment of `main@09e3c88`. The static site in the repository root is no longer served and remains only as the parity baseline for `scripts/check-build-output.mjs` and `scripts/check-api-parity.mjs`.
+**This is production.** Vercel project `forgect` builds this folder (Root Directory `nitro`, framework `nitro`) and serves www.forge-ct.com from it; verified 2026-10-19 against the production deployment of `main@09e3c88`. The earlier static site is archived at `../archive/certified-static-site` (not served) and remains only as the SEO-parity baseline for `scripts/check-build-output.mjs`; `../api` is still the certified API source that `scripts/check-api-parity.mjs` compares against.
 
 ## Run
 
@@ -21,7 +21,7 @@ node scripts/serve-output.mjs   # serve .vercel/output locally, the way Vercel r
 |---|---|---|
 | Business facts, prices, add-ons, Care | `src/lib/site.ts` | e2e checks prices and Stripe links |
 | Portfolio taxonomy: 5 live clients (4 card and tabletop, 1 retail and local) and 1 lab build | `src/lib/work.ts` | e2e checks filters and allowed outbound URLs |
-| Titles, descriptions, canonicals, robots, Open Graph | `src/lib/seo.ts` | `scripts/check-build-output.mjs` compares the build with the root HTML |
+| Titles, descriptions, canonicals, robots, Open Graph | `src/lib/seo.ts` | `scripts/check-build-output.mjs` compares the build with the archived certified HTML |
 | JSON-LD | `src/lib/structured-data.ts` (same as the certified pages) | same check, byte-for-byte JSON |
 | Sitemap, robots, favicon, OG image, client screenshots | `public/` | output check |
 | `/api/contact`, `/api/portal`, `/api/stripe-webhook`, `/api/proposals`, `/api/proposal-accept`, `/api/proposal-checkout` | `server/core/` (exact copies of `../api`), run through `src/lib/node-handler.ts` + `src/routes/api/*` | `npm run test:parity` fails if a file drifts; the certified unit tests run here too |
@@ -66,7 +66,7 @@ Every page is prerendered to static HTML. Only `/api/*` and unknown URLs (404) r
 
 ## Cutover checklist
 
-Items 1–7 are done: the project is live on this folder. Item 8 (retire `../api` and the root HTML, remove the parity scripts) is still open and is a deliberate decision for Nick, not a side effect of any page change.
+Items 1–7 are done: the project is live on this folder. The root static site was archived on 2026-10-19 (`../archive/certified-static-site`). The remaining part of item 8, retiring `../api` in favour of `server/core` and removing the parity script, is a deliberate decision for Nick: see `../docs/audits/ROOT-STATIC-SITE-RETIREMENT-2026-10-19.md`.
 
 1. Create a Vercel project from this repository with **Root Directory `nitro`**. Nitro is auto-detected and `npm run build` writes `.vercel/output`. Do not add a repo-root `.vercelignore` that lists `nitro`: Vercel applies the repo-root ignore file even when Root Directory is `nitro`, and it strips the whole app before the build.
 2. Copy the production environment variables: `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL`, `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_CARE`, `STRIPE_PRICE_CARE_PLUS`, `STRIPE_AUTOMATIC_TAX`, `SITE_URL`.
