@@ -4,7 +4,7 @@ import { Arrow, Plate } from "@/components/chrome";
 import { ClientNotes } from "@/components/client-notes";
 import { NextSteps } from "@/components/next-steps";
 import { PackageChooser, RateSheet, SheetNotes } from "@/components/rate-sheet";
-import { LabNote, Ledger, PhoneRail, ProofDeck } from "@/components/work";
+import { LabNote, PhoneRail, ProofDeck } from "@/components/work";
 import { pageHead } from "@/lib/seo";
 import { BUSINESS, CARE, PACKAGES, usd } from "@/lib/site";
 import { PROJECTS } from "@/lib/work";
@@ -125,8 +125,12 @@ function Home() {
           <div className="split">
             <h2 id="work-title">Real businesses. Real reasons to build.</h2>
             <p className="lede">
-              Six live client sites. The screenshot is the proof. The line under it is the documented need and the build —
-              not a result we did not measure. The statewide offer, with the towns and published packages, is on{" "}
+              Six live client sites, each shown once below: the screenshot is the proof, the lines under it are the
+              documented need and the build — not a result we did not measure. The filterable index is on{" "}
+              <Link className="link" to="/work">
+                Work
+              </Link>
+              ; the statewide offer, with the towns and published packages, is on{" "}
               <Link className="link" to="/connecticut-web-design">
                 Connecticut web design
               </Link>
@@ -134,8 +138,11 @@ function Home() {
             </p>
           </div>
           <ProofDeck />
-          <h3 className="index-label">Index</h3>
-          <Ledger headingId="work-title" />
+          <p className="actions">
+            <Link to="/work" className="btn btn--line" data-track="work_index_cta">
+              The full index, with filters <Arrow />
+            </Link>
+          </p>
           <LabNote />
         </div>
       </section>
