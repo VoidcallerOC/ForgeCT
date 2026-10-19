@@ -78,7 +78,7 @@ function Care() {
             <div>
               <p className="mono">Typical monthly plan</p>
               <ul>
-                <li>$89 to $149 a month before anyone changes a line for you.</li>
+                <li>A monthly retainer before anyone changes a line for you.</li>
                 <li>WordPress updates and a ticket queue.</li>
                 <li>Your price after a call. Your scope in the fine print.</li>
                 <li>Built for every trade in the county.</li>

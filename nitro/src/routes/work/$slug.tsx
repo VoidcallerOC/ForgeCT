@@ -36,6 +36,10 @@ function CaseStudy() {
           <div className="stack">
             <dl className="facts">
               <div>
+                <dt>The business</dt>
+                <dd>{project.business}</dd>
+              </div>
+              <div>
                 <dt>The problem</dt>
                 <dd>{project.need}</dd>
               </div>
@@ -71,26 +75,38 @@ function CaseStudy() {
                 </div>
               ) : null}
               <div>
-                <dt>Where</dt>
+                <dt>The result</dt>
                 <dd>
-                  {project.place} · {project.category}
-                </dd>
-              </div>
-              <div>
-                <dt>Project notes</dt>
-                <dd>
+                  <p className="facts-kicker">Delivered</p>
                   <ul className="tag-row">
                     {project.tags.map((t) => (
                       <li key={t}>{t}</li>
                     ))}
                   </ul>
+                  <p className="muted facts-note">
+                    {project.status
+                      ? "Parts of this build are still being switched on; the dated status above is the current record. "
+                      : "No measured outcome is published for this project, so the deliverables are the result. "}
+                    This is a feature-level account of the project. No conversion, revenue or other performance result is
+                    claimed here.
+                  </p>
                 </dd>
               </div>
+              {project.site ? (
+                <div>
+                  <dt>Inspect the work</dt>
+                  <dd>
+                    <a className="link" href={project.site} target="_blank" rel="noopener noreferrer" data-track={`case_inspect_${project.slug}`}>
+                      Open {project.siteLabel} <Arrow dir="out" />
+                    </a>{" "}
+                    <span className="muted">— the live site, as the business runs it today.</span>
+                  </dd>
+                </div>
+              ) : null}
               <div>
-                <dt>Project context</dt>
-                <dd className="muted">
-                  This is a feature-level account of the project. No conversion, revenue or other performance result is
-                  claimed here.
+                <dt>Where</dt>
+                <dd>
+                  {project.place} · {project.category}
                 </dd>
               </div>
             </dl>

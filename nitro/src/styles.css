@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "@fontsource-variable/dm-sans/opsz.css";
+@import "@fontsource-variable/jetbrains-mono";
 
 /*
   FORGE CT — Nitro rebuild, on the forge-ct.com brand.
@@ -24,7 +25,7 @@
   --ember: #8a9099;
   --ember-ink: #8a9099;
   --display: "DM Sans Variable", "DM Sans", "Helvetica Neue", Arial, sans-serif;
-  --mono: var(--display);
+  --mono: "JetBrains Mono Variable", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
   --gutter: clamp(16px, 4vw, 40px);
   --max: 1240px;
   color-scheme: dark;
@@ -63,6 +64,9 @@ img {
   max-width: 100%;
   height: auto;
   display: block;
+}
+picture {
+  display: contents;
 }
 ::selection {
   background: var(--ember);
@@ -167,10 +171,10 @@ p {
   margin: 0 0 1.4rem;
   padding: 0;
   list-style: none;
-  font-family: var(--display);
-  font-size: 0.78rem;
-  font-weight: 600;
-  letter-spacing: 0.16em;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--slate);
 }
@@ -203,9 +207,9 @@ p {
 }
 .mono {
   font-family: var(--mono);
-  font-size: 0.78rem;
+  font-size: 0.74rem;
   font-weight: 500;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
 }
 
@@ -678,44 +682,320 @@ p {
   color: var(--slate);
 }
 
-/* ---------- ticket (audit offer) ---------- */
+/* ---------- the Audit Ticket (components/audit-ticket.tsx) ----------
+   The one light "paper" object on the site: an inspection record with a perforated stub. */
 .ticket {
+  --tk-paper: var(--fog);
+  --tk-ink: var(--void);
+  --tk-muted: #4b5058;
+  --tk-rule: rgba(10, 10, 10, 0.14);
+  --tk-rule-strong: rgba(10, 10, 10, 0.6);
+  position: relative;
   display: grid;
+  color: var(--tk-ink);
+  background: var(--tk-paper);
   border: 1px solid var(--rule-strong);
-  background: var(--paper);
+  box-shadow: 0 30px 60px -40px rgba(0, 0, 0, 0.9);
 }
 @media (min-width: 900px) {
   .ticket {
-    grid-template-columns: 1fr auto;
+    grid-template-columns: minmax(0, 1fr) 300px;
   }
 }
-.ticket-main {
-  padding: clamp(24px, 4vw, 48px);
+.tk-main {
+  padding: clamp(20px, 3.2vw, 40px);
 }
-.ticket-stub {
+.tk-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem 1.5rem;
+  padding-bottom: 0.9rem;
+  border-bottom: 2px solid var(--tk-ink);
+}
+.tk-brand,
+.tk-no {
+  display: grid;
+  gap: 0.2rem;
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.tk-brand .tk-sub {
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: var(--tk-muted);
+}
+.tk-no {
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-align: right;
+}
+.tk-label {
+  display: block;
+  font-family: var(--mono);
+  font-size: 0.64rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--tk-muted);
+}
+.tk-meta {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem 1.5rem;
+  padding: 0.9rem 0;
+  border-bottom: 1px solid var(--tk-rule);
+  font-size: 0.95rem;
+}
+@media (min-width: 720px) {
+  .tk-meta {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+.tk-stamp-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.9rem;
+  margin: 0.9rem 0 0;
+  font-size: 0.9rem;
+  color: var(--tk-muted);
+}
+.tk-stamp {
+  display: inline-block;
+  padding: 0.3rem 0.55rem;
+  border: 2px solid var(--tk-ink);
+  border-radius: 0.2rem;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tk-ink);
+  transform: rotate(-2deg);
+}
+.tk-heading {
+  margin: 1.2rem 0 0;
+  max-width: 24ch;
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+}
+.tk-rows {
+  margin: 1.4rem 0 0;
+  border-top: 1px solid var(--tk-rule-strong);
+}
+.tk-row {
+  display: grid;
+  gap: 0.3rem 1.5rem;
+  padding: 0.95rem 0;
+  border-bottom: 1px dashed var(--tk-rule-strong);
+}
+@media (min-width: 720px) {
+  .tk-row {
+    grid-template-columns: 13rem minmax(0, 1fr);
+  }
+}
+.tk-row dt {
+  display: grid;
+  grid-template-columns: 1.4rem auto;
+  gap: 0 0.5rem;
+  align-content: start;
+}
+.tk-mark {
+  grid-row: span 2;
+  font-family: var(--mono);
+  font-size: 0.95rem;
+  line-height: 1.25;
+}
+.tk-code {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.tk-title {
+  font-weight: 620;
+  font-size: 0.98rem;
+  line-height: 1.25;
+}
+.tk-row dd {
+  margin: 0;
+  font-size: 0.98rem;
+  line-height: 1.5;
+}
+.tk-fixes {
+  display: grid;
+  gap: 0.8rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.tk-fixes li {
+  display: grid;
+  gap: 0.4rem 1.2rem;
+  padding-top: 0.7rem;
+  border-top: 1px solid var(--tk-rule);
+}
+.tk-fixes li:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+@media (min-width: 720px) {
+  .tk-fixes li {
+    grid-template-columns: 2rem minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+.tk-fix-no {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+.tk-fixes li > span > span:last-child {
+  display: block;
+}
+.tk-foot {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.3rem 1.5rem;
+  margin-top: 1rem;
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--tk-muted);
+}
+.tk-stub {
+  position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  gap: 1.5rem;
-  padding: clamp(24px, 4vw, 48px);
-  border-top: 1px dashed var(--rule-strong);
-  background: var(--surface-2);
+  gap: 1.2rem;
+  padding: clamp(20px, 3.2vw, 40px);
+  border-top: 2px dashed var(--tk-rule-strong);
+  background:
+    repeating-linear-gradient(135deg, rgba(10, 10, 10, 0.04) 0 6px, transparent 6px 14px),
+    var(--tk-paper);
+  color: var(--tk-ink);
 }
 @media (min-width: 900px) {
-  .ticket-stub {
-    min-width: 300px;
+  .tk-stub {
     border-top: 0;
-    border-left: 1px dashed var(--rule-strong);
+    border-left: 2px dashed var(--tk-rule-strong);
   }
 }
-.stamp {
-  font-family: var(--display);
-  font-weight: 820;
-  font-size: clamp(3.4rem, 7vw, 5.4rem);
-  line-height: 0.85;
-  letter-spacing: -0.04em;
-  color: var(--ember-ink);
+/* Perforation notches where the stub tears off. */
+.tk-stub::before,
+.tk-stub::after {
+  content: "";
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 1px solid var(--rule-strong);
 }
+.tk-stub::before {
+  left: -12px;
+  top: -12px;
+}
+.tk-stub::after {
+  right: -12px;
+  top: -12px;
+}
+@media (min-width: 900px) {
+  .tk-stub::after {
+    right: auto;
+    left: -12px;
+    top: auto;
+    bottom: -12px;
+  }
+}
+.tk-stub-top {
+  margin: 0;
+}
+.tk-stub-copy {
+  color: var(--tk-muted);
+}
+.tk-stub .btn {
+  margin-top: auto;
+  background: var(--tk-ink);
+  border-color: var(--tk-ink);
+  color: var(--fog);
+}
+.tk-stub .btn:hover {
+  background: var(--steel-2);
+  border-color: var(--steel-2);
+  color: var(--fog);
+}
+.tk-stub .fine {
+  color: var(--tk-muted);
+}
+.tk-stub .link {
+  text-decoration-color: var(--tk-rule-strong);
+}
+.ticket :focus-visible {
+  outline-color: var(--tk-ink);
+}
+.stamp {
+  display: block;
+  font-family: var(--mono);
+  font-weight: 800;
+  font-size: clamp(3.2rem, 6.5vw, 5rem);
+  line-height: 0.9;
+  letter-spacing: -0.06em;
+  color: var(--tk-ink, var(--ember-ink));
+}
+
+/* The audit intake form, framed as the ticket's counterfoil. */
+.tk-intake {
+  border: 1px solid var(--rule-strong);
+}
+.tk-intake-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.4rem 1rem;
+  margin: 0;
+  padding: 0.8rem 1rem;
+  border-bottom: 1px dashed var(--rule-strong);
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--slate);
+}
+.tk-intake .form {
+  padding: clamp(16px, 2.5vw, 28px);
+}
+
+/* Where the live client sites are: real towns instead of a stat strip. */
+.towns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1.6rem;
+  margin: clamp(40px, 6vw, 72px) 0 0;
+  padding-top: 1rem;
+  border-top: 1px solid var(--rule-strong);
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.towns-label {
+  width: 100%;
+  font-size: 0.64rem;
+  letter-spacing: 0.1em;
+  color: var(--slate-light);
+}
+
 .steps-inline {
   display: grid;
   gap: 0.9rem;
@@ -1339,6 +1619,18 @@ p {
   margin: 0;
   font-size: 1.08rem;
 }
+.facts-kicker {
+  margin-bottom: 0.5rem;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--slate);
+}
+.facts-note {
+  margin-top: 0.8rem;
+  font-size: 0.95rem;
+}
 .tag-row {
   display: flex;
   flex-wrap: wrap;
@@ -1492,29 +1784,6 @@ p {
   text-transform: uppercase;
   color: var(--slate-light);
 }
-.counts {
-  display: flex;
-  gap: clamp(20px, 4vw, 48px);
-  margin: 0;
-}
-.counts div {
-  border-left: 2px solid var(--ember);
-  padding-left: 0.9rem;
-}
-.counts dt {
-  font-family: var(--mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--slate-light);
-}
-.counts dd {
-  margin: 0.2rem 0 0;
-  font-size: clamp(2rem, 4vw, 3rem);
-  font-weight: 800;
-  line-height: 1;
-}
-
 /* ---------- footer ---------- */
 .footer {
   background: transparent;
@@ -1593,37 +1862,11 @@ p {
   margin-top: 0.4rem;
   font-size: 0.95rem;
 }
-.signed + .counts {
-  margin-top: clamp(40px, 6vw, 72px);
-}
 h2 + .lede,
 h2 + .plans,
 h2 + .faq {
   margin-top: 1rem;
 }
-
-/* ---------- ambient starfield (components/starfield.tsx) ---------- */
-.starfield {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  display: block;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-.masthead,
-main,
-.footer {
-  position: relative;
-  z-index: 1;
-}
-@media print {
-  .starfield {
-    display: none;
-  }
-}
-
 
 /* ---------- conversion and credibility pass ---------- */
 .builder-proof {
@@ -1650,29 +1893,6 @@ main,
 }
 .audit-example-head {
   max-width: 52rem;
-}
-.audit-example-list {
-  margin: 2.4rem 0 0;
-  padding: 0;
-  list-style: none;
-  border-top: 1px solid var(--rule-strong);
-}
-.audit-example-list li {
-  display: grid;
-  grid-template-columns: minmax(7.5rem, 0.8fr) repeat(2, minmax(0, 1.2fr));
-  gap: 1.2rem 2rem;
-  align-items: start;
-  padding: 1.5rem 0;
-  border-bottom: 1px solid var(--rule);
-}
-.audit-example-list li > div > .mono {
-  margin-bottom: 0.45rem;
-}
-.audit-example-list li > div > p:last-child {
-  max-width: 42ch;
-}
-.audit-example-number {
-  color: var(--ember-ink);
 }
 .next-steps-inner {
   max-width: 58rem;
@@ -1753,12 +1973,3 @@ main,
   font-size: 0.66rem;
 }
 
-@media (max-width: 719px) {
-  .audit-example-list li {
-    grid-template-columns: 1fr;
-    gap: 0.75rem;
-  }
-  .audit-example-number {
-    margin-bottom: 0.1rem;
-  }
-}

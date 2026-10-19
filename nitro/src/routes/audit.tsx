@@ -73,7 +73,13 @@ function Audit() {
               <li><b>Decide from there</b><span>Keep the fixes, or talk about a build.</span></li>
             </ol>
           </div>
-          <InquiryForm variant="audit" source="audit" />
+          <div className="tk-intake">
+            <p className="tk-intake-head">
+              <span>Forge-CT Audit · intake</span>
+              <span>One URL · one line of context · reply within 24h</span>
+            </p>
+            <InquiryForm variant="audit" source="audit" />
+          </div>
         </div>
       </section>
     </main>

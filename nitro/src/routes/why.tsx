@@ -54,7 +54,7 @@ function Why() {
                 <li>Your price comes after a call.</li>
                 <li>WordPress template, then a monthly mystery retainer.</li>
                 <li>Portfolio of logos. Few live shop URLs.</li>
-                <li>2 to 4 weeks of meetings.</li>
+                <li>Meetings before you see a price.</li>
               </ul>
             </div>
             <div>

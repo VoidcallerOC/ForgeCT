@@ -18,6 +18,11 @@ export default defineConfig(({ command, isPreview }) => ({
   server: { host: "0.0.0.0", port: 8080, strictPort: true },
   preview: { host: "127.0.0.1", port: 8081, strictPort: true },
   resolve: { tsconfigPaths: true },
+  build: {
+    // Never inline fonts as data: URIs: the CSP is `font-src 'self'`, so an inlined subset would be
+    // refused by the browser. Everything else keeps Vite's default inline threshold.
+    assetsInlineLimit: (filePath) => (/\.(woff2?|ttf|otf)$/i.test(filePath) ? false : undefined),
+  },
   plugins: [
     tailwindcss(),
     tanstackStart({

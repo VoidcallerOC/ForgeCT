@@ -23,7 +23,11 @@ export type Project = {
   category: string;
   place: string;
   image: string;
+  /** Intrinsic pixel size of the screenshot file (WebP variants are generated at 480w and 160w). */
+  imageWidth?: number;
   imageHeight: number;
+  /** What the business is and who it serves, in one line — from the documented category, place and need. */
+  business: string;
   /** Outbound live URL. */
   site?: string;
   siteLabel?: string;
@@ -55,6 +59,8 @@ export const PROJECTS: Project[] = [
     // Live per the owner (2026-10-01) and linked on the certified homepage; the certified case study omitted it.
     site: "https://harrisinwonderland.com/",
     siteLabel: "harrisinwonderland.com",
+    business:
+      "A reptile specialty shop in Canton — a working collection, not a pet aisle — for people choosing and caring for an animal.",
     need: "Help customers understand the animals, care, and inventory beyond the storefront.",
     built: "Live inventory, a feeder locker, care sheets, and a beginner chooser in one experience.",
     story:
@@ -79,6 +85,8 @@ export const PROJECTS: Project[] = [
     imageHeight: 1429,
     site: "https://www.thousandsunnytcg.com/",
     siteLabel: "thousandsunnytcg.com",
+    business:
+      "A card and tabletop shop in West Hartford: cards, collectibles and in-store events for players and collectors.",
     need: "Turn a search into a visit with hours, events, and a clear path to the floor.",
     built: "A shop page with event context and custom illustration that feels like the store.",
     story: "A shop page that turns a search into a visit with clear hours, events, and a direct path to the floor.",
@@ -102,6 +110,8 @@ export const PROJECTS: Project[] = [
     imageHeight: 1429,
     site: "https://mjvideogames.com/",
     siteLabel: "mjvideogames.com",
+    business:
+      "A neighborhood video-game shop in Southington: games, trade-ins and services for walk-in customers.",
     need: "Make trade-ins, services, and a real walk-in path easy to find.",
     built: "A neighborhood storefront online, built for the phone check from the parking lot.",
     story:
@@ -126,6 +136,8 @@ export const PROJECTS: Project[] = [
     imageHeight: 1429,
     site: "https://hardhittincardshop.com/",
     siteLabel: "hardhittincardshop.com",
+    business:
+      "A card shop and card-show promoter in Connecticut: sports and trading cards, graded slabs, breaks and hobby boxes.",
     need: "Give sports cards, graded slabs, breaks, and hobby boxes one clear home.",
     built: "A launch page with the same direct energy as the counter.",
     story:
@@ -140,9 +152,12 @@ export const PROJECTS: Project[] = [
     category: "Card and tabletop shop",
     place: "Watertown",
     image: "/images/work/IMG_2604.jpg",
-    imageHeight: 1459,
+    imageWidth: 1170,
+    imageHeight: 2532,
     site: "https://infiniteheroes.net/",
     siteLabel: "infiniteheroes.net",
+    business:
+      "A comic shop on Main Street in Watertown: new comics on Wednesday, collectibles on the floor whenever the door is open.",
     need: "Help a Main Street walk-in find new comics and collectibles when the door is open.",
     built: "A clear local shop page built around the Wednesday rhythm and the floor.",
     story:
@@ -160,6 +175,8 @@ export const PROJECTS: Project[] = [
     imageHeight: 1429,
     site: "https://ninoscollectibles.com/",
     siteLabel: "ninoscollectibles.com",
+    business:
+      "A trading-card dealer who buys and sells Pokémon and One Piece cards at card shows, on Instagram and in Whatnot live shows.",
     need: "Nino buys and sells Pokémon and One Piece cards at card shows, on Instagram and in Whatnot live shows. Buyers need to see what he deals in and where he is vending next; sellers need a first look at what a card might fetch before they meet him.",
     built:
       "A phone-first site built from Nino’s own Instagram posts, with a show list read from his OnTreasure profile and a card scanner for people selling to him.",

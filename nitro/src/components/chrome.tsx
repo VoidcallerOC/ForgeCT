@@ -1,4 +1,4 @@
-import { Link, useRouterState } from "@tanstack/react-router";
+import { Link, useRouter, useRouterState } from "@tanstack/react-router";
 import { useEffect, useRef, type ReactNode } from "react";
 import { BUSINESS, MAILTO } from "@/lib/site";
 
@@ -41,24 +41,35 @@ function useCurrent() {
 function NavLinks({ className, strip = false }: { className: string; strip?: boolean }) {
   const current = useCurrent();
   const ref = useRef<HTMLElement>(null);
+  const router = useRouter();
   const path = useRouterState({ select: (s) => s.location.pathname });
 
   // Mobile strip: bring the current item into view horizontally without scrolling the page.
   // The masthead persists across client-side navigation, so on a route with no primary-nav item
   // (e.g. /audit) reset to the start instead of keeping the previous page's scroll offset.
+  //
+  // The router's scroll restoration (router.tsx, `scrollRestoration: true`) records every element
+  // that scrolled, carries the strip's offset over to the next location and writes it back in its
+  // own `onRendered` subscriber. That write can land after this effect, so the alignment also runs
+  // on `onRendered`: our subscriber is registered later, so it is emitted after the restoration one.
   useEffect(() => {
-    const nav = ref.current;
-    if (!strip || !nav) return;
-    const active = nav.querySelector<HTMLElement>("[aria-current]");
-    if (!active) {
-      nav.scrollLeft = 0;
-      return;
-    }
-    const left = active.offsetLeft - nav.offsetLeft;
-    if (left < nav.scrollLeft || left + active.offsetWidth > nav.scrollLeft + nav.clientWidth) {
-      nav.scrollLeft = Math.max(0, left - 16);
-    }
-  }, [path, strip]);
+    if (!strip) return;
+    const align = () => {
+      const nav = ref.current;
+      if (!nav) return;
+      const active = nav.querySelector<HTMLElement>("[aria-current]");
+      if (!active) {
+        nav.scrollLeft = 0;
+        return;
+      }
+      const left = active.offsetLeft - nav.offsetLeft;
+      if (left < nav.scrollLeft || left + active.offsetWidth > nav.scrollLeft + nav.clientWidth) {
+        nav.scrollLeft = Math.max(0, left - 16);
+      }
+    };
+    align();
+    return router.subscribe("onRendered", align);
+  }, [path, strip, router]);
 
   return (
     <nav ref={ref} className={className} aria-label="Primary">
