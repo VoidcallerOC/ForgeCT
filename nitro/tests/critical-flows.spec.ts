@@ -183,8 +183,12 @@ test.describe("approved portfolio taxonomy", () => {
     await page.goto("/");
     await expect(page.locator(".rail")).toContainText("Nino’s Collectibles");
     await expect(page.locator("#work .proof-deck")).toContainText("Nino’s Collectibles");
-    await expect(page.locator("#work table.ledger tbody tr")).toHaveCount(6);
+    // The homepage shows each client in the rail (teaser) and the proof deck (the case) only; the
+    // filterable ledger is the index on /work, linked from the proof deck.
+    await expect(page.locator("#work table.ledger")).toHaveCount(0);
+    await expect(page.locator("#work").getByRole("link", { name: /The full index, with filters/ })).toHaveAttribute("href", "/work");
     await page.goto("/work");
+    await expect(page.locator("table.ledger tbody tr")).toHaveCount(6);
     await page.locator("table.ledger").getByRole("link", { name: "Nino’s Collectibles" }).click();
     await expect(page).toHaveURL(/\/work\/ninos-collectibles$/);
     await expect(page.locator("h1")).toHaveText("Nino’s Collectibles");
