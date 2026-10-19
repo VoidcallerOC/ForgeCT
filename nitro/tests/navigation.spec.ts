@@ -19,14 +19,9 @@ const VIEWPORTS = [
   { name: "mobile", width: 390, height: 844, nav: "nav.nav--strip" },
 ] as const;
 
-/** Certified route baseline: every URL in the certified sitemap plus the certified non-indexed pages. */
+/** Route baseline: every URL in the published sitemap plus the non-indexed pages. */
 function certifiedRoutes() {
-  let xml: string;
-  try {
-    xml = readFileSync(new URL("../../sitemap.xml", import.meta.url), "utf8");
-  } catch {
-    xml = readFileSync(new URL("../public/sitemap.xml", import.meta.url), "utf8");
-  }
+  const xml = readFileSync(new URL("../public/sitemap.xml", import.meta.url), "utf8");
   const routes = [...xml.matchAll(/<loc>https:\/\/www\.forge-ct\.com([^<]*)<\/loc>/g)].map((m) => m[1] || "/");
   return new Set([...routes, "/pay", "/thanks", "/privacy"]);
 }
