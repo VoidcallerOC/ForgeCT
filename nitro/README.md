@@ -2,7 +2,7 @@
 
 A ground-up rebuild of [www.forge-ct.com](https://www.forge-ct.com/) on the Forge Nitro stack: TanStack Start, React 19, Tailwind 4 and Nitro v3, built for Vercel.
 
-**Not live.** The certified static site in the repository root is still production. This folder deploys separately and replaces it only after the cutover checklist below is complete.
+**This is production.** Vercel project `forgect` builds this folder (Root Directory `nitro`, framework `nitro`) and serves www.forge-ct.com from it; verified 2026-10-19 against the production deployment of `main@09e3c88`. The static site in the repository root is no longer served and remains only as the parity baseline for `scripts/check-build-output.mjs` and `scripts/check-api-parity.mjs`.
 
 ## Run
 
@@ -46,8 +46,11 @@ Every page is prerendered to static HTML. Only `/api/*` and unknown URLs (404) r
 
 - **Engine (reused from `captital-bail`/`UpScale`):** Vite and TanStack Start config, the router, `nitro({ preset: "vercel" })`, the ESLint setup, and the pattern of keeping facts in a single file.
 - **Composition (new):** the site is built around the *parking-lot test*. A local business site gets judged on a phone, in seconds.
-  - Home: hero, then a **phone rail** showing the 5 live client sites, then the four questions a customer asks, then the **audit ticket** (with a 24h stub), then the **work ledger** (a filterable table, with the lab build set apart), then the **rate sheet** (packages as one spec table), then a signed line from the founder, then the inquiry form.
+  - Home: hero, then a **phone rail** showing the live client sites, then the four questions a customer asks, then the **Audit Ticket** (with a 24h stub), then who builds it and the towns the live sites are in, then the **proof deck** and **work ledger** (a filterable table, with the lab build set apart), then the **rate sheet** (packages as one spec table), then the audit-first next step.
   - Brand: the forge-ct.com brand, unchanged. Void `#0a0a0a` and charcoal `#1a1c1f` surfaces, fog `#e6e6e6` text, slate `#8a9099` for eyebrows and actions, DM Sans (self-hosted), and the FORGE-CT wordmark image (`public/brand/forge-ct-wordmark.png`, the same file as `/brand/DTsjw.png`). The rebuild is monochrome, as the live site is.
+  - Labels, plates, ticket numbers and stamps are set in JetBrains Mono (self-hosted, latin subset, about 40 KB): the inspection-record voice of the Audit Ticket, carried through the spec plates and table headers.
+  - **The Audit Ticket** (`src/components/audit-ticket.tsx`) is the one light "paper" object on the site: the FIND / MISS / FORGE / NEXT record with a perforated 24h stub. The homepage shows the empty ticket (what each line covers); `/audit` shows a filled sample stamped ILLUSTRATIVE for a fictional shop, then the intake form framed as the counterfoil. Nothing on it is scored, verified or issued automatically.
+  - There is no decorative background. The ambient starfield canvas was removed in the 2026-10-19 anti-AI audit (`docs/audits/ANTI-AI-AUDIT-2026-10-19.md`): it was the kind of ornament any agency template ships, and it cost a 30 fps canvas on every page.
 
 ### Differentiation check
 
@@ -59,9 +62,11 @@ Every page is prerendered to static HTML. Only `/api/*` and unknown URLs (404) r
 | Pricing | None | Cards + JS package picker | Single comparison table (rate sheet) |
 | Process | Dark numbered steps | Five-step "Discover → Launch" | Four customer questions (Q1–Q4) |
 | Type / colour | DM Sans, purple, offset shadows | forge-ct.com brand: DM Sans, void/charcoal/fog/slate | Same forge-ct.com brand (brand is kept; layout is new) |
-| Interaction | Call-first | Cursor spotlight, magnetic buttons, marquee | No decorative JS. One filter, forms only |
+| Interaction | Call-first | Cursor spotlight, magnetic buttons, marquee | No decorative JS or canvas. One filter, forms only |
 
-## Cutover checklist (all open)
+## Cutover checklist
+
+Items 1–7 are done: the project is live on this folder. Item 8 (retire `../api` and the root HTML, remove the parity scripts) is still open and is a deliberate decision for Nick, not a side effect of any page change.
 
 1. Create a Vercel project from this repository with **Root Directory `nitro`**. Nitro is auto-detected and `npm run build` writes `.vercel/output`. Do not add a repo-root `.vercelignore` that lists `nitro`: Vercel applies the repo-root ignore file even when Root Directory is `nitro`, and it strips the whole app before the build.
 2. Copy the production environment variables: `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL`, `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_CARE`, `STRIPE_PRICE_CARE_PLUS`, `STRIPE_AUTOMATIC_TAX`, `SITE_URL`.

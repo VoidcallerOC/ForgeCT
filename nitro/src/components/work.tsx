@@ -3,16 +3,44 @@ import { useState } from "react";
 import { Arrow } from "@/components/chrome";
 import { FILTERS, LAB, PROJECTS, filterCount, type Filter, type Project } from "@/lib/work";
 
+/**
+ * One screenshot, served as WebP where supported (generated 480w and 160w variants next to each JPEG in
+ * public/images/work), with the original JPEG as the fallback. `sizes` is the rendered CSS width.
+ */
+export function Shot({
+  src,
+  alt,
+  width = 720,
+  height,
+  sizes,
+  eager = false,
+}: {
+  src: string;
+  alt: string;
+  width?: number;
+  height: number;
+  sizes: string;
+  eager?: boolean;
+}) {
+  const base = src.replace(/\.jpe?g$/i, "");
+  return (
+    <picture>
+      <source type="image/webp" srcSet={`${base}-160.webp 160w, ${base}-480.webp 480w, ${base}.webp ${width}w`} sizes={sizes} />
+      <img src={src} alt={alt} width={width} height={height} loading={eager ? "eager" : "lazy"} decoding="async" />
+    </picture>
+  );
+}
+
 export function PhoneFrame({ project, eager = false }: { project: Project; eager?: boolean }) {
   return (
     <div className="phone-frame">
-      <img
+      <Shot
         src={project.image}
         alt={`${project.name} website shown on a mobile phone`}
-        width={720}
+        width={project.imageWidth}
         height={project.imageHeight}
-        loading={eager ? "eager" : "lazy"}
-        decoding="async"
+        sizes="(min-width: 900px) 460px, 58vw"
+        eager={eager}
       />
     </div>
   );
@@ -38,14 +66,7 @@ export function ProofDeck() {
       {PROJECTS.map((p) => (
         <article className="proof" key={p.slug} data-emphasis={EMPHASIS[p.slug] ?? p.category}>
           <Link to="/work/$slug" params={{ slug: p.slug }} className="proof-shot" data-track={`proof_${p.slug}`}>
-            <img
-              src={p.image}
-              alt={`${p.name} website`}
-              width={720}
-              height={p.imageHeight}
-              loading="lazy"
-              decoding="async"
-            />
+            <Shot src={p.image} alt={`${p.name} website`} width={p.imageWidth} height={p.imageHeight} sizes="(min-width: 860px) 56vw, 100vw" />
           </Link>
           <div className="proof-copy">
             <p className="mono">
@@ -160,7 +181,7 @@ export function Ledger({ headingId }: { headingId?: string }) {
           {PROJECTS.map((p) => (
             <tr key={p.slug} hidden={filter !== "all" && p.filter !== filter}>
               <td className="thumb">
-                <img src={p.image} alt="" width={56} height={78} loading="lazy" decoding="async" />
+                <Shot src={p.image} alt="" width={p.imageWidth} height={p.imageHeight} sizes="56px" />
               </td>
               <th scope="row" className="name">
                 <Link to="/work/$slug" params={{ slug: p.slug }}>
@@ -202,7 +223,7 @@ export function Ledger({ headingId }: { headingId?: string }) {
 export function LabNote() {
   return (
     <aside className="lab" aria-labelledby="lab-title">
-      <img src={LAB.image} alt="Voidcaller interactive music site on mobile" width={120} height={238} loading="lazy" />
+      <Shot src={LAB.image} alt="Voidcaller interactive music site on mobile" height={1429} sizes="120px" />
       <div className="stack">
         <p className="mono muted">{LAB.kind} · not client work</p>
         <h3 id="lab-title">{LAB.name}</h3>

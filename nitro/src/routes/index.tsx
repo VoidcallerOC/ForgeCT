@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { AuditTicket } from "@/components/audit-ticket";
 import { Arrow, Plate } from "@/components/chrome";
 import { ClientNotes } from "@/components/client-notes";
 import { NextSteps } from "@/components/next-steps";
@@ -20,6 +21,9 @@ const QUESTIONS = [
   { q: "Is this my kind of place?", a: "Why you started, what you care about and what makes you different — said in your shop’s own voice." },
 ];
 
+/** Every documented place a live client site belongs to, in portfolio order. */
+const TOWNS = [...new Set(PROJECTS.map((p) => p.place))];
+
 const BUILDER_PLEDGES = [
   { title: "Talk to the builder.", copy: "Your first conversation is with Nick, not an account manager passing notes along." },
   { title: "One hand from audit to launch.", copy: "The person who reads your Audit is the person who shapes and builds the site." },
@@ -31,10 +35,7 @@ function Home() {
     <main id="main">
       <section className="hero" aria-labelledby="hero-title">
         <div className="wrap">
-          <Plate
-            heat={2}
-            items={[`${BUSINESS.locality}, Connecticut`, BUSINESS.area, <span key="a"><span className="dot" aria-hidden="true" />Available</span>]}
-          />
+          <Plate heat={2} items={[`${BUSINESS.locality}, Connecticut`, BUSINESS.area, "One builder, start to finish"]} />
           <h1 id="hero-title">
             Custom websites for the businesses people <em>drive&nbsp;to.</em>
           </h1>
@@ -84,42 +85,8 @@ function Home() {
 
       <section className="band band--tight band--fog" aria-labelledby="audit-title">
         <div className="wrap">
-          <div className="ticket">
-            <div className="ticket-main">
-              <Plate items={["The Forge-CT Audit", "Free", "No pitch deck"]} />
-              <h2 id="audit-title">Before I build anything, I’ll show you what your customers see.</h2>
-              <ol className="steps-inline">
-                <li>
-                  <b>FIND</b>
-                  <span>What already earns attention.</span>
-                </li>
-                <li>
-                  <b>MISS</b>
-                  <span>What a customer cannot find.</span>
-                </li>
-                <li>
-                  <b>FORGE</b>
-                  <span>Three practical fixes for your shop.</span>
-                </li>
-                <li>
-                  <b>NEXT</b>
-                  <span>What to build, if the fixes point to more.</span>
-                </li>
-              </ol>
-              <p className="fine audit-sample-link">
-                Want to see the format first? <a className="link" href="/audit#sample-audit">Read an illustrated sample Audit</a>.
-              </p>
-            </div>
-            <div className="ticket-stub">
-              <div>
-                <p className="stamp">24h</p>
-                <p className="muted">Three practical fixes, specific to your business, within 24 hours.</p>
-              </div>
-              <Link to="/audit" className="btn" data-track="ticket_audit_cta">
-                Get your audit <Arrow />
-              </Link>
-            </div>
-          </div>
+          <Plate items={["The Forge-CT Audit", "Free", "No pitch deck"]} />
+          <AuditTicket mode="offer" headingId="audit-title" heading="Before I build anything, I’ll show you what your customers see." />
         </div>
       </section>
 
@@ -143,20 +110,12 @@ function Home() {
               ))}
             </ul>
           </div>
-          <dl className="counts">
-            <div>
-              <dt>Live client sites</dt>
-              <dd>{PROJECTS.length}</dd>
-            </div>
-            <div>
-              <dt>Build tiers</dt>
-              <dd>{PACKAGES.length}</dd>
-            </div>
-            <div>
-              <dt>Audit reply</dt>
-              <dd>24h</dd>
-            </div>
-          </dl>
+          <p className="towns">
+            <span className="towns-label">Where the live client sites are</span>
+            {TOWNS.map((town) => (
+              <span key={town}>{town}</span>
+            ))}
+          </p>
         </div>
       </section>
 

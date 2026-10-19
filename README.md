@@ -4,9 +4,11 @@ A fast, accessible marketing site for **FORGE CT**, an independent web design an
 
 The production site is [www.forge-ct.com](https://www.forge-ct.com/). The apex domain redirects permanently to the `www` hostname, which is the canonical host used by page metadata, the sitemap, crawler controls, and Stripe return URLs.
 
+> **Which code is live.** Production is served from the **`nitro/` app** (TanStack Start, React 19, Nitro, Vercel project `forgect`, Root Directory `nitro`, framework `nitro`). Verified 2026-10-19: the production deployment for `main@09e3c88` serves React-rendered HTML with hashed `/assets/*` files and the on-site audit form, and the Vercel project reports `framework: nitro`. The static HTML in this repository root is the earlier certified site. It is **no longer served**; it is kept only as the SEO-parity baseline that `nitro/scripts/check-build-output.mjs` and `nitro/scripts/check-api-parity.mjs` compare against. Edit pages in `nitro/src`, not in the root HTML.
+
 ## What is included
 
-The site is a dependency-light static implementation plus a small Vercel function for inquiries. It provides a responsive marketing page, a server-side inquiry form, a privacy notice, social-preview metadata, a sitemap, and crawler controls.
+The repository root is the earlier dependency-light static implementation plus the Vercel functions for inquiries and payments. `api/` is still the certified API source: `nitro/server/core` must stay byte-identical to it (CI enforces this), so any API change is made in both places until the root is retired.
 
 | Area                       | Location                                                              |
 | -------------------------- | --------------------------------------------------------------------- |
