@@ -65,8 +65,12 @@ img {
   height: auto;
   display: block;
 }
+/* A <picture> is transparent to layout; its <source> children must never become flex or grid items. */
 picture {
   display: contents;
+}
+picture > source {
+  display: none;
 }
 ::selection {
   background: var(--ember);
