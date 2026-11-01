@@ -20,7 +20,7 @@ default) for:
 - safe `GET` behavior for `/api/contact`, `/api/portal`, and
   `/api/stripe-webhook` (expected `405` with `Allow: POST`)
 - the approved live client URLs currently linked by the Forge portfolio:
-  `thousandsunnytcg.com`, `mjvideogames.com`, and `hardhittincardshop.com`
+  `thousandsunnytcg.com` and `mjvideogames.com`
 
 The runner never sends `POST`, submits a form, follows a payment link, creates a
 Stripe object, or writes customer data. It follows only HTTP redirects returned

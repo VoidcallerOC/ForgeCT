@@ -4,7 +4,6 @@ const ROUTES = [
   "/",
   "/work",
   "/work/thousand-sunny",
-  "/work/hard-hittin",
   "/work/harris-in-wonderland",
   "/work/m-and-j-video-games",
   "/work/infinite-heroes",
@@ -165,13 +164,13 @@ test.describe("certified business-critical flows", () => {
 });
 
 test.describe("approved portfolio taxonomy", () => {
-  test("ledger lists the six live clients, filters 5 + 1, and keeps the lab apart", async ({ page }) => {
+  test("ledger lists the five live clients, filters 4 + 1, and keeps the lab apart", async ({ page }) => {
     await page.goto("/work");
     const rows = page.locator("table.ledger tbody tr");
-    await expect(rows).toHaveCount(6);
+    await expect(rows).toHaveCount(5);
     await expect(page.getByRole("button", { name: /^All/ })).toHaveAttribute("aria-pressed", "true");
     await page.getByRole("button", { name: /Card and tabletop/ }).click();
-    await expect(page.locator("table.ledger tbody tr:visible")).toHaveCount(5);
+    await expect(page.locator("table.ledger tbody tr:visible")).toHaveCount(4);
     await page.getByRole("button", { name: /Retail and local/ }).click();
     await expect(page.locator("table.ledger tbody tr:visible")).toHaveCount(1);
     await expect(page.locator("table.ledger tbody tr:visible")).toContainText("Harris in Wonderland");
@@ -188,7 +187,7 @@ test.describe("approved portfolio taxonomy", () => {
     await expect(page.locator("#work table.ledger")).toHaveCount(0);
     await expect(page.locator("#work").getByRole("link", { name: /The full index, with filters/ })).toHaveAttribute("href", "/work");
     await page.goto("/work");
-    await expect(page.locator("table.ledger tbody tr")).toHaveCount(6);
+    await expect(page.locator("table.ledger tbody tr")).toHaveCount(5);
     await page.locator("table.ledger").getByRole("link", { name: "Nino’s Collectibles" }).click();
     await expect(page).toHaveURL(/\/work\/ninos-collectibles$/);
     await expect(page.locator("h1")).toHaveText("Nino’s Collectibles");
@@ -206,7 +205,6 @@ test.describe("approved portfolio taxonomy", () => {
     const approved = new Set([
       "https://www.thousandsunnytcg.com/",
       "https://mjvideogames.com/",
-      "https://hardhittincardshop.com/",
       "https://infiniteheroes.net/",
       "https://harrisinwonderland.com/",
       "https://voidcaller.enterthegrotto.xyz/",

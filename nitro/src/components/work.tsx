@@ -51,7 +51,6 @@ const EMPHASIS: Record<string, string> = {
   "harris-in-wonderland": "Systems",
   "thousand-sunny": "Storefront",
   "m-and-j-video-games": "Walk-in",
-  "hard-hittin": "Launch",
   "infinite-heroes": "Main Street",
   "ninos-collectibles": "Dealer",
 };
