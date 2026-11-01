@@ -15,7 +15,7 @@ function WorkIndex() {
     <main id="main">
       <PageHead plate={["Forge CT portfolio", "Live client work", "Connecticut"]} title="Real businesses. Real reasons to build.">
         <p className="lede">
-          These are the {PROJECTS.length === 6 ? "six" : PROJECTS.length} approved Forge CT live client projects for shops and
+          These are the {PROJECTS.length === 5 ? "five" : PROJECTS.length} approved Forge CT live client projects for shops and
           local businesses. Each case study records the documented need and build, without claims that are not
           established.
         </p>

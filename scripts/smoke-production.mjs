@@ -21,7 +21,6 @@ export const API_GET_ROUTES = [
 
 export const PORTFOLIO_ROUTES = [
   "/work/thousand-sunny",
-  "/work/hard-hittin",
   "/work/harris-in-wonderland",
   "/work/m-and-j-video-games",
   "/work/infinite-heroes",
@@ -31,7 +30,6 @@ export const PORTFOLIO_ROUTES = [
 export const APPROVED_CLIENT_URLS = [
   "https://thousandsunnytcg.com/",
   "https://mjvideogames.com/",
-  "https://hardhittincardshop.com/",
 ];
 
 export const REQUIRED_HEADERS = [

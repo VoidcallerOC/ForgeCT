@@ -27,8 +27,10 @@ const NEW_DESCRIPTIONS = new Set(["/audit", "/contact"]);
  * live (owner confirmed, 2026-10-01), so its case study now says "and live site" like the other four clients.
  * /work lists a sixth client, Nino’s Collectibles (approved by Nino, reported by Nick 2026-10-11), so its
  * description and JSON-LD now say six where the certified page says five.
+ * Hard Hittin Card Shop is no longer an active client (removed 2026-11-01): /work now lists five clients, the
+ * /connecticut-web-design FAQ answer no longer names it, and the /why og:description drops it.
  */
-const CHANGED_SEO = new Set(["/work/harris-in-wonderland", "/work"]);
+const CHANGED_SEO = new Set(["/work/harris-in-wonderland", "/work", "/connecticut-web-design", "/why"]);
 /** Pages where the certified robots tag was absent (= index,follow); this build states it. */
 const ROBOTS_DEFAULT = "index,follow";
 /** Certified smoke markers (scripts/smoke-production.mjs). */
@@ -138,6 +140,9 @@ for (const h of ["Strict-Transport-Security", "X-Content-Type-Options", "X-Frame
 }
 const apex = config.routes.find((r) => r.has?.some((c) => c.type === "host" && c.value === "forge-ct.com"));
 if (apex?.status !== 308 || !apex.headers?.Location?.startsWith("https://www.forge-ct.com/")) fail("config.json: apex → www 308 redirect missing");
+const retired = config.routes.find((r) => r.src === "/work/hard-hittin/?");
+if (retired?.status !== 301 || retired.headers?.Location !== "/work") fail("config.json: /work/hard-hittin → /work 301 redirect missing");
+if (await exists(path.join(staticDir, "work/hard-hittin/index.html"))) fail("static: retired /work/hard-hittin was prerendered");
 
 for (const f of ["robots.txt", "sitemap.xml", "favicon.svg", "images/og-image.jpg"]) {
   if (!(await exists(path.join(staticDir, f)))) fail(`static: ${f} missing`);

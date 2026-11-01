@@ -94,12 +94,12 @@ export const META: Record<string, PageMeta> = {
     description:
       "See why Greater Hartford shops choose FORGE CT instead of a typical web agency: live work, clear pricing, and websites built around real visits.",
     ogTitle: "Why shops pick FORGE CT over a Hartford web agency",
-    ogDescription: "Agencies send you a quote. I send you live shops. Thousand Sunny, M and J, Hard Hittin.",
+    ogDescription: "Agencies send you a quote. I send you live shops. Thousand Sunny, M and J.",
   },
   "/work": {
     title: "Work — Forge CT live client projects",
     description:
-      "All six approved Forge CT live client projects for card, tabletop, retail, and neighborhood businesses in Connecticut.",
+      "All five approved Forge CT live client projects for card, tabletop, retail, and neighborhood businesses in Connecticut.",
     ogImageAlt: CT_OG_ALT,
   },
 };

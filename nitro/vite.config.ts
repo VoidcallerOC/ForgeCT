@@ -43,6 +43,12 @@ export default defineConfig(({ command, isPreview }) => ({
                     headers: { Location: "https://www.forge-ct.com/$1" },
                   },
                   { src: "/(.*)", headers: SECURITY_HEADERS, continue: true },
+                  // Retired case study (no longer an active client, removed 2026-11-01): send old links to the index.
+                  {
+                    src: "/work/hard-hittin/?",
+                    status: 301,
+                    headers: { Location: "/work" },
+                  },
                   {
                     src: "/(images|brand)/(.*)",
                     headers: { "Cache-Control": "public, max-age=31536000, immutable" },

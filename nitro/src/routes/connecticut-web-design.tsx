@@ -15,7 +15,7 @@ export const Route = createFileRoute("/connecticut-web-design")({
  * Nino’s Collectibles stays off this page: its case study says the public site still
  * labels itself a concept preview and is not open to search engines.
  */
-const FEATURED = ["thousand-sunny", "hard-hittin", "harris-in-wonderland", "m-and-j-video-games", "infinite-heroes"];
+const FEATURED = ["thousand-sunny", "harris-in-wonderland", "m-and-j-video-games", "infinite-heroes"];
 
 /** Visible answers match the FAQPage structured data for this route. */
 const FAQ = [
@@ -25,7 +25,7 @@ const FAQ = [
   },
   {
     q: "Where in Connecticut is the work?",
-    a: "FORGE CT is based in Farmington. Live client sites include Thousand Sunny Cards and Collectibles in West Hartford, M and J Video Games in Southington, Harris in Wonderland in Canton, Infinite Heroes in Watertown, and Hard Hittin Card Shop in Connecticut.",
+    a: "FORGE CT is based in Farmington. Live client sites include Thousand Sunny Cards and Collectibles in West Hartford, M and J Video Games in Southington, Harris in Wonderland in Canton, and Infinite Heroes in Watertown.",
   },
   {
     q: "How much does a FORGE CT website cost?",
@@ -86,7 +86,7 @@ function Connecticut() {
           <h2 id="ct-work-title">Real businesses, not invented examples.</h2>
           <p className="lede">
             These are live client sites already in the Forge portfolio. Open a case study for the need, the build, and
-            the live site. Hard Hittin Card Shop is documented as Connecticut; a town is not published on its case study.
+            the live site.
           </p>
           <ul className="rail rail--light" aria-label="Connecticut case studies">
             {FEATURED.map((slug) => {

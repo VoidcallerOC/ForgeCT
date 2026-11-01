@@ -1,7 +1,8 @@
 /**
  * Approved portfolio taxonomy, from the certified site (work/index.html, generate-seo-pages.mjs,
  * homepage filters):
- *   - Six live client projects. Filters: "Card and tabletop" (5) and "Retail and local" (1). Nino’s Collectibles
+ *   - Five live client projects. Filters: "Card and tabletop" (4) and "Retail and local" (1). Hard Hittin Card Shop
+ *     was removed 2026-11-01 (no longer an active client; owner request). Nino’s Collectibles
  *     was added 2026-10-11 with Nino’s approval (reported by Nick); its case study carries dated status lines
  *     because parts of that site (live pricing, Square, show list) are not yet working in production.
  *   - One FORGE lab experiment (Voidcaller), always shown apart from client work and never counted as a client.
@@ -124,25 +125,6 @@ export const PROJECTS: Project[] = [
       "Find a clear way to call or walk in.",
     ],
     tags: ["Shop page", "Trade-ins", "Directions"],
-  },
-  {
-    slug: "hard-hittin",
-    name: "Hard Hittin Card Shop",
-    short: "Hard Hittin",
-    filter: "card-tabletop",
-    category: "Card shop",
-    place: "Connecticut",
-    image: "/images/work/hardhittin.jpg",
-    imageHeight: 1429,
-    site: "https://hardhittincardshop.com/",
-    siteLabel: "hardhittincardshop.com",
-    business:
-      "A card shop and card-show promoter in Connecticut: sports and trading cards, graded slabs, breaks and hobby boxes.",
-    need: "Give sports cards, graded slabs, breaks, and hobby boxes one clear home.",
-    built: "A launch page with the same direct energy as the counter.",
-    story:
-      "Sports and trading cards, graded slabs, breaks, and hobby boxes — a page that hits as hard as the counter does. Newest launch, still warming up.",
-    tags: ["Shop page", "Breaks", "Slabs", "Launch"],
   },
   {
     slug: "infinite-heroes",

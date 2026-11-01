@@ -23,10 +23,9 @@ const FAQ: { q: string; a: React.ReactNode }[] = [
     q: "Can I see the work before we talk?",
     a: (
       <>
-        Yes. These three featured live client shops are open right now:{" "}
-        <a className="link" href="https://www.thousandsunnytcg.com/" target="_blank" rel="noopener noreferrer">Thousand Sunny</a>,{" "}
-        <a className="link" href="https://mjvideogames.com/" target="_blank" rel="noopener noreferrer">M and J</a>, and{" "}
-        <a className="link" href="https://hardhittincardshop.com/" target="_blank" rel="noopener noreferrer">Hard Hittin</a>. See all six
+        Yes. These featured live client shops are open right now:{" "}
+        <a className="link" href="https://www.thousandsunnytcg.com/" target="_blank" rel="noopener noreferrer">Thousand Sunny</a> and{" "}
+        <a className="link" href="https://mjvideogames.com/" target="_blank" rel="noopener noreferrer">M and J</a>. See all five
         approved live client projects in the <Link className="link" to="/work">Forge portfolio</Link>.
       </>
     ),

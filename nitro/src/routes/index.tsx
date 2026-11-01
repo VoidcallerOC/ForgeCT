@@ -125,7 +125,7 @@ function Home() {
           <div className="split">
             <h2 id="work-title">Real businesses. Real reasons to build.</h2>
             <p className="lede">
-              Six live client sites, each shown once below: the screenshot is the proof, the lines under it are the
+              Five live client sites, each shown once below: the screenshot is the proof, the lines under it are the
               documented need and the build — not a result we did not measure. The filterable index is on{" "}
               <Link className="link" to="/work">
                 Work

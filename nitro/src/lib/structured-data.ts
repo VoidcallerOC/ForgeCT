@@ -374,7 +374,7 @@ export const STRUCTURED_DATA: Record<string, unknown[]> = {
           "name": "Where in Connecticut is the work?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "FORGE CT is based in Farmington. Live client sites include Thousand Sunny Cards and Collectibles in West Hartford, M and J Video Games in Southington, Harris in Wonderland in Canton, Infinite Heroes in Watertown, and Hard Hittin Card Shop in Connecticut."
+            "text": "FORGE CT is based in Farmington. Live client sites include Thousand Sunny Cards and Collectibles in West Hartford, M and J Video Games in Southington, Harris in Wonderland in Canton, and Infinite Heroes in Watertown."
           }
         },
         {
@@ -1002,7 +1002,7 @@ export const STRUCTURED_DATA: Record<string, unknown[]> = {
       "@id": "https://www.forge-ct.com/work#webpage",
       "url": "https://www.forge-ct.com/work",
       "name": "Forge CT live client projects",
-      "description": "All six approved Forge CT live client projects for local shops and businesses.",
+      "description": "All five approved Forge CT live client projects for local shops and businesses.",
       "isPartOf": {
         "@id": "https://www.forge-ct.com/#business"
       },
@@ -1024,11 +1024,6 @@ export const STRUCTURED_DATA: Record<string, unknown[]> = {
         },
         {
           "@type": "CreativeWork",
-          "name": "Hard Hittin Card Shop",
-          "url": "https://www.forge-ct.com/work/hard-hittin"
-        },
-        {
-          "@type": "CreativeWork",
           "name": "Infinite Heroes",
           "url": "https://www.forge-ct.com/work/infinite-heroes"
         },
@@ -1038,22 +1033,6 @@ export const STRUCTURED_DATA: Record<string, unknown[]> = {
           "url": "https://www.forge-ct.com/work/ninos-collectibles"
         }
       ]
-    }
-  ],
-  "/work/hard-hittin": [
-    {
-      "@context": "https://schema.org",
-      "@type": "CreativeWork",
-      "@id": "https://www.forge-ct.com/work/hard-hittin#case-study",
-      "url": "https://www.forge-ct.com/work/hard-hittin",
-      "name": "Hard Hittin Card Shop",
-      "description": "Hard Hittin Card Shop: A launch page with the same direct energy as the counter. See the Forge CT case study and live site.",
-      "image": "https://www.forge-ct.com/images/work/hardhittin.jpg",
-      "creator": {
-        "@type": "Organization",
-        "name": "FORGE CT",
-        "url": "https://www.forge-ct.com/"
-      }
     }
   ],
   "/work/harris-in-wonderland": [

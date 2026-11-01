@@ -9,11 +9,10 @@ export const Route = createFileRoute("/hartford-web-design")({
   component: Hartford,
 });
 
-// Same four proof links and destinations as the certified landing page.
+// Proof links and destinations from the certified landing page (Hard Hittin removed 2026-11-01).
 const PROOF = [
   { slug: "thousand-sunny", label: "Shop page", href: "https://www.thousandsunnytcg.com/", track: "landing_proof_thousand_sunny" },
   { slug: "m-and-j-video-games", label: "Storefront online", href: "https://mjvideogames.com/", track: "landing_proof_mj" },
-  { slug: "hard-hittin", label: "New launch", href: "https://hardhittincardshop.com/", track: "landing_proof_hard_hittin" },
   { slug: "harris-in-wonderland", label: "Project", href: "", track: "landing_proof_harris" },
 ];
 
