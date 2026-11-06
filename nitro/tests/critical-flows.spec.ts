@@ -1,13 +1,32 @@
 import { expect, test, type Page } from "@playwright/test";
 
+/**
+ * Owner-approved live client roster, written out independently of src/lib/work.ts so a deletion in the
+ * app fails here. Voidcaller is a FORGE CT experiment and is never counted as a client.
+ */
+const APPROVED_CLIENTS = [
+  { slug: "harris-in-wonderland", name: "Harris in Wonderland", site: "https://harrisinwonderland.com/" },
+  { slug: "thousand-sunny", name: "Thousand Sunny Cards and Collectibles", site: "https://www.thousandsunnytcg.com/" },
+  { slug: "m-and-j-video-games", name: "M and J Video Games", site: "https://mjvideogames.com/" },
+  { slug: "infinite-heroes", name: "Infinite Heroes", site: "https://infiniteheroes.net/" },
+  { slug: "ninos-collectibles", name: "Nino’s Collectibles", site: "https://ninoscollectibles.com/" },
+];
+const COUNT = APPROVED_CLIENTS.length;
+
+/** Owner-approved rate sheet. Superseded: the $2,000 / $6,000 / $16,000 ladder and extra-fast delivery fees. */
+const APPROVED_PACKAGES = [
+  { tier: "Basic", label: "Starter Website", price: "$750" },
+  { tier: "Standard", label: "Business Website", price: "$1,500" },
+  { tier: "Premium", label: "Forge Website", price: "$2,500" },
+];
+const SUPERSEDED_PRICING = /\$2,000|\$6,000|\$16,000|"(2000|6000|16000)"|Local Business Site|Site and System|Product Site|Extra-fast/i;
+const RETIRED = /Hard[\s-]*Hittin/i;
+const BANNED = /SousaSaaS|Front Window|Come By/i;
+
 const ROUTES = [
   "/",
   "/work",
-  "/work/thousand-sunny",
-  "/work/harris-in-wonderland",
-  "/work/m-and-j-video-games",
-  "/work/infinite-heroes",
-  "/work/ninos-collectibles",
+  ...APPROVED_CLIENTS.map((c) => `/work/${c.slug}`),
   "/services",
   "/care",
   "/audit",
@@ -15,6 +34,8 @@ const ROUTES = [
   "/contact",
   "/why",
   "/hartford-web-design",
+  "/farmington-web-design",
+  "/west-hartford-web-design",
   "/connecticut-web-design",
   "/pay",
   "/thanks",
@@ -59,10 +80,10 @@ test.describe("certified business-critical flows", () => {
     const form = page.locator("#audit-form form");
     await form.getByLabel("Your name").fill("Pat Owner");
     await form.getByLabel("Email").fill("pat@example.com");
-    await form.getByRole("button", { name: /Get my Forge-CT Audit/ }).click();
+    await form.getByRole("button", { name: /Get my FORGE CT Audit/ }).click();
     expect(bodies).toHaveLength(0);
     await form.getByLabel("Your website URL").fill("example.com");
-    await form.getByRole("button", { name: /Get my Forge-CT Audit/ }).click();
+    await form.getByRole("button", { name: /Get my FORGE CT Audit/ }).click();
     await expect(form.getByRole("status")).toHaveText(/three practical fixes within 24 hours/);
     expect(bodies[0]).toMatchObject({
       name: "Pat Owner",
@@ -76,7 +97,7 @@ test.describe("certified business-critical flows", () => {
     await page.goto("/audit#sample-audit");
     const sample = page.locator("#sample-audit");
     await expect(sample).toContainText("Fictional specialty shop");
-    await expect(sample).toContainText("not a real business, client project, or Forge-CT Audit");
+    await expect(sample).toContainText("not a real business, client project, or FORGE CT Audit");
     await expect(sample.locator("ol > li")).toHaveCount(3);
     await expect(sample.getByText("What a visitor may miss")).toHaveCount(3);
     await expect(sample.getByText("A practical change")).toHaveCount(3);
@@ -95,7 +116,7 @@ test.describe("certified business-critical flows", () => {
   test("homepage ends with an Audit-first path and keeps Care management in the footer", async ({ page }) => {
     await page.goto("/");
     const finalCta = page.locator("#contact");
-    await expect(finalCta.getByRole("link", { name: /Get your Forge-CT Audit/ })).toHaveAttribute("href", "/audit");
+    await expect(finalCta.getByRole("link", { name: /Get your FORGE CT Audit/ })).toHaveAttribute("href", "/audit");
     await expect(finalCta.getByRole("link", { name: /Already know\? Book a working session/ })).toHaveAttribute("href", "/book");
     const manageCare = page.getByRole("link", { name: "Manage Care", exact: true });
     await expect(manageCare).toHaveAttribute("href", "/pay");
@@ -142,7 +163,7 @@ test.describe("certified business-critical flows", () => {
     await page.goto("/care");
     const faq = page.locator("details").filter({ hasText: "Who is this for?" });
     await expect(faq).toContainText("local retail, restaurants, and service businesses");
-    await expect(faq).toContainText("FORGE-built websites");
+    await expect(faq).toContainText("FORGE CT sites");
     await expect(page.locator("main")).not.toContainText("card or tabletop shop");
     await expect(page.locator("main")).toContainText("Tell me about your business");
   });
@@ -164,10 +185,11 @@ test.describe("certified business-critical flows", () => {
 });
 
 test.describe("approved portfolio taxonomy", () => {
-  test("ledger lists the five live clients, filters 4 + 1, and keeps the lab apart", async ({ page }) => {
+  test("ledger lists all five approved clients, filters 4 + 1, and keeps the lab apart", async ({ page }) => {
     await page.goto("/work");
     const rows = page.locator("table.ledger tbody tr");
-    await expect(rows).toHaveCount(5);
+    await expect(rows).toHaveCount(COUNT);
+    for (const c of APPROVED_CLIENTS) await expect(page.locator("table.ledger")).toContainText(c.name);
     await expect(page.getByRole("button", { name: /^All/ })).toHaveAttribute("aria-pressed", "true");
     await page.getByRole("button", { name: /Card and tabletop/ }).click();
     await expect(page.locator("table.ledger tbody tr:visible")).toHaveCount(4);
@@ -178,38 +200,82 @@ test.describe("approved portfolio taxonomy", () => {
     await expect(page.locator(".lab")).toContainText("not client work");
   });
 
-  test("Nino’s Collectibles appears like the other clients: rail, proof deck, ledger and case study", async ({ page }) => {
+  test("visible client counts match the approved roster", async ({ page }) => {
     await page.goto("/");
-    await expect(page.locator(".rail")).toContainText("Nino’s Collectibles");
-    await expect(page.locator("#work .proof-deck")).toContainText("Nino’s Collectibles");
-    // The homepage shows each client in the rail (teaser) and the proof deck (the case) only; the
-    // filterable ledger is the index on /work, linked from the proof deck.
-    await expect(page.locator("#work table.ledger")).toHaveCount(0);
-    await expect(page.locator("#work").getByRole("link", { name: /The full index, with filters/ })).toHaveAttribute("href", "/work");
+    await expect(page.locator(".rail-wrap")).toContainText(`Live client sites · ${COUNT}`);
+    await expect(page.locator(".rail > li")).toHaveCount(COUNT);
+    await expect(page.locator("#work .proof-deck > article")).toHaveCount(COUNT);
+    await expect(page.locator("#work")).toContainText(`Live client sites · ${COUNT}`);
+    await expect(page.locator("#work")).toContainText("Five live client sites");
+    for (const c of APPROVED_CLIENTS) {
+      await expect(page.locator(".rail")).toContainText(c.name);
+      await expect(page.locator("#work .proof-deck")).toContainText(c.name);
+    }
     await page.goto("/work");
-    await expect(page.locator("table.ledger tbody tr")).toHaveCount(5);
-    await page.locator("table.ledger").getByRole("link", { name: "Nino’s Collectibles" }).click();
-    await expect(page).toHaveURL(/\/work\/ninos-collectibles$/);
-    await expect(page.locator("h1")).toHaveText("Nino’s Collectibles");
-    await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", "index,follow");
-    await expect(page.getByRole("link", { name: /Visit ninoscollectibles\.com/ })).toHaveAttribute(
-      "href",
-      "https://ninoscollectibles.com/",
-    );
+    await expect(page.locator("main")).toContainText("Five live client sites");
+    await page.goto("/why");
+    await expect(page.locator("main")).toContainText(`${COUNT} live client sites you can open right now`);
+    for (const path of ROUTES) {
+      await page.goto(path);
+      const text = await page.locator("body").innerText();
+      expect(text, `${path} shows a stale client count`).not.toMatch(/Live client sites · (?!5\b)\d|\b(three|four|six) (featured |approved )?live client/i);
+    }
+  });
+
+  test("Harris and Nino’s case studies are live, indexable and linked from the ledger", async ({ page }) => {
+    for (const c of APPROVED_CLIENTS.filter((x) => ["harris-in-wonderland", "ninos-collectibles"].includes(x.slug))) {
+      await page.goto("/work");
+      await page.locator("table.ledger").getByRole("link", { name: c.name }).click();
+      await expect(page).toHaveURL(new RegExp(`/work/${c.slug}$`));
+      await expect(page.locator("h1")).toHaveText(c.name);
+      await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", "index,follow");
+      await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", `https://www.forge-ct.com/work/${c.slug}`);
+      await expect(page).toHaveTitle(`${c.name} — FORGE CT case study`);
+      await expect(page.locator("main").getByRole("link", { name: /^Visit / })).toHaveAttribute("href", c.site);
+    }
+    await page.goto("/work/ninos-collectibles");
     await expect(page.locator(".facts")).toContainText("Checked 11 October 2026");
-    await page.reload();
-    await expect(page.locator("h1")).toHaveText("Nino’s Collectibles");
+    await expect(page.locator(".facts")).toContainText("Live pricing is not switched on yet");
+  });
+
+  test("restored case studies return 200, not a redirect", async ({ request }) => {
+    for (const c of APPROVED_CLIENTS) {
+      const res = await request.get(`/work/${c.slug}`, { maxRedirects: 0 });
+      expect(res.status(), c.slug).toBe(200);
+    }
+  });
+
+  test("sitemap lists every approved case study and no retired one", async ({ request }) => {
+    const xml = await (await request.get("/sitemap.xml")).text();
+    for (const c of APPROVED_CLIENTS) expect(xml, c.slug).toContain(`<loc>https://www.forge-ct.com/work/${c.slug}</loc>`);
+    expect(xml).not.toMatch(RETIRED);
+    expect([...xml.matchAll(/\/work\/[a-z0-9-]+</g)]).toHaveLength(COUNT);
+  });
+
+  test("/work structured data lists the approved roster", async ({ page }) => {
+    await page.goto("/work");
+    const blocks = await page.$$eval('script[type="application/ld+json"]', (els) => els.map((e) => JSON.parse(e.textContent || "{}")));
+    const collection = blocks.find((b) => b["@type"] === "CollectionPage");
+    expect(collection.mainEntity.map((e: { name: string }) => e.name)).toEqual(APPROVED_CLIENTS.map((c) => c.name));
+    expect(collection.numberOfItems).toBe(COUNT);
+  });
+
+  test("Hard Hittin is not active proof anywhere: copy, meta, social tags or JSON-LD", async ({ page }) => {
+    for (const path of ROUTES) {
+      await page.goto(path);
+      expect(await page.content(), path).not.toMatch(RETIRED);
+    }
+  });
+
+  test("banned brands never appear", async ({ page }) => {
+    for (const path of ROUTES) {
+      await page.goto(path);
+      expect(await page.content(), path).not.toMatch(BANNED);
+    }
   });
 
   test("only approved live client URLs are linked as live sites", async ({ page }) => {
-    const approved = new Set([
-      "https://www.thousandsunnytcg.com/",
-      "https://mjvideogames.com/",
-      "https://infiniteheroes.net/",
-      "https://harrisinwonderland.com/",
-      "https://voidcaller.enterthegrotto.xyz/",
-      "https://ninoscollectibles.com/",
-    ]);
+    const approved = new Set([...APPROVED_CLIENTS.map((c) => c.site), "https://voidcaller.enterthegrotto.xyz/"]);
     for (const path of ROUTES) {
       await page.goto(path);
       const external = await page.$$eval("main a[href^='http']", (as) => as.map((a) => (a as HTMLAnchorElement).href));
@@ -218,6 +284,22 @@ test.describe("approved portfolio taxonomy", () => {
         expect(approved.has(href), `${path} links unapproved ${href}`).toBe(true);
       }
     }
+  });
+
+  test("every indexable page has a title, description, self canonical and index,follow", async ({ page }) => {
+    for (const path of ROUTES.filter((r) => !["/pay", "/thanks", "/privacy"].includes(r))) {
+      await page.goto(path);
+      expect((await page.title()).length, path).toBeGreaterThan(10);
+      await expect(page.locator('meta[name="description"]'), path).toHaveAttribute("content", /.{40,}/);
+      await expect(page.locator('meta[name="robots"]'), path).toHaveAttribute("content", "index,follow");
+      await expect(page.locator('link[rel="canonical"]'), path).toHaveAttribute("href", `https://www.forge-ct.com${path === "/" ? "/" : path}`);
+    }
+  });
+
+  test("footer carries the sites-and-apps tagline", async ({ page }) => {
+    await page.goto("/");
+    await expect(page.locator("footer.footer")).toContainText("Sites and apps for Connecticut shops.");
+    await expect(page.locator("footer.footer")).not.toContainText("Websites for the businesses people drive to.");
   });
 });
 
@@ -233,15 +315,72 @@ test.describe("layout and platform", () => {
     });
   }
 
-  test("rate sheet shows all three packages and fits a phone", async ({ page }) => {
-    await page.setViewportSize({ width: 390, height: 844 });
+  test("rate sheet shows the approved Basic / Standard / Premium packages and fits a phone", async ({ page }) => {
+    for (const width of [360, 390]) {
+      await page.setViewportSize({ width, height: 844 });
+      await page.goto("/");
+      const sheet = page.locator("#pricing table.sheet");
+      const heads = sheet.locator("thead th");
+      await expect(heads).toHaveCount(3);
+      for (const [i, pk] of APPROVED_PACKAGES.entries()) {
+        await expect(heads.nth(i)).toContainText(pk.tier);
+        await expect(heads.nth(i)).toContainText(pk.price);
+        await expect(heads.nth(i)).toContainText(pk.label);
+      }
+      await expect(sheet.locator("tbody tr").filter({ hasText: "Pages" }).locator("td")).toHaveText(["Up to 3", "Up to 5", "Up to 8"]);
+      await expect(sheet.locator("tbody tr").filter({ hasText: "Revisions" }).locator("td")).toHaveText(["1 revision", "2 revisions", "3 revisions"]);
+      await expect(sheet).not.toContainText(/Extra-fast|delivery/i);
+      await expect(page.locator("#pricing .chooser")).toContainText("$750");
+      await expect(page.locator("#pricing .notes")).toContainText("E-commerce is a separately priced add-on.");
+      const fits = await sheet.evaluate((t) => t.getBoundingClientRect().right <= document.documentElement.clientWidth);
+      expect(fits, `rate sheet overflows at ${width}px`).toBe(true);
+    }
+  });
+
+  test("services lists the approved add-ons, with e-commerce quoted per project", async ({ page }) => {
+    await page.goto("/services");
+    const addons = page.locator("#addons .addons li");
+    await expect(addons).toHaveCount(4);
+    await expect(addons.filter({ hasText: "Additional page" })).toContainText("+$150");
+    await expect(addons.filter({ hasText: "Additional revision" })).toContainText("+$100");
+    await expect(addons.filter({ hasText: "Additional product" })).toContainText("+$250");
+    await expect(addons.filter({ hasText: "E-commerce functionality" }).locator(".cost")).toHaveText("Custom quote");
+    await expect(page.locator("#addons")).not.toContainText(/day/);
+  });
+
+  test("superseded high-priced packages and extra-fast fees appear nowhere: copy, meta or JSON-LD", async ({ page }) => {
+    for (const path of ROUTES) {
+      await page.goto(path);
+      expect(await page.content(), path).not.toMatch(SUPERSEDED_PRICING);
+    }
+  });
+
+  test("unverified phone, ZIP and 24/7 hours are not published; verified email is", async ({ page }) => {
+    for (const path of ROUTES) {
+      await page.goto(path);
+      const html = await page.content();
+      expect(html, path).not.toMatch(/959|229-0653|06032|tel:|Open 24 hours|24\/7|7 days a week/);
+      await expect(page.locator("footer.footer"), path).toContainText("create@forge-ct.com");
+    }
     await page.goto("/");
-    const sheet = page.locator("#pricing table.sheet");
-    for (const price of ["$750", "$1,500", "$2,500"]) await expect(sheet).toContainText(price);
-    await expect(sheet.locator("tbody tr").filter({ hasText: "Hosting setup" }).locator("td")).toHaveCount(3);
-    await expect(sheet).toContainText("Extra-fast delivery");
-    const fits = await sheet.evaluate((t) => t.getBoundingClientRect().right <= document.documentElement.clientWidth);
-    expect(fits).toBe(true);
+    const blocks = await page.$$eval('script[type="application/ld+json"]', (els) => els.map((e) => JSON.parse(e.textContent || "{}")));
+    const businesses = blocks.filter((b) => b["@type"] === "ProfessionalService");
+    expect(businesses).toHaveLength(1);
+    expect(businesses[0].telephone).toBeUndefined();
+    expect(businesses[0].openingHoursSpecification).toBeUndefined();
+    expect(businesses[0].address.postalCode).toBeUndefined();
+    expect(businesses[0].address.addressLocality).toBe("Farmington");
+  });
+
+  test("business JSON-LD offers carry the approved prices", async ({ page }) => {
+    await page.goto("/services");
+    const blocks = await page.$$eval('script[type="application/ld+json"]', (els) => els.map((e) => JSON.parse(e.textContent || "{}")));
+    const business = blocks.find((b) => b["@type"] === "ProfessionalService");
+    expect(business.priceRange).toBe("$750–$2,500");
+    const priced = business.makesOffer.filter((o: { price?: string }) => o.price);
+    expect(priced.map((o: { name: string; price: string }) => [o.name, o.price])).toEqual(
+      APPROVED_PACKAGES.map((pk) => [`${pk.tier} — ${pk.label}`, pk.price.replace(/[$,]/g, "")]),
+    );
   });
 
   test("no Content Security Policy violations or script errors", async ({ page }) => {
@@ -294,6 +433,12 @@ test.describe("layout and platform", () => {
     const apex = await request.get("/work?x=1", { headers: { Host: "forge-ct.com" }, maxRedirects: 0 });
     expect(apex.status()).toBe(308);
     expect(apex.headers()["location"]).toBe("https://www.forge-ct.com/work");
+  });
+
+  test("retired Hard Hittin case study still redirects to /work", async ({ request }) => {
+    const res = await request.get("/work/hard-hittin", { maxRedirects: 0 });
+    expect(res.status()).toBe(301);
+    expect(res.headers()["location"]).toBe("/work");
   });
 
   test("unknown routes return 404", async ({ request }) => {

@@ -6,11 +6,26 @@ const NAV = [
   { to: "/work", label: "Work" },
   { to: "/services", label: "Services" },
   { to: "/care", label: "Care" },
-  { to: "/why", label: "Why Forge" },
+  { to: "/why", label: "Why FORGE CT" },
   { to: "/contact", label: "Contact" },
 ] as const;
 
-/** The FORGE-CT wordmark from the certified site (fog FORGE, slate CT), same asset as /brand/DTsjw.png. */
+/**
+ * Verified contact block for the footer on every page and the body of /contact: name, town and email only.
+ * Phone, ZIP and hours stay off the site until the owner verifies them. A <p>, not <address>: protected CSS
+ * has no address reset.
+ */
+export function StudioAddress() {
+  return (
+    <p>
+      {BUSINESS.name} · {BUSINESS.locality}, {BUSINESS.region}
+      <br />
+      <a href={MAILTO}>{BUSINESS.email}</a>
+    </p>
+  );
+}
+
+/** The FORGE CT wordmark from the certified site (fog FORGE, slate CT), same asset as /brand/DTsjw.png. */
 export function Wordmark({ width = 200 }: { width?: number }) {
   return <img src="/brand/forge-ct-wordmark.png" alt="FORGE CT" width={width} height={Math.round((width * 132) / 901)} />;
 }
@@ -119,15 +134,15 @@ export function Footer() {
       <div className="wrap">
         <div className="footer-grid">
           <div className="stack">
-            <h2>Websites for the businesses people drive to.</h2>
+            <h2>Sites and apps for Connecticut shops.</h2>
             <p>
               {BUSINESS.name} is {BUSINESS.founder}, building custom websites and web systems in {BUSINESS.locality},{" "}
               {BUSINESS.regionLong}, for {BUSINESS.area}.
             </p>
+            <StudioAddress />
             <p>
-              <a className="link" href={MAILTO}>
-                {BUSINESS.email}
-              </a>
+              Web design in <Link to="/farmington-web-design">Farmington</Link> · <Link to="/hartford-web-design">Hartford</Link> ·{" "}
+              <Link to="/west-hartford-web-design">West Hartford</Link> · <Link to="/connecticut-web-design">Connecticut</Link>
             </p>
           </div>
           <nav aria-label="Site">
@@ -136,8 +151,8 @@ export function Footer() {
               <li><Link to="/work">Work</Link></li>
               <li><Link to="/services">Services and pricing</Link></li>
               <li><Link to="/care">Care plans</Link></li>
-              <li><Link to="/audit">The Forge-CT Audit</Link></li>
-              <li><Link to="/why">Why Forge</Link></li>
+              <li><Link to="/audit">The FORGE CT Audit</Link></li>
+              <li><Link to="/why">Why FORGE CT</Link></li>
             </ul>
           </nav>
           <nav aria-label="More">

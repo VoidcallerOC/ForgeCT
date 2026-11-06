@@ -59,7 +59,7 @@ function Privacy() {
           <p>
             Payments are handled by Stripe on pages hosted by Stripe. Payment links on this website open Stripe directly;
             this website does not collect, transmit, or store card or bank account numbers. Any information entered on a
-            Stripe page is processed by Stripe under its own privacy policy, and FORGE receives only the billing contact
+            Stripe page is processed by Stripe under its own privacy policy, and FORGE CT receives only the billing contact
             details and payment status needed to run a care plan or an invoice.
           </p>
           <h2>Your choices</h2>

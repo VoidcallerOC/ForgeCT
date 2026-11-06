@@ -1,7 +1,9 @@
 /**
  * Editable package templates seeded from published /services list prices.
  * Amounts are list defaults only — each proposal may edit them.
- * UNVERIFIED list prices (no published Forge page amount) are flagged.
+ * UNVERIFIED list prices (no published FORGE CT page amount) are flagged.
+ * Owner-approved rate sheet: Basic $750, Standard $1,500, Premium $2,500. E-commerce is a separately
+ * priced add-on with no published list price. No extra-fast delivery fees are offered.
  */
 
 export const PACKAGE_TEMPLATES = [
@@ -19,8 +21,7 @@ export const PACKAGE_TEMPLATES = [
     ],
     scope_text:
       "Up to 3 pages; custom design and development; responsive, mobile-first functional website; hosting setup; social media icons; 1 revision.",
-    timeline_text:
-      "Schedule agreed after discovery. Extra-fast: 1 day (+$250) for defined Basic scope.",
+    timeline_text: "Schedule agreed after discovery.",
   },
   {
     id: "website-standard",
@@ -36,8 +37,7 @@ export const PACKAGE_TEMPLATES = [
     ],
     scope_text:
       "Up to 5 pages; custom design and development; responsive, mobile-first; hosting setup; social media icons; speed and performance optimization; 2 revisions.",
-    timeline_text:
-      "Schedule agreed after discovery. Extra-fast: 3 days (+$500) for defined Standard scope.",
+    timeline_text: "Schedule agreed after discovery.",
   },
   {
     id: "website-premium",
@@ -52,26 +52,25 @@ export const PACKAGE_TEMPLATES = [
       },
     ],
     scope_text:
-      "Up to 8 pages; custom design and development; responsive, mobile-first; advanced functionality; hosting setup; social media icons; performance; 3 revisions. E-commerce is a paid add-on.",
-    timeline_text:
-      "Schedule agreed after discovery. Extra-fast: 5 days (+$750) for defined Premium scope.",
+      "Up to 8 pages; custom design and development; responsive, mobile-first; advanced functionality; hosting setup; social media icons; performance; 3 revisions. E-commerce is a separately priced add-on.",
+    timeline_text: "Schedule agreed after discovery.",
   },
   {
     id: "ecommerce-addon",
     name: "E-Commerce add-on",
-    list_price_verified: true,
-    source: "/services E-commerce functionality +$750",
+    list_price_verified: false,
+    source:
+      "UNVERIFIED — separately priced add-on; no published list price. Set amount per scope.",
     line_items: [
       {
-        label: "E-commerce functionality add-on",
+        label: "E-commerce functionality add-on (scoped)",
         quantity: 1,
-        unit_amount_cents: 75000,
+        unit_amount_cents: 0,
       },
     ],
     scope_text:
       "Add e-commerce functionality to an otherwise applicable package. Product, catalog, integration, and custom-functionality scope is agreed separately.",
-    timeline_text:
-      "+5 days relative to the base package schedule (as published).",
+    timeline_text: "Schedule agreed after discovery.",
   },
   {
     id: "custom-web-product",
@@ -122,6 +121,23 @@ export const PACKAGE_TEMPLATES = [
       "Ongoing Care: hours/holiday notes, content updates when sent, cancel anytime via Stripe Customer Portal. Prefer /pay Payment Link for recurring billing.",
     timeline_text: "Recurring monthly; cancel anytime.",
   },
+  {
+    id: "maintenance-care-plus",
+    name: "Maintenance — Care+ (monthly)",
+    list_price_verified: true,
+    source:
+      "/care Care+ $79/mo via Stripe Payment Link — proposal may reference, not replace, Care+ checkout",
+    line_items: [
+      {
+        label: "Care+ subscription (first month reference)",
+        quantity: 1,
+        unit_amount_cents: 7900,
+      },
+    ],
+    scope_text:
+      "Care plus one extra block or small page change a month. Prefer /pay Payment Link for recurring billing.",
+    timeline_text: "Recurring monthly; cancel anytime.",
+  },
 ];
 
 export const DEFAULT_TERMS = `This proposal is an offer of work from FORGE CT (Farmington, Connecticut). Accepting confirms you reviewed the scope, timeline, and pricing for the stated version. It is not a substitute for a signed legal contract or electronic signature platform.
@@ -133,21 +149,6 @@ Questions: create@forge-ct.com`;
 export const ADD_ON_LINE_ITEMS = [
   { label: "Additional page", quantity: 1, unit_amount_cents: 15000 },
   { label: "Additional revision", quantity: 1, unit_amount_cents: 10000 },
-  {
-    label: "Extra-fast delivery — Basic (+1 day)",
-    quantity: 1,
-    unit_amount_cents: 25000,
-  },
-  {
-    label: "Extra-fast delivery — Standard (+3 days)",
-    quantity: 1,
-    unit_amount_cents: 50000,
-  },
-  {
-    label: "Extra-fast delivery — Premium (+5 days)",
-    quantity: 1,
-    unit_amount_cents: 75000,
-  },
   {
     label: "Additional product (scoped)",
     quantity: 1,

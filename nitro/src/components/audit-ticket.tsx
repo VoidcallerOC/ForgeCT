@@ -4,14 +4,14 @@ import { Arrow } from "@/components/chrome";
 import { BUSINESS } from "@/lib/site";
 
 /**
- * The Forge-CT Audit Ticket: the one light "paper" object on a dark site. It is the inspection
- * record a shop gets back — FIND / MISS / FORGE / NEXT — rendered as a printed ticket with a
+ * The FORGE CT Audit Ticket: the one light "paper" object on a dark site. It is the inspection
+ * record a shop gets back — FIND / MISS / FIX / NEXT — rendered as a printed ticket with a
  * perforated stub.
  *
  * Two modes, both honest:
  *   "offer"  — what each line of a real ticket covers. No findings are shown, nothing is "issued".
  *   "sample" — a fictional specialty shop, stamped ILLUSTRATIVE. The findings are made up to show
- *              the format. It is never presented as a real business or a real Forge-CT Audit.
+ *              the format. It is never presented as a real business or a real FORGE CT Audit.
  * No score, no verification badge, no automated check: the Audit is written by one person.
  */
 
@@ -70,7 +70,7 @@ export function AuditTicket({ mode, headingId, heading }: { mode: "offer" | "sam
       <div className="tk-main">
         <header className="tk-head">
           <p className="tk-brand">
-            <span>Forge-CT Audit</span>
+            <span>FORGE CT Audit</span>
             <span className="tk-sub">Inspection record · your storefront, read as a customer</span>
           </p>
           <p className="tk-no">
@@ -99,7 +99,7 @@ export function AuditTicket({ mode, headingId, heading }: { mode: "offer" | "sam
         {sample ? (
           <p className="tk-stamp-line" role="note">
             <span className="tk-stamp">Illustrative</span>
-            Fictional specialty shop. This is not a real business, client project, or Forge-CT Audit — it shows the
+            Fictional specialty shop. This is not a real business, client project, or FORGE CT Audit — it shows the
             format only.
           </p>
         ) : null}
@@ -113,7 +113,7 @@ export function AuditTicket({ mode, headingId, heading }: { mode: "offer" | "sam
           <Row mark="miss" code="Miss" title="What’s getting lost">
             {sample ? SAMPLE.miss : "What a customer came for and could not find: hours buried, a floor no one can picture, events stuck on Facebook."}
           </Row>
-          <Row mark="fix" code="Forge" title="Three practical fixes">
+          <Row mark="fix" code="Fix" title="Three practical fixes">
             {sample ? (
               <ol className="tk-fixes" aria-label="Illustrative audit observations and recommendations">
                 {SAMPLE.fixes.map((f, i) => (

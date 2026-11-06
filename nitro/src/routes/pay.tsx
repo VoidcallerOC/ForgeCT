@@ -9,7 +9,7 @@ export const Route = createFileRoute("/pay")({
 });
 
 const FAQ = [
-  { q: "Where does my card go?", a: "To Stripe, on their page, not this one. FORGE never sees or stores a card number." },
+  { q: "Where does my card go?", a: "To Stripe, on their page, not this one. FORGE CT never sees or stores a card number." },
   {
     q: "How do I cancel care?",
     a: "The billing link opens your own billing page. Cancel there and the plan stops at the end of the month you paid for. You do not have to ask me first.",
@@ -85,7 +85,7 @@ function Pay() {
             <h2 id="builds">Website builds</h2>
             <p className="lede">
               Review the <Link className="link" to="/services">Basic, Standard, and Premium packages and their add-ons</Link>.
-              There is no public build-deposit checkout. After scope is confirmed, FORGE sends a Stripe invoice (or accepts
+              There is no public build-deposit checkout. After scope is confirmed, FORGE CT sends a Stripe invoice (or accepts
               check / bank transfer). E-commerce, custom functionality, and larger systems may need a separate quote.
             </p>
             <p className="muted">

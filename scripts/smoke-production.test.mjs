@@ -25,7 +25,7 @@ const server = createServer((request, response) => {
   const canonical = `http://127.0.0.1:${server.address()?.port}${pathname === "/" ? "/" : pathname}`;
   response.writeHead(200, { ...securityHeaders, "content-type": "text/html" });
   response.end(
-    `<!doctype html><html><head><link rel="canonical" href="${canonical}"></head><body><h1>FORGE CT</h1><p>Connecticut Web Design Hartford web design Forge CT portfolio Book FORGE CT Contact FORGE CT</p></body></html>`,
+    `<!doctype html><html><head><link rel="canonical" href="${canonical}"></head><body><h1>FORGE CT</h1><p>Connecticut Web Design Hartford web design Farmington web design West Hartford web design FORGE CT live client sites Book FORGE CT Contact FORGE CT</p></body></html>`,
   );
 });
 

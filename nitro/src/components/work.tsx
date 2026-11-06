@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Arrow } from "@/components/chrome";
-import { FILTERS, LAB, PROJECTS, filterCount, type Filter, type Project } from "@/lib/work";
+import { FILTERS, LAB, LIVE_CLIENT_LINE, PROJECTS, filterCount, type Filter, type Project } from "@/lib/work";
 
 /**
  * One screenshot, served as WebP where supported (generated 480w and 160w variants next to each JPEG in
@@ -78,7 +78,7 @@ export function ProofDeck() {
             </h3>
             <p className="proof-kicker">The problem</p>
             <p>{p.need}</p>
-            <p className="proof-kicker">The Forge</p>
+            <p className="proof-kicker">The build</p>
             <p>{p.built}</p>
             <ul className="tag-row">
               {p.tags.slice(0, 4).map((t) => (
@@ -109,7 +109,7 @@ export function PhoneRail() {
       <div className="rail-head">
         <p className="mono">
           <span className="dot" aria-hidden="true" />
-          Live client sites · {PROJECTS.length}
+          {LIVE_CLIENT_LINE}
         </p>
         <p className="mono" aria-hidden="true">
           Swipe <Arrow />
@@ -180,7 +180,7 @@ export function Ledger({ headingId }: { headingId?: string }) {
           {PROJECTS.map((p) => (
             <tr key={p.slug} hidden={filter !== "all" && p.filter !== filter}>
               <td className="thumb">
-                <Shot src={p.image} alt="" width={p.imageWidth} height={p.imageHeight} sizes="56px" />
+                <Shot src={p.image} alt={`${p.name} website on a phone`} width={p.imageWidth} height={p.imageHeight} sizes="56px" />
               </td>
               <th scope="row" className="name">
                 <Link to="/work/$slug" params={{ slug: p.slug }}>
@@ -227,7 +227,7 @@ export function LabNote() {
         <p className="mono muted">{LAB.kind} · not client work</p>
         <h3 id="lab-title">{LAB.name}</h3>
         <p className="muted">
-          {LAB.story} The lab is where FORGE tests richer interaction, sound, and worldbuilding — separate from the
+          {LAB.story} The lab is where FORGE CT tests richer interaction, sound, and worldbuilding — separate from the
           client work, but available when a project calls for it.
         </p>
         <p>

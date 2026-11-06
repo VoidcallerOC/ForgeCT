@@ -5,7 +5,8 @@
  *     was removed 2026-11-01 (no longer an active client; owner request). Nino’s Collectibles
  *     was added 2026-10-11 with Nino’s approval (reported by Nick); its case study carries dated status lines
  *     because parts of that site (live pricing, Square, show list) are not yet working in production.
- *   - One FORGE lab experiment (Voidcaller), always shown apart from client work and never counted as a client.
+ *   - One FORGE CT lab experiment (Voidcaller), always shown apart from client work and never counted as a client.
+ *   - Public counts, proof lists and schema are derived from PROJECTS (see helpers at the bottom). Never hardcode them.
  * Case-study copy is limited to the documented need, build, tags and location. No outcomes or metrics.
  */
 export type Filter = "card-tabletop" | "retail-local";
@@ -23,6 +24,8 @@ export type Project = {
   /** Case-study category label, as certified. */
   category: string;
   place: string;
+  /** Connecticut town, only where the business has a documented storefront town. Used by proof lists and location pages. */
+  town?: string;
   image: string;
   /** Intrinsic pixel size of the screenshot file (WebP variants are generated at 480w and 160w). */
   imageWidth?: number;
@@ -55,6 +58,7 @@ export const PROJECTS: Project[] = [
     filter: "retail-local",
     category: "Retail and local business",
     place: "Canton",
+    town: "Canton",
     image: "/images/work/harrisinwonderland.jpg",
     imageHeight: 1429,
     // Live per the owner (2026-10-01) and linked on the certified homepage; the certified case study omitted it.
@@ -82,6 +86,7 @@ export const PROJECTS: Project[] = [
     filter: "card-tabletop",
     category: "Card and tabletop shop",
     place: "West Hartford",
+    town: "West Hartford",
     image: "/images/work/thousandsunny.jpg",
     imageHeight: 1429,
     site: "https://www.thousandsunnytcg.com/",
@@ -107,6 +112,7 @@ export const PROJECTS: Project[] = [
     filter: "card-tabletop",
     category: "Neighborhood video-game shop",
     place: "Southington",
+    town: "Southington",
     image: "/images/work/mjvideogames.jpg",
     imageHeight: 1429,
     site: "https://mjvideogames.com/",
@@ -133,6 +139,7 @@ export const PROJECTS: Project[] = [
     filter: "card-tabletop",
     category: "Card and tabletop shop",
     place: "Watertown",
+    town: "Watertown",
     image: "/images/work/IMG_2604.jpg",
     imageWidth: 1170,
     imageHeight: 2532,
@@ -190,13 +197,47 @@ export const PROJECTS: Project[] = [
 
 export const LAB = {
   name: "Voidcaller — On-chain metalcore",
-  kind: "FORGE experiment · Music and interactive",
+  kind: "FORGE CT experiment · Music and interactive",
   image: "/images/work/voidcaller.jpg",
   site: "https://voidcaller.enterthegrotto.xyz/",
   story:
     "A world that matches the record: player, relics, and lore. Built to prove that a project can go further when the experience itself is part of the brief.",
   tags: ["Interactive", "Custom player", "Worldbuilding"],
 } as const;
+
+/*
+ * Roster-derived copy. Every public count, proof list and schema list reads from PROJECTS so the
+ * published number always matches the displayed portfolio. Do not hardcode a client count.
+ */
+const NUMBER_WORDS = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"];
+const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+
+export const CLIENT_COUNT = PROJECTS.length;
+export const CLIENT_COUNT_WORD = NUMBER_WORDS[CLIENT_COUNT] ?? String(CLIENT_COUNT);
+
+/** "A, B and C" */
+export function joinNames(names: string[]): string {
+  if (names.length <= 1) return names.join("");
+  return `${names.slice(0, -1).join(", ")} and ${names[names.length - 1]}`;
+}
+
+/** "Name (Town)" when a town is documented, otherwise the name. */
+export const proofLabel = (p: Project) => (p.town ? `${p.name} (${p.town})` : p.name);
+
+/** Every approved live client, in roster order, separated by middots. */
+export const PROOF_LIST = PROJECTS.map(proofLabel).join(" · ");
+
+/** e.g. "Live client sites · 5" */
+export const LIVE_CLIENT_LINE = `Live client sites · ${CLIENT_COUNT}`;
+
+/** e.g. "Five live client sites" */
+export const LIVE_CLIENTS_LEAD = `${capitalize(CLIENT_COUNT_WORD)} live client sites`;
+
+/** Short names of every approved client: "Harris in Wonderland, Thousand Sunny, … and Nino’s Collectibles". */
+export const CLIENT_SHORT_NAMES = joinNames(PROJECTS.map((p) => p.short));
+
+/** Clients with a documented Connecticut town. */
+export const TOWN_PROJECTS = PROJECTS.filter((p) => p.town);
 
 export const projectBySlug = (slug: string) => PROJECTS.find((p) => p.slug === slug);
 export const filterCount = (f: Filter) => PROJECTS.filter((p) => p.filter === f).length;

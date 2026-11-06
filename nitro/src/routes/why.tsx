@@ -1,6 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Arrow, PageHead, Plate } from "@/components/chrome";
 import { pageHead } from "@/lib/seo";
+import { PACKAGES, PRICE_SENTENCE, usd } from "@/lib/site";
+import { CLIENT_COUNT_WORD, PROJECTS, projectBySlug } from "@/lib/work";
 
 export const Route = createFileRoute("/why")({
   head: () => pageHead("/why"),
@@ -10,7 +12,7 @@ export const Route = createFileRoute("/why")({
 const FAQ: { q: string; a: React.ReactNode }[] = [
   {
     q: "How long does my shop page take?",
-    a: "Extra-fast delivery is available for a defined package scope: 1 day for Basic (+$250), 3 days for Standard (+$500), or 5 days for Premium (+$750). Larger or custom projects need their own schedule.",
+    a: `The schedule is set for your project after we look at the work. ${PRICE_SENTENCE}`,
   },
   { q: "Do I have to write the site?", a: "Give me hours, address, and what you carry. I write the page so a walk-in can use it." },
   { q: "Is this WordPress?", a: "No. A fast page that holds up on a phone in the parking lot. Not a plugin stack." },
@@ -24,9 +26,9 @@ const FAQ: { q: string; a: React.ReactNode }[] = [
     a: (
       <>
         Yes. These featured live client shops are open right now:{" "}
-        <a className="link" href="https://www.thousandsunnytcg.com/" target="_blank" rel="noopener noreferrer">Thousand Sunny</a> and{" "}
-        <a className="link" href="https://mjvideogames.com/" target="_blank" rel="noopener noreferrer">M and J</a>. See all five
-        approved live client projects in the <Link className="link" to="/work">Forge portfolio</Link>.
+        <a className="link" href={projectBySlug("thousand-sunny")?.site} target="_blank" rel="noopener noreferrer">Thousand Sunny</a> and{" "}
+        <a className="link" href={projectBySlug("m-and-j-video-games")?.site} target="_blank" rel="noopener noreferrer">M&J Video Games</a>. See all{" "}
+        {CLIENT_COUNT_WORD} live client sites on the <Link className="link" to="/work">Work page</Link>.
       </>
     ),
   },
@@ -35,7 +37,7 @@ const FAQ: { q: string; a: React.ReactNode }[] = [
 function Why() {
   return (
     <main id="main">
-      <PageHead plate={["Why FORGE"]} title="Agencies quote you. I show you live shops.">
+      <PageHead plate={["Why FORGE CT"]} title="Agencies quote you. I show you live shops.">
         <p className="lede">
           Hartford agencies will sell you a free consult, same as they sell every other trade. I build the page your shop
           actually uses on the floor.
@@ -60,9 +62,9 @@ function Why() {
               <p className="mono">FORGE CT</p>
               <ul>
                 <li>Built for shops like yours around Hartford.</li>
-                <li>Basic is $750, with the package scope listed up front.</li>
+                <li>Basic is {usd(PACKAGES[0].price)}, with the package scope listed up front.</li>
                 <li>Custom page. Care at $35/month, cancel anytime.</li>
-                <li>Three featured live client shops you can open right now.</li>
+                <li>{PROJECTS.length} live client sites you can open right now.</li>
                 <li>Walk in. Shape. Build. Launch.</li>
               </ul>
             </div>

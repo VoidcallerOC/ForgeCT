@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Arrow } from "@/components/chrome";
-import { PACKAGES, usd } from "@/lib/site";
+import { CARE, PACKAGES, usd } from "@/lib/site";
 
 const ROWS: { label: string; cell: (i: number) => { text: string; yes?: boolean; no?: boolean } }[] = [
   { label: "Pages", cell: (i) => ({ text: `Up to ${PACKAGES[i].pages}` }) },
@@ -18,12 +18,6 @@ const ROWS: { label: string; cell: (i: number) => { text: string; yes?: boolean;
   {
     label: "Revisions",
     cell: (i) => ({ text: `${PACKAGES[i].revisions} revision${PACKAGES[i].revisions > 1 ? "s" : ""}` }),
-  },
-  {
-    label: "Extra-fast delivery",
-    cell: (i) => ({
-      text: `${PACKAGES[i].rush.days} day${PACKAGES[i].rush.days > 1 ? "s" : ""} · +${usd(PACKAGES[i].rush.fee)}`,
-    }),
   },
 ];
 
@@ -108,16 +102,18 @@ export function SheetNotes() {
   return (
     <div className="notes">
       <div className="note">
-        <b>E-commerce is a paid add-on.</b>
-        <p>Not part of any base package. Larger custom work is scoped separately.</p>
+        <b>E-commerce is a separately priced add-on.</b>
+        <p>Not part of any base package. It is a custom quote with no fixed price, and larger custom work is scoped separately.</p>
       </div>
       <div className="note">
-        <b>Extra-fast means defined scope.</b>
-        <p>One-day delivery applies to the defined Basic package scope; larger or custom projects need their own schedule.</p>
+        <b>Care after launch.</b>
+        <p>
+          Care is {usd(CARE.care.price)}/month. Care+ is {usd(CARE.carePlus.price)}/month.
+        </p>
       </div>
       <div className="note">
         <b>Performance is not an upsell.</b>
-        <p>Performance is part of Forge’s development approach, not a paid speed-optimization add-on.</p>
+        <p>Performance is part of the FORGE CT development approach, not a paid speed-optimization add-on.</p>
       </div>
     </div>
   );

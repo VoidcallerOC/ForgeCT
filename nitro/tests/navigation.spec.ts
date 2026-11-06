@@ -7,10 +7,10 @@ import { expect, test, type Page } from "@playwright/test";
  */
 const PRIMARY = [
   { label: "Work", path: "/work", h1: "Real businesses. Real reasons to build." },
-  { label: "Services", path: "/services", h1: "Custom websites. Built fast." },
+  { label: "Services", path: "/services", h1: "Website packages: Basic, Standard and Premium" },
   { label: "Care", path: "/care", h1: "Care you can actually keep." },
-  { label: "Why Forge", path: "/why", h1: "Agencies quote you. I show you live shops." },
-  { label: "Contact", path: "/contact", h1: "What’s on your floor?" },
+  { label: "Why FORGE CT", path: "/why", h1: "Agencies quote you. I show you live shops." },
+  { label: "Contact", path: "/contact", h1: "Contact FORGE CT" },
 ];
 const CTA = { path: "/audit", h1: "The digital inspection ticket for your storefront." };
 
@@ -79,7 +79,7 @@ for (const vp of VIEWPORTS) {
     });
 
     test("pages outside the primary nav mark nothing current", async ({ page }) => {
-      for (const path of ["/book", "/pay", "/privacy", "/hartford-web-design", "/connecticut-web-design"]) {
+      for (const path of ["/book", "/pay", "/privacy", "/hartford-web-design", "/farmington-web-design", "/west-hartford-web-design", "/connecticut-web-design"]) {
         await page.goto(path);
         expect(await currentLinks(page), path).toEqual([]);
       }
@@ -198,7 +198,7 @@ test.describe("mobile strip scroll position across client-side navigation", () =
       ["Get audit", /\/audit$/, null],
       ["Services", /\/services$/, "Services"],
       ["Get audit", /\/audit$/, null],
-      ["Why Forge", /\/why$/, "Why Forge"],
+      ["Why FORGE CT", /\/why$/, "Why FORGE CT"],
       ["Get audit", /\/audit$/, null],
       ["Contact", /\/contact$/, "Contact"],
     ];

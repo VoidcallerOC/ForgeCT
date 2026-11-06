@@ -17,7 +17,7 @@ const FAQ = [
   { q: "Can I stay at $35?", a: "Yes. Care is $35. Care+ is only if you want the extra monthly change." },
   {
     q: "Who is this for?",
-    a: "Care is for FORGE-built websites across local retail, restaurants, and service businesses. If we built your site or are planning a build together, Care keeps the details your customers rely on current after launch.",
+    a: "Care is for FORGE CT sites across local retail, restaurants, and service businesses. If we built your site or are planning a build together, Care keeps the details your customers rely on current after launch.",
   },
 ];
 
@@ -85,7 +85,7 @@ function Care() {
               </ul>
             </div>
             <div>
-              <p className="mono">FORGE care</p>
+              <p className="mono">FORGE CT care</p>
               <ul>
                 <li>{usd(CARE.care.price)} to keep your business website current after launch.</li>
                 <li>Your hours, holiday closings, services, events, and new offerings.</li>

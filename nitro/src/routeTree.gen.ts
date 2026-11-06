@@ -15,11 +15,13 @@ import { Route as BookRouteImport } from './routes/book'
 import { Route as CareRouteImport } from './routes/care'
 import { Route as ConnecticutWebDesignRouteImport } from './routes/connecticut-web-design'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as FarmingtonWebDesignRouteImport } from './routes/farmington-web-design'
 import { Route as HartfordWebDesignRouteImport } from './routes/hartford-web-design'
 import { Route as PayRouteImport } from './routes/pay'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as ThanksRouteImport } from './routes/thanks'
+import { Route as WestHartfordWebDesignRouteImport } from './routes/west-hartford-web-design'
 import { Route as WhyRouteImport } from './routes/why'
 import { Route as ApiContactRouteImport } from './routes/api/contact'
 import { Route as ApiPortalRouteImport } from './routes/api/portal'
@@ -60,6 +62,11 @@ const ContactRoute = ContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FarmingtonWebDesignRoute = FarmingtonWebDesignRouteImport.update({
+  id: '/farmington-web-design',
+  path: '/farmington-web-design',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const HartfordWebDesignRoute = HartfordWebDesignRouteImport.update({
   id: '/hartford-web-design',
   path: '/hartford-web-design',
@@ -83,6 +90,11 @@ const ServicesRoute = ServicesRouteImport.update({
 const ThanksRoute = ThanksRouteImport.update({
   id: '/thanks',
   path: '/thanks',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WestHartfordWebDesignRoute = WestHartfordWebDesignRouteImport.update({
+  id: '/west-hartford-web-design',
+  path: '/west-hartford-web-design',
   getParentRoute: () => rootRouteImport,
 } as any)
 const WhyRoute = WhyRouteImport.update({
@@ -138,11 +150,13 @@ export interface FileRoutesByFullPath {
   '/care': typeof CareRoute
   '/connecticut-web-design': typeof ConnecticutWebDesignRoute
   '/contact': typeof ContactRoute
+  '/farmington-web-design': typeof FarmingtonWebDesignRoute
   '/hartford-web-design': typeof HartfordWebDesignRoute
   '/pay': typeof PayRoute
   '/privacy': typeof PrivacyRoute
   '/services': typeof ServicesRoute
   '/thanks': typeof ThanksRoute
+  '/west-hartford-web-design': typeof WestHartfordWebDesignRoute
   '/why': typeof WhyRoute
   '/api/contact': typeof ApiContactRoute
   '/api/portal': typeof ApiPortalRoute
@@ -160,11 +174,13 @@ export interface FileRoutesByTo {
   '/care': typeof CareRoute
   '/connecticut-web-design': typeof ConnecticutWebDesignRoute
   '/contact': typeof ContactRoute
+  '/farmington-web-design': typeof FarmingtonWebDesignRoute
   '/hartford-web-design': typeof HartfordWebDesignRoute
   '/pay': typeof PayRoute
   '/privacy': typeof PrivacyRoute
   '/services': typeof ServicesRoute
   '/thanks': typeof ThanksRoute
+  '/west-hartford-web-design': typeof WestHartfordWebDesignRoute
   '/why': typeof WhyRoute
   '/api/contact': typeof ApiContactRoute
   '/api/portal': typeof ApiPortalRoute
@@ -183,11 +199,13 @@ export interface FileRoutesById {
   '/care': typeof CareRoute
   '/connecticut-web-design': typeof ConnecticutWebDesignRoute
   '/contact': typeof ContactRoute
+  '/farmington-web-design': typeof FarmingtonWebDesignRoute
   '/hartford-web-design': typeof HartfordWebDesignRoute
   '/pay': typeof PayRoute
   '/privacy': typeof PrivacyRoute
   '/services': typeof ServicesRoute
   '/thanks': typeof ThanksRoute
+  '/west-hartford-web-design': typeof WestHartfordWebDesignRoute
   '/why': typeof WhyRoute
   '/api/contact': typeof ApiContactRoute
   '/api/portal': typeof ApiPortalRoute
@@ -207,11 +225,13 @@ export interface FileRouteTypes {
     | '/care'
     | '/connecticut-web-design'
     | '/contact'
+    | '/farmington-web-design'
     | '/hartford-web-design'
     | '/pay'
     | '/privacy'
     | '/services'
     | '/thanks'
+    | '/west-hartford-web-design'
     | '/why'
     | '/api/contact'
     | '/api/portal'
@@ -229,11 +249,13 @@ export interface FileRouteTypes {
     | '/care'
     | '/connecticut-web-design'
     | '/contact'
+    | '/farmington-web-design'
     | '/hartford-web-design'
     | '/pay'
     | '/privacy'
     | '/services'
     | '/thanks'
+    | '/west-hartford-web-design'
     | '/why'
     | '/api/contact'
     | '/api/portal'
@@ -251,11 +273,13 @@ export interface FileRouteTypes {
     | '/care'
     | '/connecticut-web-design'
     | '/contact'
+    | '/farmington-web-design'
     | '/hartford-web-design'
     | '/pay'
     | '/privacy'
     | '/services'
     | '/thanks'
+    | '/west-hartford-web-design'
     | '/why'
     | '/api/contact'
     | '/api/portal'
@@ -274,11 +298,13 @@ export interface RootRouteChildren {
   CareRoute: typeof CareRoute
   ConnecticutWebDesignRoute: typeof ConnecticutWebDesignRoute
   ContactRoute: typeof ContactRoute
+  FarmingtonWebDesignRoute: typeof FarmingtonWebDesignRoute
   HartfordWebDesignRoute: typeof HartfordWebDesignRoute
   PayRoute: typeof PayRoute
   PrivacyRoute: typeof PrivacyRoute
   ServicesRoute: typeof ServicesRoute
   ThanksRoute: typeof ThanksRoute
+  WestHartfordWebDesignRoute: typeof WestHartfordWebDesignRoute
   WhyRoute: typeof WhyRoute
   ApiContactRoute: typeof ApiContactRoute
   ApiPortalRoute: typeof ApiPortalRoute
@@ -334,6 +360,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/farmington-web-design': {
+      id: '/farmington-web-design'
+      path: '/farmington-web-design'
+      fullPath: '/farmington-web-design'
+      preLoaderRoute: typeof FarmingtonWebDesignRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/hartford-web-design': {
       id: '/hartford-web-design'
       path: '/hartford-web-design'
@@ -367,6 +400,13 @@ declare module '@tanstack/react-router' {
       path: '/thanks'
       fullPath: '/thanks'
       preLoaderRoute: typeof ThanksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/west-hartford-web-design': {
+      id: '/west-hartford-web-design'
+      path: '/west-hartford-web-design'
+      fullPath: '/west-hartford-web-design'
+      preLoaderRoute: typeof WestHartfordWebDesignRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/why': {
@@ -442,11 +482,13 @@ const rootRouteChildren: RootRouteChildren = {
   CareRoute: CareRoute,
   ConnecticutWebDesignRoute: ConnecticutWebDesignRoute,
   ContactRoute: ContactRoute,
+  FarmingtonWebDesignRoute: FarmingtonWebDesignRoute,
   HartfordWebDesignRoute: HartfordWebDesignRoute,
   PayRoute: PayRoute,
   PrivacyRoute: PrivacyRoute,
   ServicesRoute: ServicesRoute,
   ThanksRoute: ThanksRoute,
+  WestHartfordWebDesignRoute: WestHartfordWebDesignRoute,
   WhyRoute: WhyRoute,
   ApiContactRoute: ApiContactRoute,
   ApiPortalRoute: ApiPortalRoute,

@@ -27,7 +27,7 @@ function CaseStudy() {
   const next = PROJECTS[(index + 1) % PROJECTS.length];
   return (
     <main id="main">
-      <PageHead plate={["Forge CT case study", project.category, project.place]} title={project.name}>
+      <PageHead plate={["FORGE CT case study", project.category, project.place]} title={project.name}>
         <p className="lede">{project.built}</p>
       </PageHead>
       <section className="band">
@@ -44,7 +44,7 @@ function CaseStudy() {
                 <dd>{project.need}</dd>
               </div>
               <div>
-                <dt>The Forge</dt>
+                <dt>The build</dt>
                 <dd>{project.built}</dd>
               </div>
               {project.designIntent ? (
@@ -106,7 +106,15 @@ function CaseStudy() {
               <div>
                 <dt>Where</dt>
                 <dd>
-                  {project.place} · {project.category}
+                  {project.slug === "thousand-sunny" ? (
+                    <Link className="link" to="/west-hartford-web-design">
+                      {project.place}
+                    </Link>
+                  ) : (
+                    project.place
+                  )}
+                  {" · "}
+                  {project.category}
                 </dd>
               </div>
             </dl>

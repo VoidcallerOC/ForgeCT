@@ -6,8 +6,8 @@ import { NextSteps } from "@/components/next-steps";
 import { PackageChooser, RateSheet, SheetNotes } from "@/components/rate-sheet";
 import { LabNote, PhoneRail, ProofDeck } from "@/components/work";
 import { pageHead } from "@/lib/seo";
-import { BUSINESS, CARE, PACKAGES, usd } from "@/lib/site";
-import { PROJECTS } from "@/lib/work";
+import { BUSINESS, CARE, usd } from "@/lib/site";
+import { LIVE_CLIENTS_LEAD, LIVE_CLIENT_LINE, PROJECTS, PROOF_LIST } from "@/lib/work";
 
 export const Route = createFileRoute("/")({
   head: () => pageHead("/"),
@@ -36,16 +36,11 @@ function Home() {
       <section className="hero" aria-labelledby="hero-title">
         <div className="wrap">
           <Plate heat={2} items={[`${BUSINESS.locality}, Connecticut`, BUSINESS.area, "One builder, start to finish"]} />
-          <h1 id="hero-title">
-            Custom websites for the businesses people <em>drive&nbsp;to.</em>
-          </h1>
-          <p className="lede">
-            Websites for shops and local businesses around {BUSINESS.area}. Built for the phone check before someone
-            walks in. Packages from {usd(PACKAGES[0].price)}.
-          </p>
+          <h1 id="hero-title">Sites and apps for Hartford shops.</h1>
+          <p className="lede">Custom websites for the businesses people drive to, built in Farmington, CT.</p>
           <div className="actions">
             <Link to="/audit" className="btn" data-track="hero_audit_cta">
-              Get your Forge-CT Audit <Arrow />
+              Get your FORGE CT Audit <Arrow />
             </Link>
             <a className="btn btn--line" href="#work" data-track="hero_work_cta">
               See the work
@@ -68,7 +63,7 @@ function Home() {
             <Plate items={["The parking-lot test"]} />
             <h2 id="test-title">Every local site gets judged from a phone, in seconds.</h2>
             <p className="lede">
-              A FORGE site starts from the business, not a template, and answers the four questions a customer asks
+              A FORGE CT site starts from the business, not a template, and answers the four questions a customer asks
               before they come in.
             </p>
           </div>
@@ -85,7 +80,7 @@ function Home() {
 
       <section className="band band--tight band--fog" aria-labelledby="audit-title">
         <div className="wrap">
-          <Plate items={["The Forge-CT Audit", "Free", "No pitch deck"]} />
+          <Plate items={["The FORGE CT Audit", "Free", "No pitch deck"]} />
           <AuditTicket mode="offer" headingId="audit-title" heading="Before I build anything, I’ll show you what your customers see." />
         </div>
       </section>
@@ -121,16 +116,16 @@ function Home() {
 
       <section className="band" id="work" aria-labelledby="work-title">
         <div className="wrap">
-          <Plate items={["Work", `${PROJECTS.length} live client sites`, "Connecticut"]} />
+          <Plate items={["Work", LIVE_CLIENT_LINE, "Connecticut"]} />
           <div className="split">
             <h2 id="work-title">Real businesses. Real reasons to build.</h2>
             <p className="lede">
-              Five live client sites, each shown once below: the screenshot is the proof, the lines under it are the
-              documented need and the build — not a result we did not measure. The filterable index is on{" "}
+              {LIVE_CLIENTS_LEAD}, each shown once below: {PROOF_LIST}. The screenshot is the proof, the lines under it are the documented need
+              and the build — not a result we did not measure. The filterable index is on{" "}
               <Link className="link" to="/work">
                 Work
               </Link>
-              ; the statewide offer, with the towns and published packages, is on{" "}
+              ; the statewide offer is on{" "}
               <Link className="link" to="/connecticut-web-design">
                 Connecticut web design
               </Link>
