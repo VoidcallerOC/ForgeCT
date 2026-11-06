@@ -3,7 +3,8 @@
  *
  * 1. Every sitemap URL (and /pay, /thanks, /privacy) is prerendered to static HTML.
  * 2. Each page carries title, description, canonical, robots, Open Graph and Twitter tags.
- * 3. Titles, descriptions, Open Graph, one H1, the shared ProfessionalService, and the local-SEO
+ * 3. Titles, descriptions, Open Graph, one H1, the shared ProfessionalService (approved $750 / $1,500 / $2,500
+ *    offers, Care $35 and Care+ $79, no superseded pricing or extra-fast fees), and the local-SEO
  *    forbidden strings match the Nov 2026 brief. The archived certified HTML is the pre-brief baseline
  *    and is no longer the copy contract.
  * 4. The production smoke markers (scripts/smoke-production.mjs CORE_ROUTES) appear on each page.
@@ -43,12 +44,12 @@ const EXPECTED = {
   "/": {
     title: "FORGE CT — Sites and apps for Hartford shops",
     description:
-      "Sites and apps for Connecticut shops and local businesses, built by Nick Sousa in Farmington, CT. Local Business Sites from $2,000. Call (959) 229-0653.",
+      "Sites and apps for Connecticut shops and local businesses, built by Nick Sousa in Farmington, CT. Website packages from $750. Call (959) 229-0653.",
   },
   "/services": {
-    title: "Packages: sites, systems and product sites — FORGE CT",
+    title: "Website packages from $750 — FORGE CT",
     description:
-      "Local Business Site from $2,000, Site and System $6,000, Product Site $16,000. Built by FORGE CT in Farmington, CT. Care from $35/month.",
+      "Basic $750, Standard $1,500, Premium $2,500. E-commerce is a separately priced add-on. Built by FORGE CT in Farmington, CT. Care from $35/month.",
   },
   "/care": {
     title: "Website care from $35/month — FORGE CT",
@@ -83,22 +84,22 @@ const EXPECTED = {
   "/hartford-web-design": {
     title: "Hartford Web Design for Local Shops — FORGE CT",
     description:
-      "Web design for Hartford shops and local businesses from one Farmington-based builder. Live client sites, Local Business Sites from $2,000.",
+      "Web design for Hartford shops and local businesses from one Farmington-based builder. Live client sites, packages from $750.",
   },
   "/farmington-web-design": {
     title: "Farmington CT Web Design — FORGE CT",
     description:
-      "Sites and apps built in Farmington, CT for Farmington Valley shops and local businesses. One builder, live client work, from $2,000.",
+      "Sites and apps built in Farmington, CT for Farmington Valley shops and local businesses. One builder, live client work, packages from $750.",
   },
   "/west-hartford-web-design": {
     title: "West Hartford Web Design — FORGE CT",
     description:
-      "Web design for West Hartford shops, from the Farmington builder behind Thousand Sunny Cards' site. Local Business Sites from $2,000.",
+      "Web design for West Hartford shops, from the Farmington builder behind Thousand Sunny Cards' site. Packages from $750.",
   },
   "/connecticut-web-design": {
     title: "Connecticut Web Design for Local Businesses | FORGE CT",
     description:
-      "Farmington studio building sites and apps for Connecticut businesses. Live work in Canton, West Hartford, Southington and Watertown. From $2,000.",
+      "Farmington studio building sites and apps for Connecticut businesses. Live work in Canton, West Hartford, Southington and Watertown. Packages from $750.",
   },
   "/work/harris-in-wonderland": {
     title: "Harris in Wonderland — FORGE CT case study",
@@ -128,7 +129,18 @@ const EXPECTED = {
 };
 
 const LOCATION_PAGES = ["/hartford-web-design", "/farmington-web-design", "/west-hartford-web-design", "/connecticut-web-design"];
-const PRICE_RE = /750|1,500|2,500|Basic|Standard|Premium|Extra-fast/;
+/**
+ * Superseded pricing the owner rejected (Nov 2026): the $2,000 / $6,000 / $16,000 ladder and its package names,
+ * plus extra-fast delivery fees, which are not offered. Rejected anywhere in a built page, meta tag or JSON-LD.
+ */
+const SUPERSEDED_PRICE_RE = /\$2,000|\$6,000|\$16,000|\b(2000|6000|16000)\b(?=")|Local Business Site|Site and System|Product Site|Extra-fast|extra fast|rush delivery/i;
+/** Owner-approved rate sheet. */
+const APPROVED_PACKAGES = [
+  { name: "Basic — Starter Website", price: "750", display: "$750" },
+  { name: "Standard — Business Website", price: "1500", display: "$1,500" },
+  { name: "Premium — Forge Website", price: "2500", display: "$2,500" },
+];
+const APPROVED_PRICE_RANGE = "$750–$2,500";
 /** Banned brands and retired spellings, anywhere in a built page (body, meta, JSON-LD). */
 const BANNED_RE = /SousaSaaS|Front Window|Come By|Forge-CT|\$60/;
 /** Retired client: must not appear as proof in any page, meta tag or structured data. */
@@ -213,7 +225,8 @@ for (const route of routes) {
   if (h1Count !== 1) fail(`${route}: expected one h1, found ${h1Count}`);
   if (!html.includes("(959) 229-0653")) fail(`${route}: phone missing`);
   if (!html.includes("Open 24 hours, 7 days a week")) fail(`${route}: hours missing`);
-  if (PRICE_RE.test(html)) fail(`${route}: old price string still present`);
+  const superseded = html.match(SUPERSEDED_PRICE_RE);
+  if (superseded) fail(`${route}: superseded pricing present (${JSON.stringify(superseded[0])})`);
   if (BANNED_RE.test(html)) fail(`${route}: banned brand string present (${html.match(BANNED_RE)[0]})`);
   if (RETIRED_RE.test(html)) fail(`${route}: retired client Hard Hittin present in page, meta or JSON-LD`);
   if (h.jsonld.some((block) => RETIRED_RE.test(JSON.stringify(block)))) fail(`${route}: Hard Hittin in JSON-LD`);
@@ -224,7 +237,15 @@ for (const route of routes) {
   const business = businesses[0];
   if (business.name !== "FORGE CT" || business.telephone !== "+1-959-229-0653" || business.address?.postalCode !== "06032")
     fail(`${route}: ProfessionalService NAP mismatch`);
-  if (business.priceRange !== "$2,000–$16,000") fail(`${route}: priceRange mismatch`);
+  if (business.priceRange !== APPROVED_PRICE_RANGE) fail(`${route}: priceRange ${business.priceRange} != ${APPROVED_PRICE_RANGE}`);
+  const offers = (business.makesOffer || []).filter((o) => o.price);
+  const offerList = offers.map((o) => `${o.name}=${o.price}`).join(" | ");
+  const expectedOffers = APPROVED_PACKAGES.map((pk) => `${pk.name}=${pk.price}`).join(" | ");
+  if (offerList !== expectedOffers) fail(`${route}: JSON-LD package offers ${offerList}, expected ${expectedOffers}`);
+  const care = (business.makesOffer || []).map((o) => `${o.name}=${o.priceSpecification?.price ?? ""}`).filter((x) => x.startsWith("Care"));
+  if (care.join(" | ") !== "Care=35 | Care+=79") fail(`${route}: JSON-LD Care offers ${care.join(" | ")}`);
+  if ((business.makesOffer || []).some((o) => /e-?commerce/i.test(o.name) && (o.price || o.priceSpecification)))
+    fail(`${route}: e-commerce must not carry a published price`);
   const expected = EXPECTED[route];
   if (expected) {
     if (h.title !== expected.title) fail(`${route}: title\n    built:    ${h.title}\n    expected: ${expected.title}`);
@@ -248,6 +269,21 @@ for (const route of routes) {
     if (html.includes("Websites for the businesses people drive to.</h2>")) fail("/: old footer tagline still present");
   }
   if (route === "/contact" && !html.includes("Contact FORGE CT")) fail("/contact: H1 copy missing");
+  if (route === "/" || route === "/services") {
+    const text = decode(html);
+    for (const pk of APPROVED_PACKAGES) {
+      if (!text.includes(pk.display)) fail(`${route}: approved price ${pk.display} missing`);
+      if (!text.includes(pk.name.split(" — ")[1])) fail(`${route}: package label ${pk.name.split(" — ")[1]} missing`);
+    }
+    if (!text.includes("E-commerce is a separately priced add-on")) fail(`${route}: e-commerce add-on note missing`);
+    if (!text.includes("$35") || !text.includes("$79")) fail(`${route}: Care / Care+ prices missing`);
+  }
+  if (route === "/services") {
+    const text = decode(html);
+    for (const addOn of ["Additional page", "+$150", "Additional revision", "+$100", "Additional product", "+$250"])
+      if (!text.includes(addOn)) fail(`/services: add-on ${addOn} missing`);
+    if (!/E-commerce functionality<\/b><span class="cost">Quoted per project/.test(html)) fail("/services: e-commerce add-on must be quoted per project");
+  }
   if (route === "/work") {
     const collection = h.jsonld.find((block) => block["@type"] === "CollectionPage");
     const names = (collection?.mainEntity || []).map((item) => item.name).join(" | ");

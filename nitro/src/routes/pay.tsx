@@ -84,9 +84,9 @@ function Pay() {
           <div className="stack">
             <h2 id="builds">Website builds</h2>
             <p className="lede">
-              Review the <Link className="link" to="/services">Local Business Site, Site and System, and Product Site packages</Link>.
+              Review the <Link className="link" to="/services">Basic, Standard, and Premium packages and their add-ons</Link>.
               There is no public build-deposit checkout. After scope is confirmed, FORGE CT sends a Stripe invoice (or accepts
-              check / bank transfer). Custom functionality and larger systems may need a separate quote.
+              check / bank transfer). E-commerce, custom functionality, and larger systems may need a separate quote.
             </p>
             <p className="muted">
               Ready to scope a build?{" "}

@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Arrow, PageHead, Plate } from "@/components/chrome";
 import { RateSheet, SheetNotes } from "@/components/rate-sheet";
 import { pageHead } from "@/lib/seo";
-import { CARE, usd } from "@/lib/site";
+import { ADD_ONS, CARE, PACKAGE_LINE, usd } from "@/lib/site";
 
 export const Route = createFileRoute("/services")({
   head: () => pageHead("/services"),
@@ -19,10 +19,11 @@ const BUILDS = [
 function Services() {
   return (
     <main id="main">
-      <PageHead plate={["Services", "Published pricing"]} title="Website packages: Local Business Site, Site and System, Product Site">
+      <PageHead plate={["Services", "Published pricing"]} title="Website packages: Basic, Standard and Premium">
         <p className="lede">
-          Local Business Site from $2,000. Site and System $6,000. Product Site $16,000. Care is {usd(CARE.care.price)}/month
-          or Care+ is {usd(CARE.carePlus.price)}/month. Larger systems and custom applications are scoped separately.
+          Clearly scoped packages for your small business, shop, restaurant, or local service: {PACKAGE_LINE}. Care is{" "}
+          {usd(CARE.care.price)}/month or Care+ is {usd(CARE.carePlus.price)}/month. Larger systems and custom applications
+          are scoped separately.
         </p>
         <div className="actions">
           <Link to="/audit" className="btn" data-track="services_hero_audit">
@@ -32,14 +33,32 @@ function Services() {
             Book a working session
           </Link>
         </div>
+        <p className="fine">Reviewing the details? <a className="link" href="#addons">Jump to add-ons</a>.</p>
       </PageHead>
 
       <section className="band" aria-labelledby="packages-title">
         <div className="wrap">
-          <Plate items={["Website packages", "Published prices"]} />
+          <Plate items={["Website packages", "Basic · Standard · Premium"]} />
           <h2 id="packages-title">Website packages</h2>
           <RateSheet caption="Website packages compared" />
           <SheetNotes />
+        </div>
+      </section>
+
+      <section className="band band--fog" id="addons" aria-labelledby="addons-title">
+        <div className="wrap">
+          <Plate items={["Additional services"]} />
+          <h2 id="addons-title">Add-ons with a defined size.</h2>
+          <p className="lede">Each add-on extends an otherwise applicable package by a defined amount of work.</p>
+          <ul className="addons">
+            {ADD_ONS.map((a) => (
+              <li key={a.name}>
+                <b>{a.name}</b>
+                <span className="cost">{a.price ? `+${usd(a.price)}` : "Quoted per project"}</span>
+                <p>{a.note}</p>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 
@@ -53,7 +72,7 @@ function Services() {
               APIs, integrations, infrastructure, and substantial e-commerce work may need a custom quote.
             </p>
             <p className="muted">
-              These prices do not include unlimited revisions, pages, products, integrations, databases, admin systems, APIs,
+              Package prices do not include unlimited revisions, pages, products, integrations, databases, admin systems, APIs,
               or infrastructure.
             </p>
             <div className="actions">

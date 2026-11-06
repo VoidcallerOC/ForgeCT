@@ -2,55 +2,74 @@
  * Editable package templates seeded from published /services list prices.
  * Amounts are list defaults only — each proposal may edit them.
  * UNVERIFIED list prices (no published FORGE CT page amount) are flagged.
- * Local Business Site is published as a starting price; the default below is that minimum.
+ * Owner-approved rate sheet: Basic $750, Standard $1,500, Premium $2,500. E-commerce is a separately
+ * priced add-on with no published list price. No extra-fast delivery fees are offered.
  */
 
 export const PACKAGE_TEMPLATES = [
   {
-    id: "local-business-site",
-    name: "Local Business Site",
+    id: "website-basic",
+    name: "Website Build — Basic",
     list_price_verified: true,
-    source: "/services Local Business Site from $2,000",
+    source: "/services Basic $750",
     line_items: [
       {
-        label: "Local Business Site",
+        label: "Basic · Starter Website (up to 3 pages)",
         quantity: 1,
-        unit_amount_cents: 200000,
+        unit_amount_cents: 75000,
       },
     ],
     scope_text:
-      "A site for a shop or local business. Published from $2,000; confirm the final amount before send.",
+      "Up to 3 pages; custom design and development; responsive, mobile-first functional website; hosting setup; social media icons; 1 revision.",
     timeline_text: "Schedule agreed after discovery.",
   },
   {
-    id: "site-and-system",
-    name: "Site and System",
+    id: "website-standard",
+    name: "Website Build — Standard",
     list_price_verified: true,
-    source: "/services Site and System $6,000",
+    source: "/services Standard $1,500",
     line_items: [
       {
-        label: "Site and System (booking, inventory, intake)",
+        label: "Standard · Business Website (up to 5 pages)",
         quantity: 1,
-        unit_amount_cents: 600000,
-      },
-    ],
-    scope_text: "Site and System: booking, inventory, and intake.",
-    timeline_text: "Schedule agreed after discovery.",
-  },
-  {
-    id: "product-site",
-    name: "Product Site",
-    list_price_verified: true,
-    source: "/services Product Site $16,000",
-    line_items: [
-      {
-        label: "Product Site",
-        quantity: 1,
-        unit_amount_cents: 1600000,
+        unit_amount_cents: 150000,
       },
     ],
     scope_text:
-      "Product Site. Confirm catalog and integration scope before send.",
+      "Up to 5 pages; custom design and development; responsive, mobile-first; hosting setup; social media icons; speed and performance optimization; 2 revisions.",
+    timeline_text: "Schedule agreed after discovery.",
+  },
+  {
+    id: "website-premium",
+    name: "Website Build — Premium",
+    list_price_verified: true,
+    source: "/services Premium $2,500",
+    line_items: [
+      {
+        label: "Premium · Forge Website (up to 8 pages)",
+        quantity: 1,
+        unit_amount_cents: 250000,
+      },
+    ],
+    scope_text:
+      "Up to 8 pages; custom design and development; responsive, mobile-first; advanced functionality; hosting setup; social media icons; performance; 3 revisions. E-commerce is a separately priced add-on.",
+    timeline_text: "Schedule agreed after discovery.",
+  },
+  {
+    id: "ecommerce-addon",
+    name: "E-Commerce add-on",
+    list_price_verified: false,
+    source:
+      "UNVERIFIED — separately priced add-on; no published list price. Set amount per scope.",
+    line_items: [
+      {
+        label: "E-commerce functionality add-on (scoped)",
+        quantity: 1,
+        unit_amount_cents: 0,
+      },
+    ],
+    scope_text:
+      "Add e-commerce functionality to an otherwise applicable package. Product, catalog, integration, and custom-functionality scope is agreed separately.",
     timeline_text: "Schedule agreed after discovery.",
   },
   {
@@ -127,7 +146,15 @@ Payment: the deposit listed is due via Stripe Checkout after acceptance. Remaini
 
 Questions: create@forge-ct.com`;
 
-export const ADD_ON_LINE_ITEMS = [];
+export const ADD_ON_LINE_ITEMS = [
+  { label: "Additional page", quantity: 1, unit_amount_cents: 15000 },
+  { label: "Additional revision", quantity: 1, unit_amount_cents: 10000 },
+  {
+    label: "Additional product (scoped)",
+    quantity: 1,
+    unit_amount_cents: 25000,
+  },
+];
 
 export function getPackageTemplate(id) {
   return PACKAGE_TEMPLATES.find((p) => p.id === id) || null;

@@ -1,3 +1,4 @@
+import { BUSINESS, PACKAGES } from "./site";
 import { LIVE_CLIENTS_LEAD, PROJECTS, joinNames } from "./work";
 
 /**
@@ -39,28 +40,16 @@ export const BUSINESS_LD = {
       closes: "23:59",
     },
   ],
-  priceRange: "$2,000–$16,000",
+  priceRange: BUSINESS.priceRange,
   makesOffer: [
-    {
+    ...PACKAGES.map((p) => ({
       "@type": "Offer",
-      name: "Local Business Site",
+      name: `${p.tier} — ${p.label}`,
       url: "https://www.forge-ct.com/services",
-      priceSpecification: { "@type": "PriceSpecification", minPrice: "2000", priceCurrency: "USD" },
-    },
-    {
-      "@type": "Offer",
-      name: "Site and System",
-      url: "https://www.forge-ct.com/services",
-      price: "6000",
+      price: String(p.price),
       priceCurrency: "USD",
-    },
-    {
-      "@type": "Offer",
-      name: "Product Site",
-      url: "https://www.forge-ct.com/services",
-      price: "16000",
-      priceCurrency: "USD",
-    },
+      itemOffered: { "@type": "Service", name: `${p.tier} — ${p.label}`, description: p.schemaDescription },
+    })),
     {
       "@type": "Offer",
       name: "Care",
@@ -74,7 +63,7 @@ export const BUSINESS_LD = {
       priceSpecification: { "@type": "UnitPriceSpecification", price: "79", priceCurrency: "USD", unitText: "MONTH" },
     },
   ],
-} as const;
+};
 
 export type FaqItem = { q: string; a: string };
 

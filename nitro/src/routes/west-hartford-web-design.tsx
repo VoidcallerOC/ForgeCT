@@ -1,12 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageHead, Plate } from "@/components/chrome";
 import { pageHead } from "@/lib/seo";
+import { PRICE_SENTENCE } from "@/lib/site";
 import { breadcrumbLd, faqPageLd, type FaqItem } from "@/lib/structured-data";
 
 const FAQ: FaqItem[] = [
   {
     q: "How much does a West Hartford shop website cost?",
-    a: "Local Business Site from $2,000, Site and System $6,000, Product Site $16,000, plus optional Care at $35/month or Care+ at $79/month.",
+    a: PRICE_SENTENCE,
   },
   {
     q: "What is the first step?",
@@ -41,8 +42,7 @@ function WestHartford() {
       <section className="band">
         <div className="wrap stack">
           <p>
-            Pricing is published: Local Business Site from $2,000, Site and System $6,000, Product Site $16,000, plus
-            optional Care at $35/month or Care+ at $79/month.
+            Pricing is published. {PRICE_SENTENCE}
           </p>
           <p>
             <strong>See it live:</strong>{" "}

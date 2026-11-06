@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Arrow, PageHead, Plate } from "@/components/chrome";
 import { pageHead } from "@/lib/seo";
+import { PACKAGES, PRICE_SENTENCE, usd } from "@/lib/site";
 import { CLIENT_COUNT_WORD, PROJECTS, projectBySlug } from "@/lib/work";
 
 export const Route = createFileRoute("/why")({
@@ -11,7 +12,7 @@ export const Route = createFileRoute("/why")({
 const FAQ: { q: string; a: React.ReactNode }[] = [
   {
     q: "How long does my shop page take?",
-    a: "The schedule is set for your project after we look at the work. Published prices are Local Business Site from $2,000, Site and System $6,000, and Product Site $16,000.",
+    a: `The schedule is set for your project after we look at the work. ${PRICE_SENTENCE}`,
   },
   { q: "Do I have to write the site?", a: "Give me hours, address, and what you carry. I write the page so a walk-in can use it." },
   { q: "Is this WordPress?", a: "No. A fast page that holds up on a phone in the parking lot. Not a plugin stack." },
@@ -61,7 +62,7 @@ function Why() {
               <p className="mono">FORGE CT</p>
               <ul>
                 <li>Built for shops like yours around Hartford.</li>
-                <li>Local Business Site from $2,000, with the price listed up front.</li>
+                <li>Basic is {usd(PACKAGES[0].price)}, with the package scope listed up front.</li>
                 <li>Custom page. Care at $35/month, cancel anytime.</li>
                 <li>{PROJECTS.length} live client sites you can open right now.</li>
                 <li>Walk in. Shape. Build. Launch.</li>

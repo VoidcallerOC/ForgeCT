@@ -3,12 +3,13 @@ import { PageHead, Plate } from "@/components/chrome";
 import { InquiryForm } from "@/components/inquiry-form";
 import { pageHead } from "@/lib/seo";
 import { breadcrumbLd, faqPageLd, type FaqItem } from "@/lib/structured-data";
+import { PRICE_SENTENCE } from "@/lib/site";
 import { PROJECTS } from "@/lib/work";
 
 const FAQ: FaqItem[] = [
   {
     q: "How much does a shop website cost in Hartford?",
-    a: "Local Business Site from $2,000. Site and System $6,000. Product Site $16,000. Care is $35/month or Care+ is $79/month.",
+    a: PRICE_SENTENCE,
   },
   {
     q: "What does a Hartford shop website need?",
@@ -43,8 +44,8 @@ function Hartford() {
           local services.
         </p>
         <p>
-          You get published prices, live client sites you can open before you commit, and no agency relay team. Local
-          Business Site from $2,000. Site and System $6,000. Product Site $16,000. Care $35/month or Care+ $79/month.
+          You get published prices, live client sites you can open before you commit, and no agency relay team.{" "}
+          {PRICE_SENTENCE}
         </p>
         <p>
           <strong>Proof you can open today:</strong>{" "}

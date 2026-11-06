@@ -2,12 +2,13 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageHead, Plate } from "@/components/chrome";
 import { pageHead } from "@/lib/seo";
 import { breadcrumbLd, faqPageLd, type FaqItem } from "@/lib/structured-data";
+import { PRICE_SENTENCE } from "@/lib/site";
 import { TOWN_PROJECTS } from "@/lib/work";
 
 const FAQ: FaqItem[] = [
   {
     q: "How much does a Farmington business website cost?",
-    a: "Local Business Site from $2,000. Site and System (booking, inventory, intake) $6,000. Product Site $16,000. After launch, Care is $35/month or Care+ is $79/month.",
+    a: PRICE_SENTENCE,
   },
   {
     q: "What is the first step?",
@@ -43,8 +44,7 @@ function Farmington() {
             first screen.
           </p>
           <p>
-            <strong>What it costs:</strong> Local Business Site from $2,000. Site and System (booking, inventory, intake)
-            $6,000. Product Site $16,000. After launch, Care is $35/month or Care+ is $79/month.
+            <strong>What it costs:</strong> {PRICE_SENTENCE}
           </p>
           <p>
             <strong>Live work nearby:</strong>{" "}

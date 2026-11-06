@@ -12,6 +12,14 @@ const APPROVED_CLIENTS = [
   { slug: "ninos-collectibles", name: "Nino’s Collectibles", site: "https://ninoscollectibles.com/" },
 ];
 const COUNT = APPROVED_CLIENTS.length;
+
+/** Owner-approved rate sheet. Superseded: the $2,000 / $6,000 / $16,000 ladder and extra-fast delivery fees. */
+const APPROVED_PACKAGES = [
+  { tier: "Basic", label: "Starter Website", price: "$750" },
+  { tier: "Standard", label: "Business Website", price: "$1,500" },
+  { tier: "Premium", label: "Forge Website", price: "$2,500" },
+];
+const SUPERSEDED_PRICING = /\$2,000|\$6,000|\$16,000|"(2000|6000|16000)"|Local Business Site|Site and System|Product Site|Extra-fast/i;
 const RETIRED = /Hard[\s-]*Hittin/i;
 const BANNED = /SousaSaaS|Front Window|Come By/i;
 
@@ -307,18 +315,55 @@ test.describe("layout and platform", () => {
     });
   }
 
-  test("rate sheet shows all three packages and fits a phone", async ({ page }) => {
-    await page.setViewportSize({ width: 390, height: 844 });
-    await page.goto("/");
-    const sheet = page.locator("#pricing table.sheet");
-    for (const price of ["$2,000", "$6,000", "$16,000"]) await expect(sheet).toContainText(price);
-    await expect(sheet).toContainText("Local Business Site");
-    await expect(sheet).toContainText("Site and System");
-    await expect(sheet).toContainText("Product Site");
-    await expect(sheet.locator("tbody tr").filter({ hasText: "Price" }).locator("td")).toHaveCount(3);
-    await expect(sheet).not.toContainText("Extra-fast");
-    const fits = await sheet.evaluate((t) => t.getBoundingClientRect().right <= document.documentElement.clientWidth);
-    expect(fits).toBe(true);
+  test("rate sheet shows the approved Basic / Standard / Premium packages and fits a phone", async ({ page }) => {
+    for (const width of [360, 390]) {
+      await page.setViewportSize({ width, height: 844 });
+      await page.goto("/");
+      const sheet = page.locator("#pricing table.sheet");
+      const heads = sheet.locator("thead th");
+      await expect(heads).toHaveCount(3);
+      for (const [i, pk] of APPROVED_PACKAGES.entries()) {
+        await expect(heads.nth(i)).toContainText(pk.tier);
+        await expect(heads.nth(i)).toContainText(pk.price);
+        await expect(heads.nth(i)).toContainText(pk.label);
+      }
+      await expect(sheet.locator("tbody tr").filter({ hasText: "Pages" }).locator("td")).toHaveText(["Up to 3", "Up to 5", "Up to 8"]);
+      await expect(sheet.locator("tbody tr").filter({ hasText: "Revisions" }).locator("td")).toHaveText(["1 revision", "2 revisions", "3 revisions"]);
+      await expect(sheet).not.toContainText(/Extra-fast|delivery/i);
+      await expect(page.locator("#pricing .chooser")).toContainText("$750");
+      await expect(page.locator("#pricing .notes")).toContainText("E-commerce is a separately priced add-on.");
+      const fits = await sheet.evaluate((t) => t.getBoundingClientRect().right <= document.documentElement.clientWidth);
+      expect(fits, `rate sheet overflows at ${width}px`).toBe(true);
+    }
+  });
+
+  test("services lists the approved add-ons, with e-commerce quoted per project", async ({ page }) => {
+    await page.goto("/services");
+    const addons = page.locator("#addons .addons li");
+    await expect(addons).toHaveCount(4);
+    await expect(addons.filter({ hasText: "Additional page" })).toContainText("+$150");
+    await expect(addons.filter({ hasText: "Additional revision" })).toContainText("+$100");
+    await expect(addons.filter({ hasText: "Additional product" })).toContainText("+$250");
+    await expect(addons.filter({ hasText: "E-commerce functionality" }).locator(".cost")).toHaveText("Quoted per project");
+    await expect(page.locator("#addons")).not.toContainText(/day/);
+  });
+
+  test("superseded high-priced packages and extra-fast fees appear nowhere: copy, meta or JSON-LD", async ({ page }) => {
+    for (const path of ROUTES) {
+      await page.goto(path);
+      expect(await page.content(), path).not.toMatch(SUPERSEDED_PRICING);
+    }
+  });
+
+  test("business JSON-LD offers carry the approved prices", async ({ page }) => {
+    await page.goto("/services");
+    const blocks = await page.$$eval('script[type="application/ld+json"]', (els) => els.map((e) => JSON.parse(e.textContent || "{}")));
+    const business = blocks.find((b) => b["@type"] === "ProfessionalService");
+    expect(business.priceRange).toBe("$750–$2,500");
+    const priced = business.makesOffer.filter((o: { price?: string }) => o.price);
+    expect(priced.map((o: { name: string; price: string }) => [o.name, o.price])).toEqual(
+      APPROVED_PACKAGES.map((pk) => [`${pk.tier} — ${pk.label}`, pk.price.replace(/[$,]/g, "")]),
+    );
   });
 
   test("no Content Security Policy violations or script errors", async ({ page }) => {

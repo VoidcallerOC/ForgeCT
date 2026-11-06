@@ -7,7 +7,7 @@ import { expect, test, type Page } from "@playwright/test";
  */
 const PRIMARY = [
   { label: "Work", path: "/work", h1: "Real businesses. Real reasons to build." },
-  { label: "Services", path: "/services", h1: "Website packages: Local Business Site, Site and System, Product Site" },
+  { label: "Services", path: "/services", h1: "Website packages: Basic, Standard and Premium" },
   { label: "Care", path: "/care", h1: "Care you can actually keep." },
   { label: "Why FORGE CT", path: "/why", h1: "Agencies quote you. I show you live shops." },
   { label: "Contact", path: "/contact", h1: "Contact FORGE CT" },

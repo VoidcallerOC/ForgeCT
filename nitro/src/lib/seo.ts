@@ -20,7 +20,7 @@ export const META: Record<string, PageMeta> = {
   "/": {
     title: "FORGE CT — Sites and apps for Hartford shops",
     description:
-      "Sites and apps for Connecticut shops and local businesses, built by Nick Sousa in Farmington, CT. Local Business Sites from $2,000. Call (959) 229-0653.",
+      "Sites and apps for Connecticut shops and local businesses, built by Nick Sousa in Farmington, CT. Website packages from $750. Call (959) 229-0653.",
   },
   "/audit": {
     title: "Free website audit for CT shops — FORGE CT",
@@ -40,7 +40,7 @@ export const META: Record<string, PageMeta> = {
   "/connecticut-web-design": {
     title: "Connecticut Web Design for Local Businesses | FORGE CT",
     description:
-      `Farmington studio building sites and apps for Connecticut businesses. Live work in ${joinNames(TOWN_PROJECTS.map((p) => p.town!))}. From $2,000.`,
+      `Farmington studio building sites and apps for Connecticut businesses. Live work in ${joinNames(TOWN_PROJECTS.map((p) => p.town!))}. Packages from $750.`,
     ogImageAlt: CT_OG_ALT,
   },
   "/contact": {
@@ -51,12 +51,12 @@ export const META: Record<string, PageMeta> = {
   "/farmington-web-design": {
     title: "Farmington CT Web Design — FORGE CT",
     description:
-      "Sites and apps built in Farmington, CT for Farmington Valley shops and local businesses. One builder, live client work, from $2,000.",
+      "Sites and apps built in Farmington, CT for Farmington Valley shops and local businesses. One builder, live client work, packages from $750.",
   },
   "/hartford-web-design": {
     title: "Hartford Web Design for Local Shops — FORGE CT",
     description:
-      "Web design for Hartford shops and local businesses from one Farmington-based builder. Live client sites, Local Business Sites from $2,000.",
+      "Web design for Hartford shops and local businesses from one Farmington-based builder. Live client sites, packages from $750.",
   },
   "/pay": {
     title: "Pay FORGE CT — Care plans and build invoices",
@@ -70,9 +70,9 @@ export const META: Record<string, PageMeta> = {
     robots: "noindex,follow",
   },
   "/services": {
-    title: "Packages: sites, systems and product sites — FORGE CT",
+    title: "Website packages from $750 — FORGE CT",
     description:
-      "Local Business Site from $2,000, Site and System $6,000, Product Site $16,000. Built by FORGE CT in Farmington, CT. Care from $35/month.",
+      "Basic $750, Standard $1,500, Premium $2,500. E-commerce is a separately priced add-on. Built by FORGE CT in Farmington, CT. Care from $35/month.",
   },
   "/thanks": {
     title: "Payment received — FORGE CT",
@@ -82,7 +82,7 @@ export const META: Record<string, PageMeta> = {
   "/west-hartford-web-design": {
     title: "West Hartford Web Design — FORGE CT",
     description:
-      "Web design for West Hartford shops, from the Farmington builder behind Thousand Sunny Cards' site. Local Business Sites from $2,000.",
+      "Web design for West Hartford shops, from the Farmington builder behind Thousand Sunny Cards' site. Packages from $750.",
   },
   "/why": {
     title: "Why Hartford shops choose FORGE CT for sites and apps",

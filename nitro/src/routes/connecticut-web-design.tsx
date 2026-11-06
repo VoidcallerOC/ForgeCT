@@ -3,13 +3,13 @@ import { Arrow, PageHead, Plate } from "@/components/chrome";
 import { PhoneFrame } from "@/components/work";
 import { pageHead } from "@/lib/seo";
 import { breadcrumbLd, faqPageLd } from "@/lib/structured-data";
-import { CARE, PACKAGES, packagePrice, usd } from "@/lib/site";
+import { CARE, PACKAGES, PRICE_SENTENCE, packagePrice, usd } from "@/lib/site";
 import { TOWN_PROJECTS, joinNames } from "@/lib/work";
 
 const FAQ = [
   {
     q: "What does FORGE CT build for Connecticut businesses?",
-    a: "Sites and apps for shops and local businesses, built around the visit: hours, location, what you carry, and a clear next step on a phone. Site and System covers booking, inventory, and intake. Larger systems are scoped separately.",
+    a: "Sites and apps for shops and local businesses, built around the visit: hours, location, what you carry, and a clear next step on a phone. Larger systems are scoped separately.",
   },
   {
     q: "Where in Connecticut is the work?",
@@ -17,7 +17,7 @@ const FAQ = [
   },
   {
     q: "How much does a FORGE CT website cost?",
-    a: "Local Business Site from $2,000. Site and System $6,000. Product Site $16,000. Care is $35/month or Care+ is $79/month.",
+    a: PRICE_SENTENCE,
   },
   {
     q: "What is the first step?",
@@ -43,7 +43,7 @@ function Connecticut() {
       <PageHead plate={["Farmington, Connecticut", "Local business websites"]} title="Connecticut Web Design for Local Businesses">
         <p className="lede">
           FORGE CT is Nick Sousa in Farmington, building sites and apps for Connecticut shops and local businesses.
-          Live client work is in {TOWNS}. Local Business Sites from {usd(PACKAGES[0].price)}.
+          Live client work is in {TOWNS}. Packages from {usd(PACKAGES[0].price)}.
           The first step is three practical fixes within 24 hours.
         </p>
         <div className="actions">
@@ -125,9 +125,9 @@ function Connecticut() {
             {PACKAGES.map((p) => (
               <li key={p.id}>
                 <h3>
-                  {p.name} · {packagePrice(p)}
+                  {p.tier} · {packagePrice(p)}
                 </h3>
-                <p>{p.summary}</p>
+                <p>{p.schemaDescription}</p>
               </li>
             ))}
             <li>
