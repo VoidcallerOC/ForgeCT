@@ -12,21 +12,21 @@ export const Route = createFileRoute("/audit")({
 const READS = [
   { k: "Find", t: "What works", d: "The parts of your page already doing their job — the reasons a customer keeps reading instead of closing the tab." },
   { k: "Miss", t: "What’s getting lost", d: "Hours buried, a floor no one can picture, events stuck on Facebook. What a customer came for and could not find." },
-  { k: "Forge", t: "What I’d change", d: "Three practical fixes, specific to your shop — the kind you can act on whether or not you ever hire me." },
+  { k: "Fix", t: "What I’d change", d: "Three practical fixes, specific to your shop — the kind you can act on whether or not you ever hire me." },
   { k: "Next", t: "What I’d build", d: "If the fixes point to something bigger, where a Shop Site, a system, or a custom build would take it." },
 ];
 
 function Audit() {
   return (
     <main id="main">
-      <PageHead plate={["The Forge-CT Audit", "Farmington", "Greater Hartford"]} title="The digital inspection ticket for your storefront.">
+      <PageHead plate={["The FORGE CT Audit", "Farmington", "Greater Hartford"]} title="The digital inspection ticket for your storefront.">
         <p className="lede">
           Give me your website. I’ll show you what your customer sees — and reply with three practical fixes within 24
           hours. No pitch deck, no quote maze.
         </p>
         <div className="actions">
           <a href="#audit-form" className="btn" data-track="audit_hero_cta">
-            Get your Forge-CT Audit <Arrow dir="down" />
+            Get your FORGE CT Audit <Arrow dir="down" />
           </a>
           <Link to="/book" className="btn btn--line">
             Book a working session
@@ -75,7 +75,7 @@ function Audit() {
           </div>
           <div className="tk-intake">
             <p className="tk-intake-head">
-              <span>Forge-CT Audit · intake</span>
+              <span>FORGE CT Audit · intake</span>
               <span>One URL · one line of context · reply within 24h</span>
             </p>
             <InquiryForm variant="audit" source="audit" />

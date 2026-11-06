@@ -1,7 +1,6 @@
 /**
- * FORGE CT business facts. Every value here is copied from the certified production site
- * (www.forge-ct.com, main @ f7ec08a). Do not add a fact that is not published there:
- * no years in business, no client counts beyond the approved five, no outcomes or metrics.
+ * FORGE CT business facts. Canonical values are the Nov 2026 local SEO brief:
+ * name, Farmington CT 06032, phone, hours, and the current package prices.
  */
 export const SITE_URL = "https://www.forge-ct.com";
 
@@ -9,18 +8,34 @@ export const BUSINESS = {
   name: "FORGE CT",
   founder: "Nick Sousa",
   email: "create@forge-ct.com",
+  phoneDisplay: "(959) 229-0653",
+  phoneTel: "tel:+19592290653",
+  phoneSchema: "+1-959-229-0653",
   locality: "Farmington",
   region: "CT",
+  postalCode: "06032",
   regionLong: "Connecticut",
   area: "Greater Hartford",
-  priceRange: "$750 to $2,500+",
+  hours: "Open 24 hours, 7 days a week",
+  priceRange: "$2,000–$16,000",
   description:
-    "Custom websites and web systems for local retailers, restaurants, specialty shops, and other small businesses around Greater Hartford.",
-  /** Audit reply promise, as published on /audit and /hartford-web-design. */
+    "Sites and apps for Connecticut shops and local businesses: web design, web systems and ongoing care, built by Nick Sousa in Farmington, CT.",
+  /** Audit reply promise, as published on /audit and the location pages. */
   auditPromise: "three practical fixes within 24 hours",
 } as const;
 
 export const MAILTO = `mailto:${BUSINESS.email}`;
+
+/** Proof line used wherever the live clients are listed. Hard Hittin has no case page. */
+export const PROOF_LIST =
+  "Thousand Sunny Cards and Collectibles (West Hartford) · M&J Video Games (Southington) · Hard Hittin · Infinite Heroes (Watertown)";
+
+export const LIVE_CLIENT_LINE = "Live client sites · 4";
+
+export const FOUR_LIVE_CLIENTS = "Four live client sites for Connecticut shops.";
+
+export const WHY_FEATURED =
+  "Three featured live client shops are open right now: Thousand Sunny, M&J Video Games and Hard Hittin. See all four on the Work page.";
 
 /**
  * Optional public scheduling URL (Cal.com, Google Calendar appointment schedule, etc.).
@@ -29,79 +44,40 @@ export const MAILTO = `mailto:${BUSINESS.email}`;
  */
 export const SCHEDULING_URL = "";
 
-export type PackageId = "basic" | "standard" | "premium";
+export type PackageId = "local" | "system" | "product";
 
 export type Package = {
   id: PackageId;
-  tier: string;
-  label: string;
+  name: string;
   price: number;
-  pages: number;
-  revisions: number;
-  performance: boolean;
-  advanced: boolean;
-  rush: { fee: number; days: number };
-  schemaDescription: string;
+  /** True when the published price is a starting price. */
+  from?: boolean;
+  summary: string;
 };
 
 export const PACKAGES: Package[] = [
   {
-    id: "basic",
-    tier: "Basic",
-    label: "Starter Website",
-    price: 750,
-    pages: 3,
-    revisions: 1,
-    performance: false,
-    advanced: false,
-    rush: { fee: 250, days: 1 },
-    schemaDescription:
-      "Up to 3 pages; custom design and development; responsive, mobile-first functional website; hosting setup; social media icons; 1 revision.",
+    id: "local",
+    name: "Local Business Site",
+    price: 2000,
+    from: true,
+    summary: "A site for a shop or local business.",
   },
   {
-    id: "standard",
-    tier: "Standard",
-    label: "Business Website",
-    price: 1500,
-    pages: 5,
-    revisions: 2,
-    performance: true,
-    advanced: false,
-    rush: { fee: 500, days: 3 },
-    schemaDescription:
-      "Up to 5 pages; custom design and development; responsive, mobile-first functional website; hosting setup; social media icons; speed and performance optimization; 2 revisions.",
+    id: "system",
+    name: "Site and System",
+    price: 6000,
+    summary: "Booking, inventory, intake.",
   },
   {
-    id: "premium",
-    tier: "Premium",
-    label: "Forge Website",
-    price: 2500,
-    pages: 8,
-    revisions: 3,
-    performance: true,
-    advanced: true,
-    rush: { fee: 750, days: 5 },
-    schemaDescription:
-      "Up to 8 pages; custom design and development; responsive, mobile-first functional website; advanced functionality; hosting setup; social media icons; speed and performance optimization; 3 revisions. E-commerce is a paid add-on.",
+    id: "product",
+    name: "Product Site",
+    price: 16000,
+    summary: "A product site.",
   },
 ];
 
-export const ADD_ONS = [
-  { name: "Additional page", price: 150, days: 1, note: "Add one page beyond the selected package's page limit." },
-  { name: "Additional revision", price: 100, days: 1, note: "Add one revision beyond the package allowance." },
-  {
-    name: "E-commerce functionality",
-    price: 750,
-    days: 5,
-    note: "Add e-commerce functionality to an otherwise applicable package. Product, catalog, integration, and custom-functionality scope is agreed separately.",
-  },
-  {
-    name: "Additional product",
-    price: 250,
-    days: 2,
-    note: "A defined additional product build, scoped to the project. Not unlimited product uploads or simple data entry.",
-  },
-] as const;
+export const packagePrice = (p: Package) => (p.from ? `from ${usd(p.price)}` : usd(p.price));
 
 export const CARE = {
   care: {

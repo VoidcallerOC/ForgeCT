@@ -14,7 +14,7 @@ function safeEqual(a, b) {
 
 /**
  * Admin gate: Authorization: Bearer <PROPOSAL_ADMIN_TOKEN>
- * No login system exists on Forge-CT; this shared secret is the minimal
+ * No login system exists on FORGE CT; this shared secret is the minimal
  * internal gate (same secret class as other server env keys).
  */
 export function requireAdmin(request) {

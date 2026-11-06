@@ -3,7 +3,7 @@ import { Arrow, PageHead } from "@/components/chrome";
 import { NextSteps } from "@/components/next-steps";
 import { LabNote, Ledger, ProofDeck } from "@/components/work";
 import { pageHead } from "@/lib/seo";
-import { PROJECTS } from "@/lib/work";
+import { FOUR_LIVE_CLIENTS, PROOF_LIST } from "@/lib/site";
 
 export const Route = createFileRoute("/work/")({
   head: () => pageHead("/work"),
@@ -13,15 +13,14 @@ export const Route = createFileRoute("/work/")({
 function WorkIndex() {
   return (
     <main id="main">
-      <PageHead plate={["Forge CT portfolio", "Live client work", "Connecticut"]} title="Real businesses. Real reasons to build.">
+      <PageHead plate={["FORGE CT live client sites", "Live client work", "Connecticut"]} title="Real businesses. Real reasons to build.">
         <p className="lede">
-          These are the {PROJECTS.length === 5 ? "five" : PROJECTS.length} approved Forge CT live client projects for shops and
-          local businesses. Each case study records the documented need and build, without claims that are not
-          established.
+          {FOUR_LIVE_CLIENTS} {PROOF_LIST}. Each case study records the documented need and build, without claims that are
+          not established. Hard Hittin is named here and has no separate case page.
         </p>
         <div className="actions">
           <Link to="/audit" className="btn" data-track="work_audit_cta">
-            Get your Forge-CT Audit <Arrow />
+            Get your FORGE CT Audit <Arrow />
           </Link>
           <Link to="/book" className="btn btn--line" data-track="work_book_cta">
             Book a working session

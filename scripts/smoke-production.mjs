@@ -10,7 +10,9 @@ export const CORE_ROUTES = [
   { path: "/book", marker: "Book FORGE CT" },
   { path: "/connecticut-web-design", marker: "Connecticut Web Design" },
   { path: "/hartford-web-design", marker: "Hartford web design" },
-  { path: "/work", marker: "Forge CT portfolio" },
+  { path: "/farmington-web-design", marker: "Farmington web design" },
+  { path: "/west-hartford-web-design", marker: "West Hartford web design" },
+  { path: "/work", marker: "FORGE CT live client sites" },
 ];
 
 export const API_GET_ROUTES = [
@@ -21,10 +23,8 @@ export const API_GET_ROUTES = [
 
 export const PORTFOLIO_ROUTES = [
   "/work/thousand-sunny",
-  "/work/harris-in-wonderland",
   "/work/m-and-j-video-games",
   "/work/infinite-heroes",
-  "/work/ninos-collectibles",
 ];
 
 export const APPROVED_CLIENT_URLS = [
@@ -288,7 +288,7 @@ export async function runSmoke({
   for (const definition of CORE_ROUTES)
     await checkPage(result, baseUrl, definition, options);
   for (const path of PORTFOLIO_ROUTES)
-    await checkPage(result, baseUrl, { path, marker: "Forge CT" }, options);
+    await checkPage(result, baseUrl, { path, marker: "FORGE CT" }, options);
   for (const definition of API_GET_ROUTES)
     await checkApi(result, baseUrl, definition, options);
   for (const url of clientUrls) await checkExternal(result, url, options);

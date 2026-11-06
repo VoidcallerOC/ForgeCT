@@ -2,6 +2,7 @@ import { createRootRoute, HeadContent, Link, Outlet, Scripts, useRouterState } f
 import { useEffect } from "react";
 import { Footer, Masthead } from "@/components/chrome";
 import { CONVERSION_PAGES, VA_STUB, track } from "@/lib/analytics";
+import { BUSINESS_LD } from "@/lib/structured-data";
 import appCss from "../styles.css?url";
 
 const analyticsScripts = import.meta.env.PROD
@@ -24,7 +25,10 @@ export const Route = createRootRoute({
       { rel: "apple-touch-icon", href: "/favicon.svg" },
       { rel: "stylesheet", href: appCss },
     ],
-    scripts: analyticsScripts,
+    scripts: [
+      ...analyticsScripts,
+      { type: "application/ld+json", children: JSON.stringify(BUSINESS_LD) },
+    ],
   }),
   notFoundComponent: NotFound,
   component: RootDocument,

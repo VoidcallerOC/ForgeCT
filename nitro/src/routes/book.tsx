@@ -34,7 +34,7 @@ function Book() {
             <p className="muted">
               Book first. Pay is step two — a payment request only comes after the work and scope are agreed. Prefer{" "}
               <Link className="link" to="/audit">
-                a Forge-CT Audit
+                a FORGE CT Audit
               </Link>{" "}
               if you want three practical fixes before we talk.
             </p>

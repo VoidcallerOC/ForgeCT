@@ -4,8 +4,6 @@ import { STRUCTURED_DATA } from "./structured-data";
 type PageMeta = {
   title: string;
   description: string;
-  ogTitle?: string;
-  ogDescription?: string;
   ogImageAlt?: string;
   robots?: string;
 };
@@ -14,61 +12,55 @@ const DEFAULT_OG_ALT = "FORGE CT shop websites and systems for Greater Hartford 
 const CT_OG_ALT = "FORGE CT web design and development for Connecticut businesses";
 
 /**
- * Per-route metadata, carried over from the certified site. Titles, descriptions, robots and canonicals
- * are unchanged. /audit and /contact had no meta description; theirs are new and written only from
- * claims already on those pages.
+ * Per-route metadata. og:title and og:description are the title and description.
+ * "Web Design" appears in titles only on the location pages.
  */
 export const META: Record<string, PageMeta> = {
   "/": {
-    title: "FORGE CT — Websites for the businesses people drive to.",
+    title: "FORGE CT — Sites and apps for Hartford shops",
     description:
-      "Custom websites for the businesses people drive to. Forge CT builds clear, fast storefronts for local shops and businesses in Connecticut. Packages from $750.",
-    ogTitle: "FORGE CT — Custom websites for the businesses people drive to.",
-    ogDescription:
-      "Clear, fast storefronts for local shops and businesses in Connecticut. Packages from $750; larger systems scoped separately.",
-    ogImageAlt: "FORGE CT — Custom websites for the businesses people drive to.",
+      "Sites and apps for Connecticut shops and local businesses, built by Nick Sousa in Farmington, CT. Local Business Sites from $2,000. Call (959) 229-0653.",
   },
   "/audit": {
-    title: "The Forge-CT Audit — See your shop like a customer",
+    title: "Free website audit for CT shops — FORGE CT",
     description:
-      "Send your business website. FORGE CT reviews it the way a customer meets it and replies with three practical fixes within 24 hours. No pitch deck, no quote maze.",
-    ogTitle: "The Forge-CT Audit — What your customers see before they walk in",
+      "Send your business website. Nick Sousa replies with three practical fixes within 24 hours. Free, no pitch deck. FORGE CT, Farmington, CT.",
   },
   "/book": {
-    title: "Request a shop website session — FORGE CT",
+    title: "Book a working session — FORGE CT",
     description:
-      "Request a working session for your Hartford-area shop website. Prefer a live calendar link when available; otherwise FORGE confirms by email.",
+      "Request a working session about your shop's site or app. FORGE CT, Farmington, CT, serving Hartford, West Hartford and the Farmington Valley.",
   },
   "/care": {
-    title: "Business website care from $35/month — FORGE CT",
+    title: "Website care from $35/month — FORGE CT",
     description:
-      "Keep your FORGE-built business website current after launch. Care covers hours, services, events, seasonal updates, and more for Greater Hartford businesses.",
-    ogDescription:
-      "Keep hours, services, events, and other key details on your FORGE-built website current with Care from $35/month.",
-    ogImageAlt: "FORGE CT websites and digital systems for Greater Hartford businesses",
+      "Care $35/month or Care+ $79/month keeps hours, events and details current on your FORGE CT site. Farmington, CT, serving Greater Hartford.",
   },
   "/connecticut-web-design": {
     title: "Connecticut Web Design for Local Businesses | FORGE CT",
     description:
-      "Farmington studio building websites for Connecticut shops. Live work in West Hartford, Southington, Canton, and Watertown. Packages from $750.",
+      "Farmington studio building sites and apps for Connecticut businesses. Live work in West Hartford, Southington and Watertown. From $2,000.",
     ogImageAlt: CT_OG_ALT,
   },
   "/contact": {
-    title: "Contact FORGE CT — Shop websites for Hartford",
+    title: "Contact FORGE CT — Sites and apps, Farmington CT",
     description:
-      "Tell FORGE CT what your business needs. Reply with practical next steps for a site, app, or ongoing care plan. Farmington, Connecticut.",
+      "Call (959) 229-0653 or email create@forge-ct.com. FORGE CT builds sites and apps from Farmington, CT. Open 24 hours, 7 days a week.",
+  },
+  "/farmington-web-design": {
+    title: "Farmington CT Web Design — FORGE CT",
+    description:
+      "Sites and apps built in Farmington, CT for Farmington Valley shops and local businesses. One builder, live client work, from $2,000.",
   },
   "/hartford-web-design": {
-    title: "Hartford web design for card and tabletop shops — FORGE CT",
+    title: "Hartford Web Design for Local Shops — FORGE CT",
     description:
-      "Custom website packages for Hartford-area shops and local businesses: Basic $750, Standard $1,500, Premium $2,500. Extra-fast delivery is available for defined package scopes.",
+      "Web design for Hartford shops and local businesses from one Farmington-based builder. Live client sites, Local Business Sites from $2,000.",
   },
   "/pay": {
     title: "Pay FORGE CT — Care plans and build invoices",
     description:
       "Start a FORGE CT Care or Care+ plan. Website package payments are arranged after project scope is confirmed.",
-    ogDescription:
-      "Start Care at $35/month or Care+ at $79/month. Website package payments are arranged after project scope is confirmed.",
     robots: "noindex,follow",
   },
   "/privacy": {
@@ -77,46 +69,44 @@ export const META: Record<string, PageMeta> = {
     robots: "noindex,follow",
   },
   "/services": {
-    title: "Website packages and add-ons — FORGE CT",
+    title: "Packages: sites, systems and product sites — FORGE CT",
     description:
-      "Custom website packages for local businesses: Basic $750, Standard $1,500, and Premium $2,500. Explore extra-fast delivery and clearly scoped add-ons from FORGE CT.",
-    ogDescription:
-      "Basic $750, Standard $1,500, Premium $2,500. See the exact scope, extra-fast delivery options, and defined add-ons.",
-    ogImageAlt: "FORGE CT custom websites and systems for local businesses",
+      "Local Business Site from $2,000, Site and System $6,000, Product Site $16,000. Built by FORGE CT in Farmington, CT. Care from $35/month.",
   },
   "/thanks": {
     title: "Payment received — FORGE CT",
     description: "Payment received. FORGE CT will be in touch from the studio inbox.",
     robots: "noindex, nofollow",
   },
-  "/why": {
-    title: "Why Hartford shops choose FORGE CT web design",
+  "/west-hartford-web-design": {
+    title: "West Hartford Web Design — FORGE CT",
     description:
-      "See why Greater Hartford shops choose FORGE CT instead of a typical web agency: live work, clear pricing, and websites built around real visits.",
-    ogTitle: "Why shops pick FORGE CT over a Hartford web agency",
-    ogDescription: "Agencies send you a quote. I send you live shops. Thousand Sunny, M and J.",
+      "Web design for West Hartford shops, from the Farmington builder behind Thousand Sunny Cards' site. Local Business Sites from $2,000.",
+  },
+  "/why": {
+    title: "Why Hartford shops choose FORGE CT for sites and apps",
+    description:
+      "One builder, live client shops you can open, published prices. Why Greater Hartford businesses pick FORGE CT over a typical agency.",
   },
   "/work": {
-    title: "Work — Forge CT live client projects",
+    title: "Live client sites — FORGE CT work",
     description:
-      "All five approved Forge CT live client projects for card, tabletop, retail, and neighborhood businesses in Connecticut.",
+      "Live sites for Connecticut shops: Thousand Sunny, M&J Video Games, Hard Hittin and Infinite Heroes. Open them and see what customers see.",
     ogImageAlt: CT_OG_ALT,
   },
 };
 
 export function caseStudyMeta(p: { name: string; built: string; site?: string }): PageMeta {
   return {
-    title: `${p.name} — Forge CT case study`,
-    description: `${p.name}: ${p.built} See the Forge CT case study${p.site ? " and live site" : " and project details"}.`,
+    title: `${p.name} — FORGE CT case study`,
+    description: `${p.name}: ${p.built} See the FORGE CT case study${p.site ? " and live site" : " and project details"}.`,
     ogImageAlt: CT_OG_ALT,
   };
 }
 
-/** Builds the TanStack `head()` result for a route: meta, canonical, social cards and JSON-LD. */
-export function pageHead(path: string, meta: PageMeta = META[path]) {
+/** Builds the TanStack `head()` result for a route: meta, canonical, social cards and page JSON-LD. */
+export function pageHead(path: string, meta: PageMeta = META[path], jsonLd: unknown[] = STRUCTURED_DATA[path] ?? []) {
   const url = `${SITE_URL}${path === "/" ? "/" : path}`;
-  const ogTitle = meta.ogTitle ?? meta.title;
-  const ogDescription = meta.ogDescription ?? meta.description;
   const image = `${SITE_URL}/images/og-image.jpg`;
   return {
     meta: [
@@ -125,8 +115,8 @@ export function pageHead(path: string, meta: PageMeta = META[path]) {
       { name: "robots", content: meta.robots ?? "index,follow" },
       { property: "og:type", content: "website" },
       { property: "og:site_name", content: "FORGE CT" },
-      { property: "og:title", content: ogTitle },
-      { property: "og:description", content: ogDescription },
+      { property: "og:title", content: meta.title },
+      { property: "og:description", content: meta.description },
       { property: "og:url", content: url },
       { property: "og:image", content: image },
       { property: "og:image:type", content: "image/jpeg" },
@@ -134,13 +124,13 @@ export function pageHead(path: string, meta: PageMeta = META[path]) {
       { property: "og:image:height", content: "630" },
       { property: "og:image:alt", content: meta.ogImageAlt ?? DEFAULT_OG_ALT },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: ogTitle },
-      { name: "twitter:description", content: ogDescription },
+      { name: "twitter:title", content: meta.title },
+      { name: "twitter:description", content: meta.description },
       { name: "twitter:image", content: image },
       { name: "twitter:image:alt", content: meta.ogImageAlt ?? DEFAULT_OG_ALT },
     ],
     links: [{ rel: "canonical", href: url }],
-    scripts: (STRUCTURED_DATA[path] ?? []).map((data) => ({
+    scripts: jsonLd.map((data) => ({
       type: "application/ld+json",
       children: JSON.stringify(data),
     })),

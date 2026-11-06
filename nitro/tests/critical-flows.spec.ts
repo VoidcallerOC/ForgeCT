@@ -4,10 +4,8 @@ const ROUTES = [
   "/",
   "/work",
   "/work/thousand-sunny",
-  "/work/harris-in-wonderland",
   "/work/m-and-j-video-games",
   "/work/infinite-heroes",
-  "/work/ninos-collectibles",
   "/services",
   "/care",
   "/audit",
@@ -15,6 +13,8 @@ const ROUTES = [
   "/contact",
   "/why",
   "/hartford-web-design",
+  "/farmington-web-design",
+  "/west-hartford-web-design",
   "/connecticut-web-design",
   "/pay",
   "/thanks",
@@ -59,10 +59,10 @@ test.describe("certified business-critical flows", () => {
     const form = page.locator("#audit-form form");
     await form.getByLabel("Your name").fill("Pat Owner");
     await form.getByLabel("Email").fill("pat@example.com");
-    await form.getByRole("button", { name: /Get my Forge-CT Audit/ }).click();
+    await form.getByRole("button", { name: /Get my FORGE CT Audit/ }).click();
     expect(bodies).toHaveLength(0);
     await form.getByLabel("Your website URL").fill("example.com");
-    await form.getByRole("button", { name: /Get my Forge-CT Audit/ }).click();
+    await form.getByRole("button", { name: /Get my FORGE CT Audit/ }).click();
     await expect(form.getByRole("status")).toHaveText(/three practical fixes within 24 hours/);
     expect(bodies[0]).toMatchObject({
       name: "Pat Owner",
@@ -76,14 +76,14 @@ test.describe("certified business-critical flows", () => {
     await page.goto("/audit#sample-audit");
     const sample = page.locator("#sample-audit");
     await expect(sample).toContainText("Fictional specialty shop");
-    await expect(sample).toContainText("not a real business, client project, or Forge-CT Audit");
+    await expect(sample).toContainText("not a real business, client project, or FORGE CT Audit");
     await expect(sample.locator("ol > li")).toHaveCount(3);
     await expect(sample.getByText("What a visitor may miss")).toHaveCount(3);
     await expect(sample.getByText("A practical change")).toHaveCount(3);
   });
 
   test("three featured case studies explain the documented customer path without outcome claims", async ({ page }) => {
-    for (const path of ["/work/harris-in-wonderland", "/work/thousand-sunny", "/work/m-and-j-video-games"]) {
+    for (const path of ["/work/thousand-sunny", "/work/m-and-j-video-games"]) {
       await page.goto(path);
       await expect(page.locator(".facts")).toContainText("Design intent");
       await expect(page.locator(".facts")).toContainText("What visitors can do");
@@ -95,7 +95,7 @@ test.describe("certified business-critical flows", () => {
   test("homepage ends with an Audit-first path and keeps Care management in the footer", async ({ page }) => {
     await page.goto("/");
     const finalCta = page.locator("#contact");
-    await expect(finalCta.getByRole("link", { name: /Get your Forge-CT Audit/ })).toHaveAttribute("href", "/audit");
+    await expect(finalCta.getByRole("link", { name: /Get your FORGE CT Audit/ })).toHaveAttribute("href", "/audit");
     await expect(finalCta.getByRole("link", { name: /Already know\? Book a working session/ })).toHaveAttribute("href", "/book");
     const manageCare = page.getByRole("link", { name: "Manage Care", exact: true });
     await expect(manageCare).toHaveAttribute("href", "/pay");
@@ -142,7 +142,7 @@ test.describe("certified business-critical flows", () => {
     await page.goto("/care");
     const faq = page.locator("details").filter({ hasText: "Who is this for?" });
     await expect(faq).toContainText("local retail, restaurants, and service businesses");
-    await expect(faq).toContainText("FORGE-built websites");
+    await expect(faq).toContainText("FORGE CT sites");
     await expect(page.locator("main")).not.toContainText("card or tabletop shop");
     await expect(page.locator("main")).toContainText("Tell me about your business");
   });
@@ -164,41 +164,29 @@ test.describe("certified business-critical flows", () => {
 });
 
 test.describe("approved portfolio taxonomy", () => {
-  test("ledger lists the five live clients, filters 4 + 1, and keeps the lab apart", async ({ page }) => {
+  test("ledger lists the three case studies and keeps the lab apart", async ({ page }) => {
     await page.goto("/work");
     const rows = page.locator("table.ledger tbody tr");
-    await expect(rows).toHaveCount(5);
+    await expect(rows).toHaveCount(3);
     await expect(page.getByRole("button", { name: /^All/ })).toHaveAttribute("aria-pressed", "true");
     await page.getByRole("button", { name: /Card and tabletop/ }).click();
-    await expect(page.locator("table.ledger tbody tr:visible")).toHaveCount(4);
+    await expect(page.locator("table.ledger tbody tr:visible")).toHaveCount(3);
     await page.getByRole("button", { name: /Retail and local/ }).click();
-    await expect(page.locator("table.ledger tbody tr:visible")).toHaveCount(1);
-    await expect(page.locator("table.ledger tbody tr:visible")).toContainText("Harris in Wonderland");
+    await expect(page.locator("table.ledger tbody tr:visible")).toHaveCount(0);
     await expect(page.locator("table.ledger")).not.toContainText("Voidcaller");
     await expect(page.locator(".lab")).toContainText("not client work");
+    await expect(page.locator("main")).toContainText("Thousand Sunny Cards and Collectibles (West Hartford) · M&J Video Games (Southington) · Hard Hittin · Infinite Heroes (Watertown)");
+    await expect(page.locator("main")).not.toContainText("Harris");
   });
 
-  test("Nino’s Collectibles appears like the other clients: rail, proof deck, ledger and case study", async ({ page }) => {
+  test("home names four live clients and links only the case studies", async ({ page }) => {
     await page.goto("/");
-    await expect(page.locator(".rail")).toContainText("Nino’s Collectibles");
-    await expect(page.locator("#work .proof-deck")).toContainText("Nino’s Collectibles");
-    // The homepage shows each client in the rail (teaser) and the proof deck (the case) only; the
-    // filterable ledger is the index on /work, linked from the proof deck.
+    await expect(page.locator(".rail-wrap")).toContainText("Live client sites · 4");
+    await expect(page.locator(".rail")).toContainText("Thousand Sunny");
+    await expect(page.locator("#work .proof-deck")).toContainText("M and J Video Games");
     await expect(page.locator("#work table.ledger")).toHaveCount(0);
     await expect(page.locator("#work").getByRole("link", { name: /The full index, with filters/ })).toHaveAttribute("href", "/work");
-    await page.goto("/work");
-    await expect(page.locator("table.ledger tbody tr")).toHaveCount(5);
-    await page.locator("table.ledger").getByRole("link", { name: "Nino’s Collectibles" }).click();
-    await expect(page).toHaveURL(/\/work\/ninos-collectibles$/);
-    await expect(page.locator("h1")).toHaveText("Nino’s Collectibles");
-    await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", "index,follow");
-    await expect(page.getByRole("link", { name: /Visit ninoscollectibles\.com/ })).toHaveAttribute(
-      "href",
-      "https://ninoscollectibles.com/",
-    );
-    await expect(page.locator(".facts")).toContainText("Checked 11 October 2026");
-    await page.reload();
-    await expect(page.locator("h1")).toHaveText("Nino’s Collectibles");
+    await expect(page.locator("main")).not.toContainText("Harris");
   });
 
   test("only approved live client URLs are linked as live sites", async ({ page }) => {
@@ -206,9 +194,7 @@ test.describe("approved portfolio taxonomy", () => {
       "https://www.thousandsunnytcg.com/",
       "https://mjvideogames.com/",
       "https://infiniteheroes.net/",
-      "https://harrisinwonderland.com/",
       "https://voidcaller.enterthegrotto.xyz/",
-      "https://ninoscollectibles.com/",
     ]);
     for (const path of ROUTES) {
       await page.goto(path);
@@ -237,9 +223,12 @@ test.describe("layout and platform", () => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto("/");
     const sheet = page.locator("#pricing table.sheet");
-    for (const price of ["$750", "$1,500", "$2,500"]) await expect(sheet).toContainText(price);
-    await expect(sheet.locator("tbody tr").filter({ hasText: "Hosting setup" }).locator("td")).toHaveCount(3);
-    await expect(sheet).toContainText("Extra-fast delivery");
+    for (const price of ["$2,000", "$6,000", "$16,000"]) await expect(sheet).toContainText(price);
+    await expect(sheet).toContainText("Local Business Site");
+    await expect(sheet).toContainText("Site and System");
+    await expect(sheet).toContainText("Product Site");
+    await expect(sheet.locator("tbody tr").filter({ hasText: "Price" }).locator("td")).toHaveCount(3);
+    await expect(sheet).not.toContainText("Extra-fast");
     const fits = await sheet.evaluate((t) => t.getBoundingClientRect().right <= document.documentElement.clientWidth);
     expect(fits).toBe(true);
   });
@@ -294,6 +283,14 @@ test.describe("layout and platform", () => {
     const apex = await request.get("/work?x=1", { headers: { Host: "forge-ct.com" }, maxRedirects: 0 });
     expect(apex.status()).toBe(308);
     expect(apex.headers()["location"]).toBe("https://www.forge-ct.com/work");
+  });
+
+  test("retired case studies redirect to /work", async ({ request }) => {
+    for (const path of ["/work/harris-in-wonderland", "/work/ninos-collectibles", "/work/hard-hittin"]) {
+      const res = await request.get(path, { maxRedirects: 0 });
+      expect(res.status(), path).toBe(301);
+      expect(res.headers()["location"], path).toBe("/work");
+    }
   });
 
   test("unknown routes return 404", async ({ request }) => {

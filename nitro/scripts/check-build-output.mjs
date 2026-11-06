@@ -3,8 +3,9 @@
  *
  * 1. Every sitemap URL (and /pay, /thanks, /privacy) is prerendered to static HTML.
  * 2. Each page carries title, description, canonical, robots, Open Graph and Twitter tags.
- * 3. SEO parity with the archived certified HTML (archive/certified-static-site, while it exists): title, description,
- *    canonical, robots, og:title / og:description, and JSON-LD must match. Documented exceptions only.
+ * 3. Titles, descriptions, Open Graph, one H1, the shared ProfessionalService, and the local-SEO
+ *    forbidden strings match the Nov 2026 brief. The archived certified HTML is the pre-brief baseline
+ *    and is no longer the copy contract.
  * 4. The production smoke markers (scripts/smoke-production.mjs CORE_ROUTES) appear on each page.
  * 5. config.json carries the security headers and the apex → www redirect.
  * 6. Every local src/href in the HTML resolves to a built file or a prerendered page.
@@ -16,24 +17,93 @@ import process from "node:process";
 const here = path.dirname(new URL(import.meta.url).pathname);
 const out = path.join(here, "../.vercel/output");
 const staticDir = path.join(out, "static");
-const certifiedRoot = path.join(here, "../../archive/certified-static-site");
 const failures = [];
 const fail = (msg) => failures.push(msg);
 
-/** Pages where the certified HTML had no meta description; this build adds one. */
-const NEW_DESCRIPTIONS = new Set(["/audit", "/contact"]);
-/**
- * Pages whose description and JSON-LD intentionally differ from the certified page. Harris in Wonderland is
- * live (owner confirmed, 2026-10-01), so its case study now says "and live site" like the other four clients.
- * /work lists a sixth client, Nino’s Collectibles (approved by Nino, reported by Nick 2026-10-11), so its
- * description and JSON-LD now say six where the certified page says five.
- * Hard Hittin Card Shop is no longer an active client (removed 2026-11-01): /work now lists five clients, the
- * /connecticut-web-design FAQ answer no longer names it, and the /why og:description drops it.
- */
-const CHANGED_SEO = new Set(["/work/harris-in-wonderland", "/work", "/connecticut-web-design", "/why"]);
-/** Pages where the certified robots tag was absent (= index,follow); this build states it. */
-const ROBOTS_DEFAULT = "index,follow";
-/** Certified smoke markers (scripts/smoke-production.mjs). */
+/** Titles and meta descriptions from the Nov 2026 local SEO brief. */
+const EXPECTED = {
+  "/": {
+    title: "FORGE CT — Sites and apps for Hartford shops",
+    description:
+      "Sites and apps for Connecticut shops and local businesses, built by Nick Sousa in Farmington, CT. Local Business Sites from $2,000. Call (959) 229-0653.",
+  },
+  "/services": {
+    title: "Packages: sites, systems and product sites — FORGE CT",
+    description:
+      "Local Business Site from $2,000, Site and System $6,000, Product Site $16,000. Built by FORGE CT in Farmington, CT. Care from $35/month.",
+  },
+  "/care": {
+    title: "Website care from $35/month — FORGE CT",
+    description:
+      "Care $35/month or Care+ $79/month keeps hours, events and details current on your FORGE CT site. Farmington, CT, serving Greater Hartford.",
+  },
+  "/why": {
+    title: "Why Hartford shops choose FORGE CT for sites and apps",
+    description:
+      "One builder, live client shops you can open, published prices. Why Greater Hartford businesses pick FORGE CT over a typical agency.",
+  },
+  "/audit": {
+    title: "Free website audit for CT shops — FORGE CT",
+    description:
+      "Send your business website. Nick Sousa replies with three practical fixes within 24 hours. Free, no pitch deck. FORGE CT, Farmington, CT.",
+  },
+  "/contact": {
+    title: "Contact FORGE CT — Sites and apps, Farmington CT",
+    description:
+      "Call (959) 229-0653 or email create@forge-ct.com. FORGE CT builds sites and apps from Farmington, CT. Open 24 hours, 7 days a week.",
+  },
+  "/book": {
+    title: "Book a working session — FORGE CT",
+    description:
+      "Request a working session about your shop's site or app. FORGE CT, Farmington, CT, serving Hartford, West Hartford and the Farmington Valley.",
+  },
+  "/work": {
+    title: "Live client sites — FORGE CT work",
+    description:
+      "Live sites for Connecticut shops: Thousand Sunny, M&J Video Games, Hard Hittin and Infinite Heroes. Open them and see what customers see.",
+  },
+  "/hartford-web-design": {
+    title: "Hartford Web Design for Local Shops — FORGE CT",
+    description:
+      "Web design for Hartford shops and local businesses from one Farmington-based builder. Live client sites, Local Business Sites from $2,000.",
+  },
+  "/farmington-web-design": {
+    title: "Farmington CT Web Design — FORGE CT",
+    description:
+      "Sites and apps built in Farmington, CT for Farmington Valley shops and local businesses. One builder, live client work, from $2,000.",
+  },
+  "/west-hartford-web-design": {
+    title: "West Hartford Web Design — FORGE CT",
+    description:
+      "Web design for West Hartford shops, from the Farmington builder behind Thousand Sunny Cards' site. Local Business Sites from $2,000.",
+  },
+  "/connecticut-web-design": {
+    title: "Connecticut Web Design for Local Businesses | FORGE CT",
+    description:
+      "Farmington studio building sites and apps for Connecticut businesses. Live work in West Hartford, Southington and Watertown. From $2,000.",
+  },
+  "/work/thousand-sunny": {
+    title: "Thousand Sunny Cards and Collectibles — FORGE CT case study",
+    description:
+      "Thousand Sunny Cards and Collectibles: A shop page with event context and custom illustration that feels like the store. See the FORGE CT case study and live site.",
+  },
+  "/work/m-and-j-video-games": {
+    title: "M and J Video Games — FORGE CT case study",
+    description:
+      "M and J Video Games: A neighborhood storefront online, built for the phone check from the parking lot. See the FORGE CT case study and live site.",
+  },
+  "/work/infinite-heroes": {
+    title: "Infinite Heroes — FORGE CT case study",
+    description:
+      "Infinite Heroes: A clear local shop page built around the Wednesday rhythm and the floor. See the FORGE CT case study and live site.",
+  },
+};
+
+const LOCATION_PAGES = ["/hartford-web-design", "/farmington-web-design", "/west-hartford-web-design", "/connecticut-web-design"];
+const PRICE_RE = /750|1,500|2,500|Basic|Standard|Premium|Extra-fast/;
+const PROOF_RE = /Harris|Nino|Canton|Forge-CT|SousaSaaS|Front Window|Come By|\$60/;
+
+/** Smoke markers that must appear in the built HTML. */
 const MARKERS = {
   "/": "FORGE CT",
   "/audit": "FORGE CT",
@@ -43,7 +113,9 @@ const MARKERS = {
   "/book": "Book FORGE CT",
   "/connecticut-web-design": "Connecticut Web Design",
   "/hartford-web-design": "Hartford web design",
-  "/work": "Forge CT portfolio",
+  "/farmington-web-design": "Farmington web design",
+  "/west-hartford-web-design": "West Hartford web design",
+  "/work": "FORGE CT live client sites",
 };
 
 const exists = async (p) => {
@@ -98,26 +170,44 @@ for (const route of routes) {
   if (h.canonical !== expectedCanonical) fail(`${route}: canonical ${h.canonical} != ${expectedCanonical}`);
   if (sitemapRoutes.includes(route) && /noindex/.test(h.robots || "")) fail(`${route}: in sitemap but noindex`);
   if (MARKERS[route] && !html.includes(MARKERS[route])) fail(`${route}: smoke marker ${JSON.stringify(MARKERS[route])} missing`);
-
-  const certifiedFile = path.join(certifiedRoot, route === "/" ? "index.html" : `${route.slice(1)}/index.html`);
-  if (await exists(certifiedFile)) {
-    const certifiedHtml = await readFile(certifiedFile, "utf8");
-    const c = headOf(certifiedHtml);
-    if (certifiedHtml.includes('src="/schema.js"')) {
-      c.jsonld.push(JSON.parse(await readFile(path.join(certifiedRoot, "schema/services.json"), "utf8")));
-    }
-    if (h.title !== c.title) fail(`${route}: title drift\n    built:     ${h.title}\n    certified: ${c.title}`);
-    if (CHANGED_SEO.has(route)) {
-      if (!h.description) fail(`${route}: missing description`);
-    } else if (c.description ? h.description !== c.description : !NEW_DESCRIPTIONS.has(route))
-      fail(`${route}: description drift\n    built:     ${h.description}\n    certified: ${c.description}`);
-    if (h.canonical !== c.canonical) fail(`${route}: canonical drift (${h.canonical} vs ${c.canonical})`);
-    if (h.robots.replace(/\s/g, "") !== (c.robots || ROBOTS_DEFAULT).replace(/\s/g, ""))
-      fail(`${route}: robots drift (${h.robots} vs ${c.robots})`);
-    if (c.ogTitle && h.ogTitle !== c.ogTitle) fail(`${route}: og:title drift`);
-    if (c.ogDescription && h.ogDescription !== c.ogDescription && !CHANGED_SEO.has(route)) fail(`${route}: og:description drift`);
-    if (!CHANGED_SEO.has(route) && JSON.stringify(h.jsonld) !== JSON.stringify(c.jsonld))
-      fail(`${route}: JSON-LD differs from certified page`);
+  if (h.ogTitle !== h.title) fail(`${route}: og:title does not match title`);
+  if (h.ogDescription !== h.description) fail(`${route}: og:description does not match description`);
+  const h1Count = (html.match(/<h1\b/g) || []).length;
+  if (h1Count !== 1) fail(`${route}: expected one h1, found ${h1Count}`);
+  if (!html.includes("(959) 229-0653")) fail(`${route}: phone missing`);
+  if (!html.includes("Open 24 hours, 7 days a week")) fail(`${route}: hours missing`);
+  if (PRICE_RE.test(html)) fail(`${route}: old price string still present`);
+  if (PROOF_RE.test(html)) fail(`${route}: retired proof or brand string still present`);
+  const businesses = h.jsonld.filter((block) => block["@type"] === "ProfessionalService" || (Array.isArray(block["@type"]) && block["@type"].includes("ProfessionalService")));
+  if (businesses.length !== 1) fail(`${route}: expected one ProfessionalService, found ${businesses.length}`);
+  const business = businesses[0];
+  if (business.name !== "FORGE CT" || business.telephone !== "+1-959-229-0653" || business.address?.postalCode !== "06032")
+    fail(`${route}: ProfessionalService NAP mismatch`);
+  if (business.priceRange !== "$2,000–$16,000") fail(`${route}: priceRange mismatch`);
+  const expected = EXPECTED[route];
+  if (expected) {
+    if (h.title !== expected.title) fail(`${route}: title\n    built:    ${h.title}\n    expected: ${expected.title}`);
+    if (h.description !== expected.description) fail(`${route}: description\n    built:    ${h.description}\n    expected: ${expected.description}`);
+  }
+  if (LOCATION_PAGES.includes(route)) {
+    if (!h.jsonld.some((block) => block["@type"] === "BreadcrumbList")) fail(`${route}: missing BreadcrumbList`);
+    if (!h.jsonld.some((block) => block["@type"] === "FAQPage")) fail(`${route}: missing FAQPage`);
+  }
+  if (route === "/audit") {
+    const service = h.jsonld.find((block) => block["@type"] === "Service");
+    if (service?.name !== "FORGE CT Audit" || service?.provider?.["@id"] !== "https://www.forge-ct.com/#business")
+      fail("/audit: Service schema must be named FORGE CT Audit and reference #business");
+  }
+  if (route === "/") {
+    if (!html.includes("Sites and apps for Hartford shops.")) fail("/: H1 copy missing");
+    if (!html.includes("Custom websites for the businesses people drive to, built in Farmington, CT.")) fail("/: subhead missing");
+  }
+  if (route === "/contact" && !html.includes("Contact FORGE CT")) fail("/contact: H1 copy missing");
+  if (route === "/work") {
+    const collection = h.jsonld.find((block) => block["@type"] === "CollectionPage");
+    const names = (collection?.mainEntity || []).map((item) => item.name).join(" | ");
+    if (names !== "Thousand Sunny Cards and Collectibles | M&J Video Games | Infinite Heroes")
+      fail(`/work: mainEntity is ${names}`);
   }
 }
 
@@ -140,9 +230,12 @@ for (const h of ["Strict-Transport-Security", "X-Content-Type-Options", "X-Frame
 }
 const apex = config.routes.find((r) => r.has?.some((c) => c.type === "host" && c.value === "forge-ct.com"));
 if (apex?.status !== 308 || !apex.headers?.Location?.startsWith("https://www.forge-ct.com/")) fail("config.json: apex → www 308 redirect missing");
-const retired = config.routes.find((r) => r.src === "/work/hard-hittin/?");
-if (retired?.status !== 301 || retired.headers?.Location !== "/work") fail("config.json: /work/hard-hittin → /work 301 redirect missing");
-if (await exists(path.join(staticDir, "work/hard-hittin/index.html"))) fail("static: retired /work/hard-hittin was prerendered");
+for (const src of ["/work/hard-hittin/?", "/work/harris-in-wonderland/?", "/work/ninos-collectibles/?"]) {
+  const retired = config.routes.find((r) => r.src === src);
+  if (retired?.status !== 301 || retired.headers?.Location !== "/work") fail(`config.json: ${src} → /work 301 redirect missing`);
+  const folder = src.replace(/\/\?$/, "").slice(1);
+  if (await exists(path.join(staticDir, folder, "index.html"))) fail(`static: retired ${src} was prerendered`);
+}
 
 for (const f of ["robots.txt", "sitemap.xml", "favicon.svg", "images/og-image.jpg"]) {
   if (!(await exists(path.join(staticDir, f)))) fail(`static: ${f} missing`);
@@ -152,4 +245,4 @@ if (failures.length) {
   console.error(`build output check failed (${failures.length}):\n- ${failures.join("\n- ")}`);
   process.exit(1);
 }
-console.log(`build output check passed: ${routes.length} prerendered routes, SEO parity with the certified site, headers, redirect, local references.`);
+console.log(`build output check passed: ${routes.length} prerendered routes, brief titles and schema, headers, redirects, local references.`);

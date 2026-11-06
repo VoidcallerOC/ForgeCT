@@ -21,15 +21,15 @@ const COPY: Record<FormVariant, Copy> = {
     submit: "Send your story",
     sending: "Sending your inquiry…",
     done: "Received. I’ll reply with three practical fixes within 24 hours.",
-    note: "Used to reply to your inquiry and keep the request in FORGE’s private lead queue.",
+    note: "Used to reply to your inquiry and keep the request in the FORGE CT private lead queue.",
   },
   audit: {
     message: "What feels stuck? (optional)",
     messageRequired: false,
-    submit: "Get my Forge-CT Audit",
+    submit: "Get my FORGE CT Audit",
     sending: "Sending your inquiry…",
     done: "Received. I’ll reply with three practical fixes within 24 hours.",
-    note: "Used to reply with your audit and keep the request in FORGE’s private lead queue.",
+    note: "Used to reply with your audit and keep the request in the FORGE CT private lead queue.",
   },
   booking: {
     message: "What should we cover? (optional)",
@@ -37,7 +37,7 @@ const COPY: Record<FormVariant, Copy> = {
     submit: "Request this time",
     sending: "Sending your appointment request…",
     done: "Request received. I’ll confirm the appointment by email.",
-    note: "Used to coordinate the appointment and keep the request in FORGE’s private lead queue. The time is confirmed by email — not held until then.",
+    note: "Used to coordinate the appointment and keep the request in the FORGE CT private lead queue. The time is confirmed by email — not held until then.",
   },
 };
 
