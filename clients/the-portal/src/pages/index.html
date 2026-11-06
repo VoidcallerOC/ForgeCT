@@ -1,0 +1,539 @@
+<!--meta
+{
+  "title": "The Portal | Tabletop Game Store in Manchester, CT",
+  "description": "Board games, Magic: The Gathering, miniatures and roleplaying games in Manchester, Connecticut. Seventeen gaming tables, a 500+ title game library, and events all week.",
+  "nav": "home",
+  "bodyClass": "page-home"
+}
+-->
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero__sky" aria-hidden="true"></div>
+  <canvas class="hero__canvas" aria-hidden="true"></canvas>
+  <svg class="hero__portal" viewBox="0 0 800 800" aria-hidden="true">
+    <defs>
+      <radialGradient id="core" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#fff7e6" stop-opacity=".95" />
+        <stop offset="18%" stop-color="#f2b65a" stop-opacity=".6" />
+        <stop offset="45%" stop-color="#5b3fd6" stop-opacity=".35" />
+        <stop offset="75%" stop-color="#4fe3d6" stop-opacity=".08" />
+        <stop offset="100%" stop-color="#08070d" stop-opacity="0" />
+      </radialGradient>
+      <linearGradient id="rim" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#f2b65a" />
+        <stop offset=".5" stop-color="#8b6cff" />
+        <stop offset="1" stop-color="#4fe3d6" />
+      </linearGradient>
+    </defs>
+    <circle class="core" cx="400" cy="400" r="300" fill="url(#core)" />
+    <g class="ring r1" fill="none" stroke="url(#rim)">
+      <circle
+        cx="400"
+        cy="400"
+        r="250"
+        stroke-width="1.5"
+        stroke-opacity=".8"
+      />
+      <circle
+        cx="400"
+        cy="400"
+        r="262"
+        stroke-width="10"
+        stroke-opacity=".25"
+        stroke-dasharray="2 14"
+      />
+    </g>
+    <g class="ring r2" fill="none" stroke="#f2b65a">
+      <circle
+        cx="400"
+        cy="400"
+        r="300"
+        stroke-width="1"
+        stroke-opacity=".45"
+        stroke-dasharray="120 18 6 18"
+      />
+      <path
+        d="M400 92 l8 14 -8 14 -8 -14z M400 680 l8 14 -8 14 -8 -14z M92 400 l14 -8 14 8 -14 8z M680 400 l14 -8 14 8 -14 8z"
+        fill="#f2b65a"
+        fill-opacity=".8"
+        stroke="none"
+      />
+    </g>
+    <g class="ring r3" fill="none" stroke="#8b6cff">
+      <circle cx="400" cy="400" r="350" stroke-width="1" stroke-opacity=".3" />
+      <circle
+        cx="400"
+        cy="400"
+        r="362"
+        stroke-width="16"
+        stroke-opacity=".12"
+        stroke-dasharray="1 9"
+      />
+      <polygon
+        points="400,40 712,580 88,580"
+        stroke-width="1"
+        stroke-opacity=".22"
+      />
+      <polygon
+        points="400,760 88,220 712,220"
+        stroke-width="1"
+        stroke-opacity=".22"
+      />
+    </g>
+    <circle
+      cx="400"
+      cy="400"
+      r="200"
+      fill="none"
+      stroke="#fff"
+      stroke-opacity=".12"
+    />
+  </svg>
+
+  <div class="wrap">
+    <div class="hero__content">
+      <p class="eyebrow">Manchester, Connecticut · Tabletop game store</p>
+      <p class="hero__wordmark" aria-hidden="true">
+        <span class="the">The</span>
+        <span class="name">Portal</span>
+        <span class="hero__beam"></span>
+      </p>
+      <h1 id="hero-title">
+        Every kind of tabletop game, <em class="glow">one door</em> away.
+      </h1>
+      <p class="lede">
+        Board games, collectible card games, miniatures and roleplaying — on our
+        shelves and on our tables. Pull up a chair, learn a game, or find your
+        next group.
+      </p>
+      <div class="btn-row">
+        <a class="btn btn--primary" href="/events">
+          See what's on
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <path d="M5 12h14M13 6l6 6-6 6" />
+          </svg>
+        </a>
+        <a class="btn" href="/visit">Plan your visit</a>
+      </div>
+      <ul class="hero__facts">
+        <li>
+          <span><strong>17</strong> gaming tables</span>
+        </li>
+        <li>
+          <span><strong>500+</strong> game library</span>
+        </li>
+        <li>
+          <span data-open-status="long"
+            ><span data-open-text>Open daily</span></span
+          >
+        </li>
+      </ul>
+    </div>
+  </div>
+  <span class="scroll-cue" aria-hidden="true"></span>
+</section>
+
+<div class="marquee" aria-hidden="true">
+  <div class="marquee__track">
+    <span>Friday Night Magic</span><span>Prereleases</span><span>Drafts</span
+    ><span>Board game days</span><span>Warhammer</span
+    ><span>Learn to play RPGs</span><span>Local designers</span
+    ><span>Painting &amp; terrain</span> <span>Friday Night Magic</span
+    ><span>Prereleases</span><span>Drafts</span><span>Board game days</span
+    ><span>Warhammer</span><span>Learn to play RPGs</span
+    ><span>Local designers</span><span>Painting &amp; terrain</span>
+  </div>
+</div>
+
+<section class="section" aria-labelledby="realms-title">
+  <div class="wrap">
+    <div class="section-head section-head--split reveal">
+      <div>
+        <p class="eyebrow">Four ways in</p>
+        <h2 id="realms-title">Choose your realm.</h2>
+      </div>
+      <p class="lede">
+        Whether you want a light game night or a twelve-hour campaign, a casual
+        draft or a painted army, the store is built around playing — not just
+        buying.
+      </p>
+    </div>
+
+    <div class="realms">
+      <a
+        class="realm realm--feature realm--minis reveal"
+        href="/tabletop#minis"
+      >
+        <img
+          class="realm__img"
+          src="/assets/img/dragon-wall.jpg"
+          alt=""
+          loading="lazy"
+          width="736"
+          height="1100"
+        />
+        <svg
+          class="realm__icon"
+          viewBox="0 0 64 64"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          aria-hidden="true"
+        >
+          <path d="M32 6 L38 22 L32 58 L26 22 Z" />
+          <path d="M20 22 H44" />
+          <path d="M32 22 V58" />
+          <circle cx="32" cy="10" r="2" />
+        </svg>
+        <span class="realm__kicker">Miniatures</span>
+        <h3>Seventeen tables. A whole collection of terrain.</h3>
+        <p>
+          Warhammer, Star Wars, Game of Thrones and more. Bring your army — the
+          battlefield is already built.
+        </p>
+        <span class="realm__go">Enter the battlefield</span>
+      </a>
+
+      <a class="realm realm--cards reveal" style="--d: 0.08s" href="/cards">
+        <svg
+          class="realm__icon"
+          viewBox="0 0 64 64"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          aria-hidden="true"
+        >
+          <rect
+            x="12"
+            y="14"
+            width="26"
+            height="38"
+            rx="3"
+            transform="rotate(-12 25 33)"
+          />
+          <rect
+            x="26"
+            y="12"
+            width="26"
+            height="38"
+            rx="3"
+            transform="rotate(10 39 31)"
+          />
+          <path d="M39 24 l3 6 -3 6 -3 -6z" />
+        </svg>
+        <span class="realm__kicker">Card games</span>
+        <h3>Friday Night Magic &amp; beyond</h3>
+        <p>
+          Weekly Friday Night Magic, prereleases and drafts — and a community
+          that shows up.
+        </p>
+        <span class="realm__go">Shuffle up</span>
+      </a>
+
+      <a
+        class="realm realm--board reveal"
+        style="--d: 0.16s"
+        href="/tabletop#board"
+      >
+        <img
+          class="realm__img"
+          src="/assets/img/board-game-wall.jpg"
+          alt=""
+          loading="lazy"
+          width="1100"
+          height="736"
+        />
+        <svg
+          class="realm__icon"
+          viewBox="0 0 64 64"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          aria-hidden="true"
+        >
+          <path
+            d="M32 8a7 7 0 0 1 4 12.7c5 1.4 13 4.6 13 9.3 0 3-6 2-9 2l6 18c.7 2.2-.6 4-3 4H21c-2.4 0-3.7-1.8-3-4l6-18c-3 0-9 1-9-2 0-4.7 8-7.9 13-9.3A7 7 0 0 1 32 8z"
+          />
+        </svg>
+        <span class="realm__kicker">Board games</span>
+        <h3>A 500+ title library</h3>
+        <p>
+          Try before you buy. Heavy or light, two players or ten — there's a
+          table for it.
+        </p>
+        <span class="realm__go">Open the library</span>
+      </a>
+
+      <a class="realm realm--rpg reveal" style="--d: 0.24s" href="/rpg">
+        <svg
+          class="realm__icon"
+          viewBox="0 0 64 64"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          aria-hidden="true"
+        >
+          <path d="M32 4 56 18v28L32 60 8 46V18z" />
+          <path
+            d="M32 4 20 26h24zM20 26 8 46M44 26l12 20M20 26l12 34 12-34M8 18l12 8M56 18l-12 8"
+          />
+        </svg>
+        <span class="realm__kicker">Roleplaying</span>
+        <h3>Sourcebooks, dice &amp; your first campaign</h3>
+        <p>
+          Learn to play, start a group, or find a table that needs one more
+          hero.
+        </p>
+        <span class="realm__go">Roll initiative</span>
+      </a>
+
+      <a
+        class="realm realm--board reveal"
+        style="--d: 0.32s; --accent: #d9a6ff"
+        href="/begin"
+      >
+        <svg
+          class="realm__icon"
+          viewBox="0 0 64 64"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          aria-hidden="true"
+        >
+          <circle cx="32" cy="32" r="24" />
+          <path d="M32 8v6M32 50v6M8 32h6M50 32h6" />
+          <path d="M40 24 28 28l-4 12 12-4z" />
+        </svg>
+        <span class="realm__kicker">New here?</span>
+        <h3>Find your kind of game</h3>
+        <p>
+          Six quick questions from our staff's own guide point you to the right
+          shelf.
+        </p>
+        <span class="realm__go">Take the quiz</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="section--tight" aria-label="The Portal by the numbers">
+  <div class="wrap">
+    <div class="stats reveal">
+      <div class="stat">
+        <div class="stat__n">17</div>
+        <div class="stat__l">Tables for miniatures and open play</div>
+      </div>
+      <div class="stat">
+        <div class="stat__n">500<sup>+</sup></div>
+        <div class="stat__l">Titles in the in-store game library</div>
+      </div>
+      <div class="stat">
+        <div class="stat__n">4</div>
+        <div class="stat__l">Pillars: board, card, minis, RPG</div>
+      </div>
+      <div class="stat">
+        <div class="stat__n">7</div>
+        <div class="stat__l">Days a week, late nights Tue–Fri</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="space-title">
+  <div class="wrap story">
+    <div class="frames reveal">
+      <figure class="frame" style="margin: 0">
+        <img
+          src="/assets/img/dragon-wall.jpg"
+          alt="A red dragon head trophy mounted above shelves of Dungeons &amp; Dragons boxed games and miniatures"
+          loading="lazy"
+          width="736"
+          height="1100"
+        />
+        <figcaption class="frame__tag">In the store</figcaption>
+      </figure>
+      <figure class="frame" style="margin: 0">
+        <img
+          src="/assets/img/board-game-wall.jpg"
+          alt="Wooden shelves packed with shrink-wrapped board games"
+          loading="lazy"
+          width="1100"
+          height="736"
+        />
+      </figure>
+      <figure class="frame" style="margin: 0">
+        <img
+          src="/assets/img/new-arrivals.jpg"
+          alt="A display table of board games including Ticket to Ride and Shobu"
+          loading="lazy"
+          width="640"
+          height="480"
+        />
+      </figure>
+    </div>
+    <div class="reveal" style="--d: 0.1s">
+      <p class="eyebrow">The space</p>
+      <h2 id="space-title">
+        Not a shop with a table. <em class="glow">A place to play.</em>
+      </h2>
+      <p class="lede">
+        The Portal has brought every kind of tabletop game to Manchester — and
+        the room to play them.
+      </p>
+      <ul class="checklist">
+        <li>
+          <strong>Large gaming space</strong> with seventeen tables and terrain
+          for every scale of battle.
+        </li>
+        <li>
+          <strong>Game library</strong> of more than five hundred titles you can
+          play in store.
+        </li>
+        <li>
+          <strong>Special orders</strong> — if it's in print and not on the
+          shelf, we'll order it for you.
+        </li>
+        <li>
+          <strong>Host your own</strong> RPG group, miniatures day or board game
+          night. Just ask the staff.
+        </li>
+      </ul>
+      <a class="link-arrow" href="/tabletop">Tour the tabletop floor →</a>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="padding-top: 0" aria-labelledby="events-title">
+  <div class="wrap">
+    <div class="section-head section-head--split reveal">
+      <div>
+        <p class="eyebrow">Events &amp; tournaments</p>
+        <h2 id="events-title">Something on the tables all week.</h2>
+      </div>
+      <p class="lede">
+        From Magic tournaments to local designers demoing new games, the event
+        calendar covers every corner of the hobby.
+      </p>
+    </div>
+    <div class="events">
+      <article class="event reveal" data-cat="cards">
+        <div class="event__when"><b>Fri</b><span>Weekly</span></div>
+        <div>
+          <span class="event__type">Magic: The Gathering</span>
+          <h3>Friday Night Magic</h3>
+          <p>
+            The weekly heartbeat of the card room. New and returning players
+            welcome.
+          </p>
+          <div class="event__meta">
+            <span class="tag tag--verified">Store-confirmed event</span>
+          </div>
+        </div>
+      </article>
+      <article class="event reveal" style="--d: 0.08s" data-cat="cards">
+        <div class="event__when"><b>New</b><span>Set</span></div>
+        <div>
+          <span class="event__type">Magic: The Gathering</span>
+          <h3>Prereleases &amp; Drafts</h3>
+          <p>
+            Crack the newest set before launch, then draft it with the
+            community.
+          </p>
+          <div class="event__meta">
+            <span class="tag tag--verified">Store-confirmed event</span>
+          </div>
+        </div>
+      </article>
+      <article class="event reveal" style="--d: 0.16s" data-cat="community">
+        <div class="event__when"><b>Local</b><span>Showcase</span></div>
+        <div>
+          <span class="event__type">Community</span>
+          <h3>Local designer showcases</h3>
+          <p>
+            Connecticut designers and publishers show off new games. Play them
+            first.
+          </p>
+          <div class="event__meta">
+            <span class="tag tag--verified">Store-confirmed event</span>
+          </div>
+        </div>
+      </article>
+    </div>
+    <div class="btn-row" style="margin-top: 28px">
+      <a class="btn btn--primary" href="/events">Browse all event types</a>
+      <a
+        class="btn"
+        href="https://www.facebook.com/TimeMachinePortal"
+        rel="noopener"
+        target="_blank"
+        >Latest updates on Facebook</a
+      >
+    </div>
+  </div>
+</section>
+
+<section class="section" style="padding-top: 0" aria-labelledby="visit-title">
+  <div class="wrap">
+    <div class="panel reveal">
+      <div class="panel__grid">
+        <div>
+          <p class="eyebrow">Visit the Portal</p>
+          <h2 id="visit-title">60 Hilliard St, Manchester.</h2>
+          <p class="lede">
+            Open seven days. Late nights Tuesday through Friday, and until
+            midnight on Fridays.
+          </p>
+          <div class="btn-row">
+            <a
+              class="btn btn--primary"
+              href="https://www.google.com/maps/dir/?api=1&amp;destination=60+Hilliard+St%2C+Manchester%2C+CT+06042"
+              rel="noopener"
+              target="_blank"
+              >Get directions</a
+            >
+            <a class="btn" href="tel:+18604320711">Call (860) 432-0711</a>
+          </div>
+        </div>
+        <div>
+          <table class="hours" aria-label="Store hours">
+            <tbody>
+              <tr data-hours-row="0">
+                <th scope="row">Sunday</th>
+                <td>12 – 8 p.m.</td>
+              </tr>
+              <tr data-hours-row="1">
+                <th scope="row">Monday</th>
+                <td>12 – 8 p.m.</td>
+              </tr>
+              <tr data-hours-row="2">
+                <th scope="row">Tuesday</th>
+                <td>12 – 11 p.m.</td>
+              </tr>
+              <tr data-hours-row="3">
+                <th scope="row">Wednesday</th>
+                <td>12 – 11 p.m.</td>
+              </tr>
+              <tr data-hours-row="4">
+                <th scope="row">Thursday</th>
+                <td>12 – 11 p.m.</td>
+              </tr>
+              <tr data-hours-row="5">
+                <th scope="row">Friday</th>
+                <td>12 p.m. – 12 a.m.</td>
+              </tr>
+              <tr data-hours-row="6">
+                <th scope="row">Saturday</th>
+                <td>10 a.m. – 10 p.m.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
