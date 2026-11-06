@@ -26,17 +26,6 @@ export const BUSINESS = {
 
 export const MAILTO = `mailto:${BUSINESS.email}`;
 
-/** Proof line used wherever the live clients are listed. Hard Hittin has no case page. */
-export const PROOF_LIST =
-  "Thousand Sunny Cards and Collectibles (West Hartford) · M&J Video Games (Southington) · Hard Hittin · Infinite Heroes (Watertown)";
-
-export const LIVE_CLIENT_LINE = "Live client sites · 4";
-
-export const FOUR_LIVE_CLIENTS = "Four live client sites for Connecticut shops.";
-
-export const WHY_FEATURED =
-  "Three featured live client shops are open right now: Thousand Sunny, M&J Video Games and Hard Hittin. See all four on the Work page.";
-
 /**
  * Optional public scheduling URL (Cal.com, Google Calendar appointment schedule, etc.).
  * Leave empty until Nick publishes a real booking link. When empty, /book uses the

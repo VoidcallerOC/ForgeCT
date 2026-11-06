@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Arrow, PageHead, Plate } from "@/components/chrome";
 import { pageHead } from "@/lib/seo";
-import { WHY_FEATURED } from "@/lib/site";
+import { CLIENT_COUNT_WORD, PROJECTS, projectBySlug } from "@/lib/work";
 
 export const Route = createFileRoute("/why")({
   head: () => pageHead("/why"),
@@ -24,9 +24,10 @@ const FAQ: { q: string; a: React.ReactNode }[] = [
     q: "Can I see the work before we talk?",
     a: (
       <>
-        Three featured live client shops are open right now:{" "}
-        <a className="link" href="https://www.thousandsunnytcg.com/" target="_blank" rel="noopener noreferrer">Thousand Sunny</a>,{" "}
-        <a className="link" href="https://mjvideogames.com/" target="_blank" rel="noopener noreferrer">M&J Video Games</a> and Hard Hittin. See all four on the <Link className="link" to="/work">Work page</Link>.
+        Yes. These featured live client shops are open right now:{" "}
+        <a className="link" href={projectBySlug("thousand-sunny")?.site} target="_blank" rel="noopener noreferrer">Thousand Sunny</a> and{" "}
+        <a className="link" href={projectBySlug("m-and-j-video-games")?.site} target="_blank" rel="noopener noreferrer">M&J Video Games</a>. See all{" "}
+        {CLIENT_COUNT_WORD} live client sites on the <Link className="link" to="/work">Work page</Link>.
       </>
     ),
   },
@@ -62,7 +63,7 @@ function Why() {
                 <li>Built for shops like yours around Hartford.</li>
                 <li>Local Business Site from $2,000, with the price listed up front.</li>
                 <li>Custom page. Care at $35/month, cancel anytime.</li>
-                <li>{WHY_FEATURED}</li>
+                <li>{PROJECTS.length} live client sites you can open right now.</li>
                 <li>Walk in. Shape. Build. Launch.</li>
               </ul>
             </div>

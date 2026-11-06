@@ -6,8 +6,8 @@ import { NextSteps } from "@/components/next-steps";
 import { PackageChooser, RateSheet, SheetNotes } from "@/components/rate-sheet";
 import { LabNote, PhoneRail, ProofDeck } from "@/components/work";
 import { pageHead } from "@/lib/seo";
-import { BUSINESS, CARE, FOUR_LIVE_CLIENTS, PROOF_LIST, usd } from "@/lib/site";
-import { PROJECTS } from "@/lib/work";
+import { BUSINESS, CARE, usd } from "@/lib/site";
+import { LIVE_CLIENTS_LEAD, LIVE_CLIENT_LINE, PROJECTS, PROOF_LIST } from "@/lib/work";
 
 export const Route = createFileRoute("/")({
   head: () => pageHead("/"),
@@ -116,11 +116,11 @@ function Home() {
 
       <section className="band" id="work" aria-labelledby="work-title">
         <div className="wrap">
-          <Plate items={["Work", "Live client sites · 4", "Connecticut"]} />
+          <Plate items={["Work", LIVE_CLIENT_LINE, "Connecticut"]} />
           <div className="split">
             <h2 id="work-title">Real businesses. Real reasons to build.</h2>
             <p className="lede">
-              {FOUR_LIVE_CLIENTS} {PROOF_LIST}. The screenshot is the proof, the lines under it are the documented need
+              {LIVE_CLIENTS_LEAD}, each shown once below: {PROOF_LIST}. The screenshot is the proof, the lines under it are the documented need
               and the build — not a result we did not measure. The filterable index is on{" "}
               <Link className="link" to="/work">
                 Work

@@ -1,8 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Arrow } from "@/components/chrome";
-import { LIVE_CLIENT_LINE } from "@/lib/site";
-import { FILTERS, LAB, PROJECTS, filterCount, type Filter, type Project } from "@/lib/work";
+import { FILTERS, LAB, LIVE_CLIENT_LINE, PROJECTS, filterCount, type Filter, type Project } from "@/lib/work";
 
 /**
  * One screenshot, served as WebP where supported (generated 480w and 160w variants next to each JPEG in
@@ -49,9 +48,11 @@ export function PhoneFrame({ project, eager = false }: { project: Project; eager
 
 /** Visual emphasis only — labels taken from the documented category, not a claimed result. */
 const EMPHASIS: Record<string, string> = {
+  "harris-in-wonderland": "Systems",
   "thousand-sunny": "Storefront",
   "m-and-j-video-games": "Walk-in",
   "infinite-heroes": "Main Street",
+  "ninos-collectibles": "Dealer",
 };
 
 /**

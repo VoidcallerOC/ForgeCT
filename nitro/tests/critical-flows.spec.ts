@@ -1,11 +1,24 @@
 import { expect, test, type Page } from "@playwright/test";
 
+/**
+ * Owner-approved live client roster, written out independently of src/lib/work.ts so a deletion in the
+ * app fails here. Voidcaller is a FORGE CT experiment and is never counted as a client.
+ */
+const APPROVED_CLIENTS = [
+  { slug: "harris-in-wonderland", name: "Harris in Wonderland", site: "https://harrisinwonderland.com/" },
+  { slug: "thousand-sunny", name: "Thousand Sunny Cards and Collectibles", site: "https://www.thousandsunnytcg.com/" },
+  { slug: "m-and-j-video-games", name: "M and J Video Games", site: "https://mjvideogames.com/" },
+  { slug: "infinite-heroes", name: "Infinite Heroes", site: "https://infiniteheroes.net/" },
+  { slug: "ninos-collectibles", name: "Nino’s Collectibles", site: "https://ninoscollectibles.com/" },
+];
+const COUNT = APPROVED_CLIENTS.length;
+const RETIRED = /Hard[\s-]*Hittin/i;
+const BANNED = /SousaSaaS|Front Window|Come By/i;
+
 const ROUTES = [
   "/",
   "/work",
-  "/work/thousand-sunny",
-  "/work/m-and-j-video-games",
-  "/work/infinite-heroes",
+  ...APPROVED_CLIENTS.map((c) => `/work/${c.slug}`),
   "/services",
   "/care",
   "/audit",
@@ -83,7 +96,7 @@ test.describe("certified business-critical flows", () => {
   });
 
   test("three featured case studies explain the documented customer path without outcome claims", async ({ page }) => {
-    for (const path of ["/work/thousand-sunny", "/work/m-and-j-video-games"]) {
+    for (const path of ["/work/harris-in-wonderland", "/work/thousand-sunny", "/work/m-and-j-video-games"]) {
       await page.goto(path);
       await expect(page.locator(".facts")).toContainText("Design intent");
       await expect(page.locator(".facts")).toContainText("What visitors can do");
@@ -164,38 +177,97 @@ test.describe("certified business-critical flows", () => {
 });
 
 test.describe("approved portfolio taxonomy", () => {
-  test("ledger lists the three case studies and keeps the lab apart", async ({ page }) => {
+  test("ledger lists all five approved clients, filters 4 + 1, and keeps the lab apart", async ({ page }) => {
     await page.goto("/work");
     const rows = page.locator("table.ledger tbody tr");
-    await expect(rows).toHaveCount(3);
+    await expect(rows).toHaveCount(COUNT);
+    for (const c of APPROVED_CLIENTS) await expect(page.locator("table.ledger")).toContainText(c.name);
     await expect(page.getByRole("button", { name: /^All/ })).toHaveAttribute("aria-pressed", "true");
     await page.getByRole("button", { name: /Card and tabletop/ }).click();
-    await expect(page.locator("table.ledger tbody tr:visible")).toHaveCount(3);
+    await expect(page.locator("table.ledger tbody tr:visible")).toHaveCount(4);
     await page.getByRole("button", { name: /Retail and local/ }).click();
-    await expect(page.locator("table.ledger tbody tr:visible")).toHaveCount(0);
+    await expect(page.locator("table.ledger tbody tr:visible")).toHaveCount(1);
+    await expect(page.locator("table.ledger tbody tr:visible")).toContainText("Harris in Wonderland");
     await expect(page.locator("table.ledger")).not.toContainText("Voidcaller");
     await expect(page.locator(".lab")).toContainText("not client work");
-    await expect(page.locator("main")).toContainText("Thousand Sunny Cards and Collectibles (West Hartford) · M&J Video Games (Southington) · Hard Hittin · Infinite Heroes (Watertown)");
-    await expect(page.locator("main")).not.toContainText("Harris");
   });
 
-  test("home names four live clients and links only the case studies", async ({ page }) => {
+  test("visible client counts match the approved roster", async ({ page }) => {
     await page.goto("/");
-    await expect(page.locator(".rail-wrap")).toContainText("Live client sites · 4");
-    await expect(page.locator(".rail")).toContainText("Thousand Sunny");
-    await expect(page.locator("#work .proof-deck")).toContainText("M and J Video Games");
-    await expect(page.locator("#work table.ledger")).toHaveCount(0);
-    await expect(page.locator("#work").getByRole("link", { name: /The full index, with filters/ })).toHaveAttribute("href", "/work");
-    await expect(page.locator("main")).not.toContainText("Harris");
+    await expect(page.locator(".rail-wrap")).toContainText(`Live client sites · ${COUNT}`);
+    await expect(page.locator(".rail > li")).toHaveCount(COUNT);
+    await expect(page.locator("#work .proof-deck > article")).toHaveCount(COUNT);
+    await expect(page.locator("#work")).toContainText(`Live client sites · ${COUNT}`);
+    await expect(page.locator("#work")).toContainText("Five live client sites");
+    for (const c of APPROVED_CLIENTS) {
+      await expect(page.locator(".rail")).toContainText(c.name);
+      await expect(page.locator("#work .proof-deck")).toContainText(c.name);
+    }
+    await page.goto("/work");
+    await expect(page.locator("main")).toContainText("Five live client sites");
+    await page.goto("/why");
+    await expect(page.locator("main")).toContainText(`${COUNT} live client sites you can open right now`);
+    for (const path of ROUTES) {
+      await page.goto(path);
+      const text = await page.locator("body").innerText();
+      expect(text, `${path} shows a stale client count`).not.toMatch(/Live client sites · (?!5\b)\d|\b(three|four|six) (featured |approved )?live client/i);
+    }
+  });
+
+  test("Harris and Nino’s case studies are live, indexable and linked from the ledger", async ({ page }) => {
+    for (const c of APPROVED_CLIENTS.filter((x) => ["harris-in-wonderland", "ninos-collectibles"].includes(x.slug))) {
+      await page.goto("/work");
+      await page.locator("table.ledger").getByRole("link", { name: c.name }).click();
+      await expect(page).toHaveURL(new RegExp(`/work/${c.slug}$`));
+      await expect(page.locator("h1")).toHaveText(c.name);
+      await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", "index,follow");
+      await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", `https://www.forge-ct.com/work/${c.slug}`);
+      await expect(page).toHaveTitle(`${c.name} — FORGE CT case study`);
+      await expect(page.locator("main").getByRole("link", { name: /^Visit / })).toHaveAttribute("href", c.site);
+    }
+    await page.goto("/work/ninos-collectibles");
+    await expect(page.locator(".facts")).toContainText("Checked 11 October 2026");
+    await expect(page.locator(".facts")).toContainText("Live pricing is not switched on yet");
+  });
+
+  test("restored case studies return 200, not a redirect", async ({ request }) => {
+    for (const c of APPROVED_CLIENTS) {
+      const res = await request.get(`/work/${c.slug}`, { maxRedirects: 0 });
+      expect(res.status(), c.slug).toBe(200);
+    }
+  });
+
+  test("sitemap lists every approved case study and no retired one", async ({ request }) => {
+    const xml = await (await request.get("/sitemap.xml")).text();
+    for (const c of APPROVED_CLIENTS) expect(xml, c.slug).toContain(`<loc>https://www.forge-ct.com/work/${c.slug}</loc>`);
+    expect(xml).not.toMatch(RETIRED);
+    expect([...xml.matchAll(/\/work\/[a-z0-9-]+</g)]).toHaveLength(COUNT);
+  });
+
+  test("/work structured data lists the approved roster", async ({ page }) => {
+    await page.goto("/work");
+    const blocks = await page.$$eval('script[type="application/ld+json"]', (els) => els.map((e) => JSON.parse(e.textContent || "{}")));
+    const collection = blocks.find((b) => b["@type"] === "CollectionPage");
+    expect(collection.mainEntity.map((e: { name: string }) => e.name)).toEqual(APPROVED_CLIENTS.map((c) => c.name));
+    expect(collection.numberOfItems).toBe(COUNT);
+  });
+
+  test("Hard Hittin is not active proof anywhere: copy, meta, social tags or JSON-LD", async ({ page }) => {
+    for (const path of ROUTES) {
+      await page.goto(path);
+      expect(await page.content(), path).not.toMatch(RETIRED);
+    }
+  });
+
+  test("banned brands never appear", async ({ page }) => {
+    for (const path of ROUTES) {
+      await page.goto(path);
+      expect(await page.content(), path).not.toMatch(BANNED);
+    }
   });
 
   test("only approved live client URLs are linked as live sites", async ({ page }) => {
-    const approved = new Set([
-      "https://www.thousandsunnytcg.com/",
-      "https://mjvideogames.com/",
-      "https://infiniteheroes.net/",
-      "https://voidcaller.enterthegrotto.xyz/",
-    ]);
+    const approved = new Set([...APPROVED_CLIENTS.map((c) => c.site), "https://voidcaller.enterthegrotto.xyz/"]);
     for (const path of ROUTES) {
       await page.goto(path);
       const external = await page.$$eval("main a[href^='http']", (as) => as.map((a) => (a as HTMLAnchorElement).href));
@@ -204,6 +276,22 @@ test.describe("approved portfolio taxonomy", () => {
         expect(approved.has(href), `${path} links unapproved ${href}`).toBe(true);
       }
     }
+  });
+
+  test("every indexable page has a title, description, self canonical and index,follow", async ({ page }) => {
+    for (const path of ROUTES.filter((r) => !["/pay", "/thanks", "/privacy"].includes(r))) {
+      await page.goto(path);
+      expect((await page.title()).length, path).toBeGreaterThan(10);
+      await expect(page.locator('meta[name="description"]'), path).toHaveAttribute("content", /.{40,}/);
+      await expect(page.locator('meta[name="robots"]'), path).toHaveAttribute("content", "index,follow");
+      await expect(page.locator('link[rel="canonical"]'), path).toHaveAttribute("href", `https://www.forge-ct.com${path === "/" ? "/" : path}`);
+    }
+  });
+
+  test("footer carries the sites-and-apps tagline", async ({ page }) => {
+    await page.goto("/");
+    await expect(page.locator("footer.footer")).toContainText("Sites and apps for Connecticut shops.");
+    await expect(page.locator("footer.footer")).not.toContainText("Websites for the businesses people drive to.");
   });
 });
 
@@ -285,12 +373,10 @@ test.describe("layout and platform", () => {
     expect(apex.headers()["location"]).toBe("https://www.forge-ct.com/work");
   });
 
-  test("retired case studies redirect to /work", async ({ request }) => {
-    for (const path of ["/work/harris-in-wonderland", "/work/ninos-collectibles", "/work/hard-hittin"]) {
-      const res = await request.get(path, { maxRedirects: 0 });
-      expect(res.status(), path).toBe(301);
-      expect(res.headers()["location"], path).toBe("/work");
-    }
+  test("retired Hard Hittin case study still redirects to /work", async ({ request }) => {
+    const res = await request.get("/work/hard-hittin", { maxRedirects: 0 });
+    expect(res.status()).toBe(301);
+    expect(res.headers()["location"]).toBe("/work");
   });
 
   test("unknown routes return 404", async ({ request }) => {

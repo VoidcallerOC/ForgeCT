@@ -1,4 +1,4 @@
-import { PROJECTS } from "./work";
+import { LIVE_CLIENTS_LEAD, PROJECTS, joinNames } from "./work";
 
 /**
  * One ProfessionalService block for the layout. Page files add FAQ, breadcrumb,
@@ -141,25 +141,14 @@ export const STRUCTURED_DATA: Record<string, unknown[]> = {
       "@id": "https://www.forge-ct.com/work#webpage",
       url: "https://www.forge-ct.com/work",
       name: "FORGE CT live client sites",
-      description: "Thousand Sunny Cards and Collectibles, M&J Video Games and Infinite Heroes.",
+      description: `${LIVE_CLIENTS_LEAD}: ${joinNames(PROJECTS.map((p) => p.name))}.`,
       isPartOf: { "@id": "https://www.forge-ct.com/#business" },
-      mainEntity: [
-        {
-          "@type": "CreativeWork",
-          name: "Thousand Sunny Cards and Collectibles",
-          url: "https://www.forge-ct.com/work/thousand-sunny",
-        },
-        {
-          "@type": "CreativeWork",
-          name: "M&J Video Games",
-          url: "https://www.forge-ct.com/work/m-and-j-video-games",
-        },
-        {
-          "@type": "CreativeWork",
-          name: "Infinite Heroes",
-          url: "https://www.forge-ct.com/work/infinite-heroes",
-        },
-      ],
+      numberOfItems: PROJECTS.length,
+      mainEntity: PROJECTS.map((p) => ({
+        "@type": "CreativeWork",
+        name: p.name,
+        url: `https://www.forge-ct.com/work/${p.slug}`,
+      })),
     },
   ],
   ...CASE_STUDIES,

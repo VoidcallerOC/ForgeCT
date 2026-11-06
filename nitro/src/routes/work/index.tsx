@@ -3,7 +3,7 @@ import { Arrow, PageHead } from "@/components/chrome";
 import { NextSteps } from "@/components/next-steps";
 import { LabNote, Ledger, ProofDeck } from "@/components/work";
 import { pageHead } from "@/lib/seo";
-import { FOUR_LIVE_CLIENTS, PROOF_LIST } from "@/lib/site";
+import { LIVE_CLIENTS_LEAD, PROOF_LIST } from "@/lib/work";
 
 export const Route = createFileRoute("/work/")({
   head: () => pageHead("/work"),
@@ -15,8 +15,8 @@ function WorkIndex() {
     <main id="main">
       <PageHead plate={["FORGE CT live client sites", "Live client work", "Connecticut"]} title="Real businesses. Real reasons to build.">
         <p className="lede">
-          {FOUR_LIVE_CLIENTS} {PROOF_LIST}. Each case study records the documented need and build, without claims that are
-          not established. Hard Hittin is named here and has no separate case page.
+          {LIVE_CLIENTS_LEAD}: {PROOF_LIST}. Each case study records the documented need and build, without claims that
+          are not established.
         </p>
         <div className="actions">
           <Link to="/audit" className="btn" data-track="work_audit_cta">

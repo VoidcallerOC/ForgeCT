@@ -10,16 +10,16 @@ const NAV = [
   { to: "/contact", label: "Contact" },
 ] as const;
 
-/** Exact NAP block for the footer on every page and the body of /contact. */
+/** Exact NAP block for the footer on every page and the body of /contact. A <p>, not <address>: protected CSS has no address reset. */
 export function StudioAddress() {
   return (
-    <address>
+    <p>
       FORGE CT · Farmington, CT 06032
       <br />
       <a href="tel:+19592290653">(959) 229-0653</a> · <a href="mailto:create@forge-ct.com">create@forge-ct.com</a>
       <br />
       Open 24 hours, 7 days a week
-    </address>
+    </p>
   );
 }
 
@@ -132,7 +132,7 @@ export function Footer() {
       <div className="wrap">
         <div className="footer-grid">
           <div className="stack">
-            <p className="footer-lead">Websites for the businesses people drive to.</p>
+            <h2>Sites and apps for Connecticut shops.</h2>
             <p>
               {BUSINESS.name} is {BUSINESS.founder}, building custom websites and web systems in {BUSINESS.locality},{" "}
               {BUSINESS.regionLong}, for {BUSINESS.area}.

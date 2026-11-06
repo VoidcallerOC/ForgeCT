@@ -1,7 +1,12 @@
 /**
- * Approved portfolio. Three case studies (Thousand Sunny, M&J Video Games, Infinite Heroes)
- * plus Hard Hittin, who is named in proof lists only and has no case page.
- * One FORGE CT lab experiment (Voidcaller) is always shown apart from client work.
+ * Approved portfolio taxonomy, from the certified site (work/index.html, generate-seo-pages.mjs,
+ * homepage filters):
+ *   - Five live client projects. Filters: "Card and tabletop" (4) and "Retail and local" (1). Hard Hittin Card Shop
+ *     was removed 2026-11-01 (no longer an active client; owner request). Nino’s Collectibles
+ *     was added 2026-10-11 with Nino’s approval (reported by Nick); its case study carries dated status lines
+ *     because parts of that site (live pricing, Square, show list) are not yet working in production.
+ *   - One FORGE CT lab experiment (Voidcaller), always shown apart from client work and never counted as a client.
+ *   - Public counts, proof lists and schema are derived from PROJECTS (see helpers at the bottom). Never hardcode them.
  * Case-study copy is limited to the documented need, build, tags and location. No outcomes or metrics.
  */
 export type Filter = "card-tabletop" | "retail-local";
@@ -19,6 +24,8 @@ export type Project = {
   /** Case-study category label, as certified. */
   category: string;
   place: string;
+  /** Connecticut town, only where the business has a documented storefront town. Used by proof lists and location pages. */
+  town?: string;
   image: string;
   /** Intrinsic pixel size of the screenshot file (WebP variants are generated at 480w and 160w). */
   imageWidth?: number;
@@ -45,12 +52,41 @@ export type Project = {
 
 export const PROJECTS: Project[] = [
   {
+    slug: "harris-in-wonderland",
+    name: "Harris in Wonderland",
+    short: "Harris in Wonderland",
+    filter: "retail-local",
+    category: "Retail and local business",
+    place: "Canton",
+    town: "Canton",
+    image: "/images/work/harrisinwonderland.jpg",
+    imageHeight: 1429,
+    // Live per the owner (2026-10-01) and linked on the certified homepage; the certified case study omitted it.
+    site: "https://harrisinwonderland.com/",
+    siteLabel: "harrisinwonderland.com",
+    business:
+      "A reptile specialty shop in Canton — a working collection, not a pet aisle — for people choosing and caring for an animal.",
+    need: "Help customers understand the animals, care, and inventory beyond the storefront.",
+    built: "Live inventory, a feeder locker, care sheets, and a beginner chooser in one experience.",
+    story:
+      "The deepest build here: live Square inventory, a feeder locker, care sheets, and a beginner chooser that helps customers pick the right animal.",
+    designIntent:
+      "Bring inventory, practical care information and a beginner chooser together so visitors can explore the offer and learn what they need before a visit.",
+    customerPath: [
+      "Browse live Square inventory.",
+      "Use the beginner chooser to explore which animal may be a fit.",
+      "Find care sheets and feeder-locker information alongside the shop offer.",
+    ],
+    tags: ["Live inventory", "Square", "Care sheets", "Care plan"],
+  },
+  {
     slug: "thousand-sunny",
     name: "Thousand Sunny Cards and Collectibles",
     short: "Thousand Sunny",
     filter: "card-tabletop",
     category: "Card and tabletop shop",
     place: "West Hartford",
+    town: "West Hartford",
     image: "/images/work/thousandsunny.jpg",
     imageHeight: 1429,
     site: "https://www.thousandsunnytcg.com/",
@@ -76,11 +112,13 @@ export const PROJECTS: Project[] = [
     filter: "card-tabletop",
     category: "Neighborhood video-game shop",
     place: "Southington",
+    town: "Southington",
     image: "/images/work/mjvideogames.jpg",
     imageHeight: 1429,
     site: "https://mjvideogames.com/",
     siteLabel: "mjvideogames.com",
-    business: "A neighborhood video-game shop in Southington: games, trade-ins and services for walk-in customers.",
+    business:
+      "A neighborhood video-game shop in Southington: games, trade-ins and services for walk-in customers.",
     need: "Make trade-ins, services, and a real walk-in path easy to find.",
     built: "A neighborhood storefront online, built for the phone check from the parking lot.",
     story:
@@ -101,6 +139,7 @@ export const PROJECTS: Project[] = [
     filter: "card-tabletop",
     category: "Card and tabletop shop",
     place: "Watertown",
+    town: "Watertown",
     image: "/images/work/IMG_2604.jpg",
     imageWidth: 1170,
     imageHeight: 2532,
@@ -114,6 +153,46 @@ export const PROJECTS: Project[] = [
       "Watertown comic shop on Main Street. New comics on Wednesday, collectibles on the floor whenever the door is open — a page built so a walk-in can find the shop.",
     tags: ["Comics", "Collectibles", "Main Street"],
   },
+  {
+    slug: "ninos-collectibles",
+    name: "Nino’s Collectibles",
+    short: "Nino’s Collectibles",
+    filter: "card-tabletop",
+    category: "Trading-card dealer",
+    place: "Card shows",
+    image: "/images/work/ninoscollectibles.jpg",
+    imageHeight: 1429,
+    site: "https://ninoscollectibles.com/",
+    siteLabel: "ninoscollectibles.com",
+    business:
+      "A trading-card dealer who buys and sells Pokémon and One Piece cards at card shows, on Instagram and in Whatnot live shows.",
+    need: "Nino buys and sells Pokémon and One Piece cards at card shows, on Instagram and in Whatnot live shows. Buyers need to see what he deals in and where he is vending next; sellers need a first look at what a card might fetch before they meet him.",
+    built:
+      "A phone-first site built from Nino’s own Instagram posts, with a show list read from his OnTreasure profile and a card scanner for people selling to him.",
+    story:
+      "Nino’s own Instagram posts, a show list read from his OnTreasure profile, and a card scanner for people selling to him — built for buyers and sellers who meet him at card shows.",
+    designIntent:
+      "Keep every claim traceable. Photos and captions come from Nino’s public posts with their dates, and past pulls are labelled as not a stock list. Show dates are read from OnTreasure, never typed in. The scanner never fills in a price, a condition or a grade: it shows an estimate only from a dated market price, the customer picks the condition, and the final offer is made in person.",
+    customerPath: [
+      "See recent pulls and deals from Nino’s Instagram, labelled as past posts.",
+      "Follow a link to where Nino is vending next.",
+      "Message Nino on Instagram to buy, sell or meet at a show.",
+    ],
+    statusCheckedOn: "11 October 2026",
+    status: [
+      "Live at ninoscollectibles.com. The site’s own footer still labels it a concept preview, and it is not yet open to search engines.",
+      "Card scanner: the phone reads the collector number with on-device OCR, searches the catalog, and asks the customer to confirm the printing and condition. It passes its end-to-end test against a test catalog. Live pricing is not switched on yet, so on the live site the scanner cannot return a match or an estimate.",
+      "Show list: built to read Nino’s OnTreasure vendor profile. On the check date it reported the list unavailable and linked to his profile instead.",
+      "Owner tools for inventory, photo drafts, events and Square sync are built and tested against a mock of Square. They are not yet connected to Nino’s Square account.",
+    ],
+    figure: {
+      image: "/images/work/ninoscollectibles-scan.jpg",
+      imageHeight: 1428,
+      alt: "Nino’s Collectibles card scanner page shown on a mobile phone",
+      caption: "The public scanner page. Card search and estimates switch on once live pricing is configured.",
+    },
+    tags: ["Instagram-sourced feed", "OnTreasure shows", "Card scanner (OCR)", "Owner tools"],
+  },
 ];
 
 export const LAB = {
@@ -125,6 +204,40 @@ export const LAB = {
     "A world that matches the record: player, relics, and lore. Built to prove that a project can go further when the experience itself is part of the brief.",
   tags: ["Interactive", "Custom player", "Worldbuilding"],
 } as const;
+
+/*
+ * Roster-derived copy. Every public count, proof list and schema list reads from PROJECTS so the
+ * published number always matches the displayed portfolio. Do not hardcode a client count.
+ */
+const NUMBER_WORDS = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"];
+const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+
+export const CLIENT_COUNT = PROJECTS.length;
+export const CLIENT_COUNT_WORD = NUMBER_WORDS[CLIENT_COUNT] ?? String(CLIENT_COUNT);
+
+/** "A, B and C" */
+export function joinNames(names: string[]): string {
+  if (names.length <= 1) return names.join("");
+  return `${names.slice(0, -1).join(", ")} and ${names[names.length - 1]}`;
+}
+
+/** "Name (Town)" when a town is documented, otherwise the name. */
+export const proofLabel = (p: Project) => (p.town ? `${p.name} (${p.town})` : p.name);
+
+/** Every approved live client, in roster order, separated by middots. */
+export const PROOF_LIST = PROJECTS.map(proofLabel).join(" · ");
+
+/** e.g. "Live client sites · 5" */
+export const LIVE_CLIENT_LINE = `Live client sites · ${CLIENT_COUNT}`;
+
+/** e.g. "Five live client sites" */
+export const LIVE_CLIENTS_LEAD = `${capitalize(CLIENT_COUNT_WORD)} live client sites`;
+
+/** Short names of every approved client: "Harris in Wonderland, Thousand Sunny, … and Nino’s Collectibles". */
+export const CLIENT_SHORT_NAMES = joinNames(PROJECTS.map((p) => p.short));
+
+/** Clients with a documented Connecticut town. */
+export const TOWN_PROJECTS = PROJECTS.filter((p) => p.town);
 
 export const projectBySlug = (slug: string) => PROJECTS.find((p) => p.slug === slug);
 export const filterCount = (f: Filter) => PROJECTS.filter((p) => p.filter === f).length;

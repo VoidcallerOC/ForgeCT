@@ -3,6 +3,7 @@ import { PageHead, Plate } from "@/components/chrome";
 import { InquiryForm } from "@/components/inquiry-form";
 import { pageHead } from "@/lib/seo";
 import { breadcrumbLd, faqPageLd, type FaqItem } from "@/lib/structured-data";
+import { PROJECTS } from "@/lib/work";
 
 const FAQ: FaqItem[] = [
   {
@@ -47,17 +48,14 @@ function Hartford() {
         </p>
         <p>
           <strong>Proof you can open today:</strong>{" "}
-          <Link className="link" to="/work/$slug" params={{ slug: "thousand-sunny" }}>
-            Thousand Sunny
-          </Link>
-          ,{" "}
-          <Link className="link" to="/work/$slug" params={{ slug: "m-and-j-video-games" }}>
-            M&J Video Games
-          </Link>
-          , Hard Hittin and{" "}
-          <Link className="link" to="/work/$slug" params={{ slug: "infinite-heroes" }}>
-            Infinite Heroes
-          </Link>
+          {PROJECTS.map((p, i) => (
+            <span key={p.slug}>
+              {i > 0 ? (i === PROJECTS.length - 1 ? " and " : ", ") : null}
+              <Link className="link" to="/work/$slug" params={{ slug: p.slug }}>
+                {p.short}
+              </Link>
+            </span>
+          ))}
           .
         </p>
         <p>

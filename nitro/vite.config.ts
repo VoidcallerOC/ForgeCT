@@ -43,19 +43,9 @@ export default defineConfig(({ command, isPreview }) => ({
                     headers: { Location: "https://www.forge-ct.com/$1" },
                   },
                   { src: "/(.*)", headers: SECURITY_HEADERS, continue: true },
-                  // Retired case studies: Hard Hittin has no case page; Harris and Nino's are no longer proof.
+                  // Retired case study (no longer an active client, removed 2026-11-01): send old links to the index.
                   {
                     src: "/work/hard-hittin/?",
-                    status: 301,
-                    headers: { Location: "/work" },
-                  },
-                  {
-                    src: "/work/harris-in-wonderland/?",
-                    status: 301,
-                    headers: { Location: "/work" },
-                  },
-                  {
-                    src: "/work/ninos-collectibles/?",
                     status: 301,
                     headers: { Location: "/work" },
                   },

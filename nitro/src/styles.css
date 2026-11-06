@@ -1807,13 +1807,9 @@ p {
 .footer p {
   color: var(--slate-light);
 }
-.footer .footer-lead {
-  color: var(--fog);
+.footer h2 {
   font-size: clamp(1.6rem, 3vw, 2.3rem);
   max-width: 18ch;
-}
-address {
-  font-style: normal;
 }
 .footer nav ul {
   margin: 0;

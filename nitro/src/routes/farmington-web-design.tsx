@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageHead, Plate } from "@/components/chrome";
 import { pageHead } from "@/lib/seo";
 import { breadcrumbLd, faqPageLd, type FaqItem } from "@/lib/structured-data";
+import { TOWN_PROJECTS } from "@/lib/work";
 
 const FAQ: FaqItem[] = [
   {
@@ -47,18 +48,16 @@ function Farmington() {
           </p>
           <p>
             <strong>Live work nearby:</strong>{" "}
-            <Link className="link" to="/work/$slug" params={{ slug: "thousand-sunny" }}>
-              Thousand Sunny Cards and Collectibles
-            </Link>{" "}
-            in West Hartford,{" "}
-            <Link className="link" to="/work/$slug" params={{ slug: "m-and-j-video-games" }}>
-              M&J Video Games
-            </Link>{" "}
-            in Southington, and{" "}
-            <Link className="link" to="/work/$slug" params={{ slug: "infinite-heroes" }}>
-              Infinite Heroes
-            </Link>{" "}
-            in Watertown.
+            {TOWN_PROJECTS.map((p, i) => (
+              <span key={p.slug}>
+                {i > 0 ? (i === TOWN_PROJECTS.length - 1 ? ", and " : ", ") : null}
+                <Link className="link" to="/work/$slug" params={{ slug: p.slug }}>
+                  {p.name}
+                </Link>{" "}
+                in {p.town}
+              </span>
+            ))}
+            .
           </p>
           <p>
             <strong>First step:</strong> send your current site for a free{" "}

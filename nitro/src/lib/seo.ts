@@ -1,4 +1,5 @@
 import { SITE_URL } from "./site";
+import { CLIENT_SHORT_NAMES, LIVE_CLIENTS_LEAD, TOWN_PROJECTS, joinNames } from "./work";
 import { STRUCTURED_DATA } from "./structured-data";
 
 type PageMeta = {
@@ -39,7 +40,7 @@ export const META: Record<string, PageMeta> = {
   "/connecticut-web-design": {
     title: "Connecticut Web Design for Local Businesses | FORGE CT",
     description:
-      "Farmington studio building sites and apps for Connecticut businesses. Live work in West Hartford, Southington and Watertown. From $2,000.",
+      `Farmington studio building sites and apps for Connecticut businesses. Live work in ${joinNames(TOWN_PROJECTS.map((p) => p.town!))}. From $2,000.`,
     ogImageAlt: CT_OG_ALT,
   },
   "/contact": {
@@ -91,7 +92,7 @@ export const META: Record<string, PageMeta> = {
   "/work": {
     title: "Live client sites — FORGE CT work",
     description:
-      "Live sites for Connecticut shops: Thousand Sunny, M&J Video Games, Hard Hittin and Infinite Heroes. Open them and see what customers see.",
+      `${LIVE_CLIENTS_LEAD}: ${CLIENT_SHORT_NAMES}. Open them and see what customers see.`,
     ogImageAlt: CT_OG_ALT,
   },
 };

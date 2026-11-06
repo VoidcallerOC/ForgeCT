@@ -4,7 +4,7 @@ import { PhoneFrame } from "@/components/work";
 import { pageHead } from "@/lib/seo";
 import { breadcrumbLd, faqPageLd } from "@/lib/structured-data";
 import { CARE, PACKAGES, packagePrice, usd } from "@/lib/site";
-import { projectBySlug } from "@/lib/work";
+import { TOWN_PROJECTS, joinNames } from "@/lib/work";
 
 const FAQ = [
   {
@@ -13,7 +13,7 @@ const FAQ = [
   },
   {
     q: "Where in Connecticut is the work?",
-    a: "FORGE CT is based in Farmington. Live client sites include Thousand Sunny Cards and Collectibles in West Hartford, M&J Video Games in Southington, Hard Hittin, and Infinite Heroes in Watertown.",
+    a: `FORGE CT is based in Farmington. Live client sites include ${joinNames(TOWN_PROJECTS.map((p) => `${p.name} in ${p.town}`))}.`,
   },
   {
     q: "How much does a FORGE CT website cost?",
@@ -34,8 +34,8 @@ export const Route = createFileRoute("/connecticut-web-design")({
   component: Connecticut,
 });
 
-/** Case studies with a documented Connecticut town. Hard Hittin is named in the copy and has no case page. */
-const FEATURED = ["thousand-sunny", "m-and-j-video-games", "infinite-heroes"];
+/** Case studies with a documented Connecticut town, derived from the approved roster. */
+const TOWNS = joinNames(TOWN_PROJECTS.map((p) => p.town!));
 
 function Connecticut() {
   return (
@@ -43,7 +43,7 @@ function Connecticut() {
       <PageHead plate={["Farmington, Connecticut", "Local business websites"]} title="Connecticut Web Design for Local Businesses">
         <p className="lede">
           FORGE CT is Nick Sousa in Farmington, building sites and apps for Connecticut shops and local businesses.
-          Live client work is in West Hartford, Southington, and Watertown. Local Business Sites from {usd(PACKAGES[0].price)}.
+          Live client work is in {TOWNS}. Local Business Sites from {usd(PACKAGES[0].price)}.
           The first step is three practical fixes within 24 hours.
         </p>
         <div className="actions">
@@ -89,11 +89,10 @@ function Connecticut() {
             the live site.
           </p>
           <ul className="rail rail--light" aria-label="Connecticut case studies">
-            {FEATURED.map((slug) => {
-              const p = projectBySlug(slug)!;
+            {TOWN_PROJECTS.map((p) => {
               return (
-                <li key={slug}>
-                  <Link to="/work/$slug" params={{ slug }} className="phone">
+                <li key={p.slug}>
+                  <Link to="/work/$slug" params={{ slug: p.slug }} className="phone">
                     <PhoneFrame project={p} />
                     <div className="phone-cap">
                       <span className="mono muted">
