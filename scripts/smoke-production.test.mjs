@@ -1,7 +1,15 @@
 import { createServer } from "node:http";
 import { after, before, test } from "node:test";
 import assert from "node:assert/strict";
-import { runSmoke } from "./smoke-production.mjs";
+import { readFileSync } from "node:fs";
+import {
+  APPROVED_CLIENT_URLS,
+  EXTERNAL_SCOPE,
+  FORGE_CT_SCOPE,
+  PORTFOLIO_ROUTES,
+  formatSummary,
+  runSmoke,
+} from "./smoke-production.mjs";
 
 const server = createServer((request, response) => {
   const pathname = new URL(request.url, "http://127.0.0.1").pathname;
@@ -13,6 +21,11 @@ const server = createServer((request, response) => {
     "referrer-policy": "strict-origin-when-cross-origin",
     "permissions-policy": "payment=()",
   };
+  if (pathname === "/down-client-site/") {
+    response.writeHead(503, { "content-type": "text/plain" });
+    response.end("unavailable");
+    return;
+  }
   if (pathname.startsWith("/api/")) {
     response.writeHead(405, {
       ...securityHeaders,
@@ -62,4 +75,50 @@ test("smoke results identify the exact URL and failure type", async () => {
     false,
   );
   assert.equal(result.safeMethod.startsWith("GET-only"), true);
+});
+
+test("portfolio routes and client URLs match the approved roster in work.ts", () => {
+  const source = readFileSync(
+    new URL("../nitro/src/lib/work.ts", import.meta.url),
+    "utf8",
+  );
+  const roster = source.slice(
+    source.indexOf("export const PROJECTS"),
+    source.indexOf("];", source.indexOf("export const PROJECTS")),
+  );
+  const slugs = [...roster.matchAll(/slug: "([^"]+)"/g)].map((m) => m[1]);
+  const sites = [...roster.matchAll(/site: "([^"]+)"/g)].map((m) => m[1]);
+  assert.equal(slugs.length, 5);
+  assert.deepEqual(
+    PORTFOLIO_ROUTES,
+    slugs.map((slug) => `/work/${slug}`),
+  );
+  assert.deepEqual(APPROVED_CLIENT_URLS, sites);
+});
+
+test("external client site failures are scoped and labelled as external", async () => {
+  const baseUrl = `http://127.0.0.1:${server.address().port}`;
+  const downUrl = `${baseUrl}/down-client-site/`;
+  const result = await runSmoke({
+    baseUrl,
+    clientUrls: [downUrl],
+    timeoutMs: 1_000,
+    maxMs: 5_000,
+  });
+  assert.equal(result.ok, false);
+  assert.equal(result.forgeCtFailures, 0);
+  assert.equal(result.externalFailures, 1);
+  assert.deepEqual(result.failures, [
+    {
+      url: downUrl,
+      type: "status",
+      detail: "expected 2xx or 3xx, received 503",
+      scope: EXTERNAL_SCOPE,
+    },
+  ]);
+  const summary = formatSummary(result);
+  assert.match(summary, /0 FORGE CT, 1 external client site/);
+  assert.match(summary, /outside FORGE CT control/);
+  assert.doesNotMatch(summary, /^FORGE CT failures:/m);
+  assert.notEqual(EXTERNAL_SCOPE, FORGE_CT_SCOPE);
 });

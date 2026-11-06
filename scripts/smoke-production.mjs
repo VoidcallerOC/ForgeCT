@@ -21,16 +21,28 @@ export const API_GET_ROUTES = [
   { path: "/api/stripe-webhook", allowedMethods: ["POST"] },
 ];
 
+// Approved roster order, mirrors PROJECTS in nitro/src/lib/work.ts.
 export const PORTFOLIO_ROUTES = [
+  "/work/harris-in-wonderland",
   "/work/thousand-sunny",
   "/work/m-and-j-video-games",
   "/work/infinite-heroes",
+  "/work/ninos-collectibles",
 ];
 
+// Live client sites linked from /work, same order and URLs as PROJECTS[].site.
+// These are third-party sites outside FORGE CT's control: their failures are
+// tagged scope "external-client-site" and listed separately in the output.
 export const APPROVED_CLIENT_URLS = [
-  "https://thousandsunnytcg.com/",
+  "https://harrisinwonderland.com/",
+  "https://www.thousandsunnytcg.com/",
   "https://mjvideogames.com/",
+  "https://infiniteheroes.net/",
+  "https://ninoscollectibles.com/",
 ];
+
+export const FORGE_CT_SCOPE = "forge-ct";
+export const EXTERNAL_SCOPE = "external-client-site";
 
 export const REQUIRED_HEADERS = [
   "content-security-policy",
@@ -119,8 +131,8 @@ export async function requestFollowingRedirects(
   };
 }
 
-function failure(result, url, type, detail) {
-  result.failures.push({ url, type, detail });
+function failure(result, url, type, detail, scope = FORGE_CT_SCOPE) {
+  result.failures.push({ url, type, detail, scope });
 }
 
 async function checkPage(result, baseUrl, definition, options) {
@@ -244,6 +256,7 @@ async function checkExternal(result, url, options) {
       url,
       checked.error === "timeout" ? "timeout" : "request",
       checked.error,
+      EXTERNAL_SCOPE,
     );
     return;
   }
@@ -251,6 +264,7 @@ async function checkExternal(result, url, options) {
   result.checks.push({
     url,
     finalUrl: checked.url,
+    scope: EXTERNAL_SCOPE,
     status: response.status,
     redirects: checked.redirects,
     responseTimeMs: elapsedMs,
@@ -261,6 +275,7 @@ async function checkExternal(result, url, options) {
       url,
       "status",
       `expected 2xx or 3xx, received ${response.status}`,
+      EXTERNAL_SCOPE,
     );
   if (elapsedMs > options.maxMs)
     failure(
@@ -268,6 +283,7 @@ async function checkExternal(result, url, options) {
       url,
       "response-time",
       `${elapsedMs}ms exceeds ${options.maxMs}ms`,
+      EXTERNAL_SCOPE,
     );
 }
 
@@ -292,8 +308,32 @@ export async function runSmoke({
   for (const definition of API_GET_ROUTES)
     await checkApi(result, baseUrl, definition, options);
   for (const url of clientUrls) await checkExternal(result, url, options);
+  result.forgeCtFailures = result.failures.filter(
+    (item) => item.scope === FORGE_CT_SCOPE,
+  ).length;
+  result.externalFailures = result.failures.filter(
+    (item) => item.scope === EXTERNAL_SCOPE,
+  ).length;
   result.ok = result.failures.length === 0;
   return result;
+}
+
+export function formatSummary(result) {
+  const forge = result.failures.filter((item) => item.scope === FORGE_CT_SCOPE);
+  const external = result.failures.filter(
+    (item) => item.scope === EXTERNAL_SCOPE,
+  );
+  const line = (item) => `- ${item.url} [${item.type}] ${item.detail}`;
+  return [
+    `Production smoke ${result.ok ? "passed" : "failed"}: ${result.checks.length} checks, ${result.failures.length} failure(s) (${forge.length} FORGE CT, ${external.length} external client site).`,
+    ...(forge.length ? ["FORGE CT failures:", ...forge.map(line)] : []),
+    ...(external.length
+      ? [
+          "External client site failures (third-party sites outside FORGE CT control; not a forge-ct.com outage):",
+          ...external.map(line),
+        ]
+      : []),
+  ].join("\n");
 }
 
 const isMain =
@@ -303,12 +343,7 @@ if (isMain) {
   const output =
     process.env.SMOKE_JSON === "1"
       ? JSON.stringify(result, null, 2)
-      : [
-          `Production smoke ${result.ok ? "passed" : "failed"}: ${result.checks.length} checks, ${result.failures.length} failure(s).`,
-          ...result.failures.map(
-            (item) => `- ${item.url} [${item.type}] ${item.detail}`,
-          ),
-        ].join("\n");
+      : formatSummary(result);
   console.log(output);
   if (!result.ok) process.exitCode = 1;
 }
