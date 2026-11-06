@@ -20,7 +20,7 @@ export const META: Record<string, PageMeta> = {
   "/": {
     title: "FORGE CT — Sites and apps for Hartford shops",
     description:
-      "Sites and apps for Connecticut shops and local businesses, built by Nick Sousa in Farmington, CT. Website packages from $750. Call (959) 229-0653.",
+      "Sites and apps for Connecticut shops and local businesses, built by Nick Sousa in Farmington, CT. Website packages from $750 and a free website audit.",
   },
   "/audit": {
     title: "Free website audit for CT shops — FORGE CT",
@@ -46,7 +46,7 @@ export const META: Record<string, PageMeta> = {
   "/contact": {
     title: "Contact FORGE CT — Sites and apps, Farmington CT",
     description:
-      "Call (959) 229-0653 or email create@forge-ct.com. FORGE CT builds sites and apps from Farmington, CT. Open 24 hours, 7 days a week.",
+      "Email create@forge-ct.com or send the inquiry form. FORGE CT builds sites and apps for Connecticut shops and local businesses from Farmington, CT.",
   },
   "/farmington-web-design": {
     title: "Farmington CT Web Design — FORGE CT",

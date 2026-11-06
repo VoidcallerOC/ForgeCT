@@ -16,13 +16,11 @@ export const BUSINESS_LD = {
   description:
     "Sites and apps for Connecticut shops and local businesses: web design, web systems and ongoing care, built by Nick Sousa in Farmington, CT.",
   email: "create@forge-ct.com",
-  telephone: "+1-959-229-0653",
   founder: { "@type": "Person", name: "Nick Sousa" },
   address: {
     "@type": "PostalAddress",
     addressLocality: "Farmington",
     addressRegion: "CT",
-    postalCode: "06032",
     addressCountry: "US",
   },
   areaServed: [
@@ -31,14 +29,6 @@ export const BUSINESS_LD = {
     { "@type": "City", name: "West Hartford, CT" },
     { "@type": "AdministrativeArea", name: "Hartford County, CT" },
     { "@type": "State", name: "Connecticut" },
-  ],
-  openingHoursSpecification: [
-    {
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-      opens: "00:00",
-      closes: "23:59",
-    },
   ],
   priceRange: BUSINESS.priceRange,
   makesOffer: [

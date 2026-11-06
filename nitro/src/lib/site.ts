@@ -1,7 +1,8 @@
 /**
  * FORGE CT business facts. Canonical values are the Nov 2026 local SEO brief:
- * name, Farmington CT 06032, phone and hours (each still awaiting owner verification),
- * and the owner-approved package prices below.
+ * name, Farmington CT locality, email, and the owner-approved package prices below.
+ * Phone, ZIP and business hours are NOT published: no owner-verified value exists
+ * (docs/LOCAL-SEO-WEEKLY-CHECKLIST.md marks phone/address publication BLOCKED pending the owner's NAP decision).
  */
 export const usd = (n: number) => `$${n.toLocaleString("en-US")}`;
 
@@ -11,15 +12,10 @@ export const BUSINESS = {
   name: "FORGE CT",
   founder: "Nick Sousa",
   email: "create@forge-ct.com",
-  phoneDisplay: "(959) 229-0653",
-  phoneTel: "tel:+19592290653",
-  phoneSchema: "+1-959-229-0653",
   locality: "Farmington",
   region: "CT",
-  postalCode: "06032",
   regionLong: "Connecticut",
   area: "Greater Hartford",
-  hours: "Open 24 hours, 7 days a week",
   priceRange: "$750–$2,500",
   description:
     "Sites and apps for Connecticut shops and local businesses: web design, web systems and ongoing care, built by Nick Sousa in Farmington, CT.",
@@ -93,13 +89,13 @@ export const PACKAGES: Package[] = [
   },
 ];
 
-/** Add-ons. E-commerce has no published price: it is quoted per project. No delivery days are published. */
+/** Add-ons. E-commerce is a custom quote with no fixed advertised price. No delivery days are published. */
 export const ADD_ONS: { name: string; price?: number; note: string }[] = [
   { name: "Additional page", price: 150, note: "Add one page beyond the selected package's page limit." },
   { name: "Additional revision", price: 100, note: "Add one revision beyond the package allowance." },
   {
     name: "E-commerce functionality",
-    note: "A separately priced add-on, quoted per project. Product, catalog, integration, and custom-functionality scope is agreed separately.",
+    note: "Custom quote; no fixed advertised price. Product, catalog, integration, and custom-functionality scope is agreed separately.",
   },
   {
     name: "Additional product",

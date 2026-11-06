@@ -344,7 +344,7 @@ test.describe("layout and platform", () => {
     await expect(addons.filter({ hasText: "Additional page" })).toContainText("+$150");
     await expect(addons.filter({ hasText: "Additional revision" })).toContainText("+$100");
     await expect(addons.filter({ hasText: "Additional product" })).toContainText("+$250");
-    await expect(addons.filter({ hasText: "E-commerce functionality" }).locator(".cost")).toHaveText("Quoted per project");
+    await expect(addons.filter({ hasText: "E-commerce functionality" }).locator(".cost")).toHaveText("Custom quote");
     await expect(page.locator("#addons")).not.toContainText(/day/);
   });
 
@@ -353,6 +353,23 @@ test.describe("layout and platform", () => {
       await page.goto(path);
       expect(await page.content(), path).not.toMatch(SUPERSEDED_PRICING);
     }
+  });
+
+  test("unverified phone, ZIP and 24/7 hours are not published; verified email is", async ({ page }) => {
+    for (const path of ROUTES) {
+      await page.goto(path);
+      const html = await page.content();
+      expect(html, path).not.toMatch(/959|229-0653|06032|tel:|Open 24 hours|24\/7|7 days a week/);
+      await expect(page.locator("footer.footer"), path).toContainText("create@forge-ct.com");
+    }
+    await page.goto("/");
+    const blocks = await page.$$eval('script[type="application/ld+json"]', (els) => els.map((e) => JSON.parse(e.textContent || "{}")));
+    const businesses = blocks.filter((b) => b["@type"] === "ProfessionalService");
+    expect(businesses).toHaveLength(1);
+    expect(businesses[0].telephone).toBeUndefined();
+    expect(businesses[0].openingHoursSpecification).toBeUndefined();
+    expect(businesses[0].address.postalCode).toBeUndefined();
+    expect(businesses[0].address.addressLocality).toBe("Farmington");
   });
 
   test("business JSON-LD offers carry the approved prices", async ({ page }) => {

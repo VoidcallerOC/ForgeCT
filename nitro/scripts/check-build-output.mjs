@@ -10,7 +10,9 @@
  * 4. The production smoke markers (scripts/smoke-production.mjs CORE_ROUTES) appear on each page.
  * 5. config.json carries the security headers and the apex → www redirect.
  * 6. Every local src/href in the HTML resolves to a built file or a prerendered page.
- * 7. Portfolio integrity: all five approved clients are prerendered (200, not redirected), in the sitemap,
+ * 7. Business facts: only verified identity (name, Farmington CT, email). No phone, ZIP or opening hours in copy
+ *    or schema until the owner verifies them.
+ * 8. Portfolio integrity: all five approved clients are prerendered (200, not redirected), in the sitemap,
  *    in the /work CollectionPage, and every visible count matches the roster. Retired Hard Hittin appears
  *    in no page, meta tag or JSON-LD; only its old URL keeps a 301 to /work.
  *
@@ -44,7 +46,7 @@ const EXPECTED = {
   "/": {
     title: "FORGE CT — Sites and apps for Hartford shops",
     description:
-      "Sites and apps for Connecticut shops and local businesses, built by Nick Sousa in Farmington, CT. Website packages from $750. Call (959) 229-0653.",
+      "Sites and apps for Connecticut shops and local businesses, built by Nick Sousa in Farmington, CT. Website packages from $750 and a free website audit.",
   },
   "/services": {
     title: "Website packages from $750 — FORGE CT",
@@ -69,7 +71,7 @@ const EXPECTED = {
   "/contact": {
     title: "Contact FORGE CT — Sites and apps, Farmington CT",
     description:
-      "Call (959) 229-0653 or email create@forge-ct.com. FORGE CT builds sites and apps from Farmington, CT. Open 24 hours, 7 days a week.",
+      "Email create@forge-ct.com or send the inquiry form. FORGE CT builds sites and apps for Connecticut shops and local businesses from Farmington, CT.",
   },
   "/book": {
     title: "Book a working session — FORGE CT",
@@ -134,6 +136,11 @@ const LOCATION_PAGES = ["/hartford-web-design", "/farmington-web-design", "/west
  * plus extra-fast delivery fees, which are not offered. Rejected anywhere in a built page, meta tag or JSON-LD.
  */
 const SUPERSEDED_PRICE_RE = /\$2,000|\$6,000|\$16,000|\b(2000|6000|16000)\b(?=")|Local Business Site|Site and System|Product Site|Extra-fast|extra fast|rush delivery/i;
+/**
+ * Business facts with no owner verification on record (docs/LOCAL-SEO-WEEKLY-CHECKLIST.md: phone/address
+ * publication BLOCKED). They must not be published in copy, links, meta or JSON-LD until the owner verifies them.
+ */
+const UNVERIFIED_FACT_RE = /959|229-0653|2290653|06032|tel:|Open 24 hours|24\/7|7 days a week|opens":"00:00/;
 /** Owner-approved rate sheet. */
 const APPROVED_PACKAGES = [
   { name: "Basic — Starter Website", price: "750", display: "$750" },
@@ -223,8 +230,9 @@ for (const route of routes) {
   if (h.ogDescription !== h.description) fail(`${route}: og:description does not match description`);
   const h1Count = (html.match(/<h1\b/g) || []).length;
   if (h1Count !== 1) fail(`${route}: expected one h1, found ${h1Count}`);
-  if (!html.includes("(959) 229-0653")) fail(`${route}: phone missing`);
-  if (!html.includes("Open 24 hours, 7 days a week")) fail(`${route}: hours missing`);
+  if (!html.includes("create@forge-ct.com")) fail(`${route}: verified contact email missing`);
+  const unverified = html.match(UNVERIFIED_FACT_RE);
+  if (unverified) fail(`${route}: unverified business fact published (${JSON.stringify(unverified[0])})`);
   const superseded = html.match(SUPERSEDED_PRICE_RE);
   if (superseded) fail(`${route}: superseded pricing present (${JSON.stringify(superseded[0])})`);
   if (BANNED_RE.test(html)) fail(`${route}: banned brand string present (${html.match(BANNED_RE)[0]})`);
@@ -235,8 +243,16 @@ for (const route of routes) {
   const businesses = h.jsonld.filter((block) => block["@type"] === "ProfessionalService" || (Array.isArray(block["@type"]) && block["@type"].includes("ProfessionalService")));
   if (businesses.length !== 1) fail(`${route}: expected one ProfessionalService, found ${businesses.length}`);
   const business = businesses[0];
-  if (business.name !== "FORGE CT" || business.telephone !== "+1-959-229-0653" || business.address?.postalCode !== "06032")
-    fail(`${route}: ProfessionalService NAP mismatch`);
+  if (
+    business.name !== "FORGE CT" ||
+    business.email !== "create@forge-ct.com" ||
+    business.address?.addressLocality !== "Farmington" ||
+    business.address?.addressRegion !== "CT"
+  )
+    fail(`${route}: ProfessionalService identity mismatch`);
+  for (const key of ["telephone", "openingHoursSpecification", "openingHours", "aggregateRating", "review", "award"])
+    if (key in business) fail(`${route}: ProfessionalService must not carry unverified ${key}`);
+  if (business.address && "postalCode" in business.address) fail(`${route}: ProfessionalService must not carry an unverified postalCode`);
   if (business.priceRange !== APPROVED_PRICE_RANGE) fail(`${route}: priceRange ${business.priceRange} != ${APPROVED_PRICE_RANGE}`);
   const offers = (business.makesOffer || []).filter((o) => o.price);
   const offerList = offers.map((o) => `${o.name}=${o.price}`).join(" | ");
@@ -282,7 +298,7 @@ for (const route of routes) {
     const text = decode(html);
     for (const addOn of ["Additional page", "+$150", "Additional revision", "+$100", "Additional product", "+$250"])
       if (!text.includes(addOn)) fail(`/services: add-on ${addOn} missing`);
-    if (!/E-commerce functionality<\/b><span class="cost">Quoted per project/.test(html)) fail("/services: e-commerce add-on must be quoted per project");
+    if (!/E-commerce functionality<\/b><span class="cost">Custom quote</.test(html)) fail("/services: e-commerce add-on must be a custom quote");
   }
   if (route === "/work") {
     const collection = h.jsonld.find((block) => block["@type"] === "CollectionPage");
@@ -297,6 +313,17 @@ for (const route of routes) {
       if (!decode(html).includes(c.name)) fail(`/work: approved client ${c.name} missing`);
       if (!html.includes(`href="/work/${c.slug}"`)) fail(`/work: no link to /work/${c.slug}`);
     }
+  }
+}
+
+// Every indexable route has a unique title and description.
+for (const key of ["title", "description"]) {
+  const seen = new Map();
+  for (const route of sitemapRoutes) {
+    const value = builtHtml[route] && headOf(builtHtml[route])[key];
+    if (!value) continue;
+    if (seen.has(value)) fail(`${route}: duplicate ${key} (same as ${seen.get(value)})`);
+    seen.set(value, route);
   }
 }
 

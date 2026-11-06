@@ -21,7 +21,7 @@ const FAQ: FaqItem[] = [
   },
   {
     q: "What is the first step?",
-    a: "Send your shop URL and a little context about what feels stuck. FORGE CT will review it like a customer and reply with three practical fixes within 24 hours. Or call (959) 229-0653.",
+    a: "Send your shop URL and a little context about what feels stuck. FORGE CT will review it like a customer and reply with three practical fixes within 24 hours. Or email create@forge-ct.com.",
   },
 ];
 
@@ -64,7 +64,7 @@ function Hartford() {
           <Link className="link" to="/audit">
             FORGE CT Audit
           </Link>{" "}
-          with three fixes within 24 hours, or call <a href="tel:+19592290653">(959) 229-0653</a>.
+          with three fixes within 24 hours, or email <a href="mailto:create@forge-ct.com">create@forge-ct.com</a>.
         </p>
       </PageHead>
 

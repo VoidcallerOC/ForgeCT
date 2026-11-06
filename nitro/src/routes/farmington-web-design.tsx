@@ -12,7 +12,7 @@ const FAQ: FaqItem[] = [
   },
   {
     q: "What is the first step?",
-    a: "Send your current site for a free FORGE CT Audit. You'll get three practical fixes within 24 hours. Or call (959) 229-0653 or email create@forge-ct.com.",
+    a: "Send your current site for a free FORGE CT Audit. You'll get three practical fixes within 24 hours. Or email create@forge-ct.com.",
   },
 ];
 
@@ -28,7 +28,7 @@ export const Route = createFileRoute("/farmington-web-design")({
 function Farmington() {
   return (
     <main id="main">
-      <PageHead plate={["Farmington, CT 06032", "Sites and apps"]} title="Farmington web design: sites and apps for local businesses">
+      <PageHead plate={["Farmington, CT", "Sites and apps"]} title="Farmington web design: sites and apps for local businesses">
         <p className="lede">
           FORGE CT is based in Farmington. I'm Nick Sousa, and I design and build websites for the shops, studios and
           service businesses around Farmington Center, Unionville and the Route 4 and Route 10 corridors. You talk to the
@@ -64,8 +64,7 @@ function Farmington() {
             <Link className="link" to="/audit">
               FORGE CT Audit
             </Link>
-            . You'll get three practical fixes within 24 hours. Or call <a href="tel:+19592290653">(959) 229-0653</a> or
-            email <a href="mailto:create@forge-ct.com">create@forge-ct.com</a>.
+            . You'll get three practical fixes within 24 hours. Or email <a href="mailto:create@forge-ct.com">create@forge-ct.com</a>.
           </p>
         </div>
       </section>

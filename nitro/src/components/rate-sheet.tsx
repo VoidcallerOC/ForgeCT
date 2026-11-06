@@ -103,7 +103,7 @@ export function SheetNotes() {
     <div className="notes">
       <div className="note">
         <b>E-commerce is a separately priced add-on.</b>
-        <p>Not part of any base package. It is quoted per project, and larger custom work is scoped separately.</p>
+        <p>Not part of any base package. It is a custom quote with no fixed price, and larger custom work is scoped separately.</p>
       </div>
       <div className="note">
         <b>Care after launch.</b>

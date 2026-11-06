@@ -11,7 +11,7 @@ const FAQ: FaqItem[] = [
   },
   {
     q: "What is the first step?",
-    a: "Start with a free FORGE CT Audit, with three fixes within 24 hours, or call (959) 229-0653.",
+    a: "Start with a free FORGE CT Audit, with three fixes within 24 hours, or email create@forge-ct.com.",
   },
 ];
 
@@ -54,7 +54,7 @@ function WestHartford() {
             <Link className="link" to="/audit">
               FORGE CT Audit
             </Link>
-            , with three fixes within 24 hours, or call <a href="tel:+19592290653">(959) 229-0653</a>.
+            , with three fixes within 24 hours, or email <a href="mailto:create@forge-ct.com">create@forge-ct.com</a>.
           </p>
         </div>
       </section>

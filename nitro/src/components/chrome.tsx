@@ -1,6 +1,6 @@
 import { Link, useRouter, useRouterState } from "@tanstack/react-router";
 import { useEffect, useRef, type ReactNode } from "react";
-import { BUSINESS } from "@/lib/site";
+import { BUSINESS, MAILTO } from "@/lib/site";
 
 const NAV = [
   { to: "/work", label: "Work" },
@@ -10,15 +10,17 @@ const NAV = [
   { to: "/contact", label: "Contact" },
 ] as const;
 
-/** Exact NAP block for the footer on every page and the body of /contact. A <p>, not <address>: protected CSS has no address reset. */
+/**
+ * Verified contact block for the footer on every page and the body of /contact: name, town and email only.
+ * Phone, ZIP and hours stay off the site until the owner verifies them. A <p>, not <address>: protected CSS
+ * has no address reset.
+ */
 export function StudioAddress() {
   return (
     <p>
-      FORGE CT · Farmington, CT 06032
+      {BUSINESS.name} · {BUSINESS.locality}, {BUSINESS.region}
       <br />
-      <a href="tel:+19592290653">(959) 229-0653</a> · <a href="mailto:create@forge-ct.com">create@forge-ct.com</a>
-      <br />
-      Open 24 hours, 7 days a week
+      <a href={MAILTO}>{BUSINESS.email}</a>
     </p>
   );
 }

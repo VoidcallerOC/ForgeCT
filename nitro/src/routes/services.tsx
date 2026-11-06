@@ -54,7 +54,7 @@ function Services() {
             {ADD_ONS.map((a) => (
               <li key={a.name}>
                 <b>{a.name}</b>
-                <span className="cost">{a.price ? `+${usd(a.price)}` : "Quoted per project"}</span>
+                <span className="cost">{a.price ? `+${usd(a.price)}` : "Custom quote"}</span>
                 <p>{a.note}</p>
               </li>
             ))}
